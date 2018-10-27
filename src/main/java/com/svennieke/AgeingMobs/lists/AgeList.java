@@ -46,10 +46,10 @@ public class AgeList {
 		}
 		
 		if(AgeingMobsConfigGen.general.villagervindicator.villagerToVindicatorAgeing)			
-			addDarknessBasedAging("VillagerToVindicator", "minecraft:villager", "minecraft:vindicator", AgeingMobsConfigGen.general.villagervindicator.minimumLightLevel, AgeingMobsConfigGen.general.villagervindicator.maximumLightLevel, false, true, AgeingMobsConfigGen.general.villagervindicator.villagerToVindicatorAgeingTime);
+			addDarknessBasedAging("VillagerToVindicator", "minecraft:villager", "minecraft:vindication_illager", AgeingMobsConfigGen.general.villagervindicator.minimumLightLevel, AgeingMobsConfigGen.general.villagervindicator.maximumLightLevel, false, true, AgeingMobsConfigGen.general.villagervindicator.villagerToVindicatorAgeingTime);
 		
 		if(AgeingMobsConfigGen.general.vindicatorevoker.vindicatorToEvokerAgeing)			
-			addMagicBasedAging("VindicatorToEvoker", "minecraft:vindicator", "minecraft:evoker", AgeingMobsConfigGen.general.vindicatorevoker.vindicatorToEvokerAgeingTime);
+			addMagicBasedAging("VindicatorToEvoker", "minecraft:vindication_illager", "minecraft:evocation_illager", AgeingMobsConfigGen.general.vindicatorevoker.vindicatorToEvokerAgeingTime);
 		
 		if(AgeingMobsConfigGen.general.guardianelder.guardianToElderAgeing)
 			addBossAging("GuardianToElder", "minecraft:guardian", "minecraft:elder_guardian", AgeingMobsConfigGen.general.guardianelder.guardianToElderAgeingMax, AgeingMobsConfigGen.general.guardianelder.guardianToElderRange, AgeingMobsConfigGen.general.guardianelder.guardianToElderAgeingTime);

@@ -584,7 +584,6 @@ public class AgeingHandler {
 		{
 			if(info.getEntity().equals(info.getEvolvedEntity()))
 			{
-				
 				if(!info.getChangedEntityData().hasNoTags())
 				{
 					BlockPos originalPos = entity.getPosition();
@@ -609,7 +608,7 @@ public class AgeingHandler {
 					}
 					else
 					{
-						AgeingMobs.logger.error("Aged Entity invalid: %s", new Object[] {info.getEvolvedEntity().toString()});
+						AgeingMobs.logger.error("Aged Entity invalid [Line 661, Report this to the author of Ageing Mobs]: " + info.getEvolvedEntity().toString());
 					}
 					
 					tag.removeTag(uniqueTag);
@@ -644,7 +643,7 @@ public class AgeingHandler {
 					}
 					else
 					{
-						AgeingMobs.logger.error("Aged Entity invalid: %s", new Object[] {info.getEvolvedEntity().toString()});
+						AgeingMobs.logger.error("Aged Entity invalid [Line 646, Report this to the author of Ageing Mobs]: " + info.getEvolvedEntity().toString());
 					}
 					
 					tag.removeTag(uniqueTag);
@@ -656,6 +655,7 @@ public class AgeingHandler {
 					BlockPos originalPos = entity.getPosition();
 					Entity agedEntity = null;
 					agedEntity = EntityList.createEntityByIDFromName(AgeingHelper.getEntityLocation(info.getEvolvedEntity()), entity.world);
+					System.out.println(info.getEvolvedEntity().toString());
 					if(agedEntity != null)
 					{
 						agedEntity.copyLocationAndAnglesFrom(entity);
@@ -663,7 +663,7 @@ public class AgeingHandler {
 					}
 					else
 					{
-						AgeingMobs.logger.error("Aged Entity invalid: %s", new Object[] {info.getEvolvedEntity().toString()});
+						AgeingMobs.logger.error("Aged Entity invalid [Line 666, Report this to the author of Ageing Mobs]: " + info.getEvolvedEntity().toString());
 					}
 					
 					tag.removeTag(uniqueTag);
@@ -695,7 +695,6 @@ public class AgeingHandler {
 		{
 			if(info.getEntity().equals(info.getEvolvedEntity()))
 			{
-				
 				if(!info.getChangedEntityData().hasNoTags())
 				{
 					BlockPos originalPos = entity.getPosition();
@@ -720,7 +719,7 @@ public class AgeingHandler {
 					}
 					else
 					{
-						AgeingMobs.logger.error("Aged Entity invalid: %s", new Object[] {info.getEvolvedEntity().toString()});
+						AgeingMobs.logger.error("Magic Aged Entity invalid [Line 722, Report this to the author of Ageing Mobs]: " + info.getEvolvedEntity().toString());
 					}
 					
 					tag.removeTag(uniqueTag);
@@ -755,7 +754,7 @@ public class AgeingHandler {
 					}
 					else
 					{
-						AgeingMobs.logger.error("Aged Entity invalid: %s", new Object[] {info.getEvolvedEntity().toString()});
+						AgeingMobs.logger.error("Magic Aged Entity invalid [Line 757, Report this to the author of Ageing Mobs]: " + info.getEvolvedEntity().toString());
 					}
 					
 					tag.removeTag(uniqueTag);
@@ -767,6 +766,7 @@ public class AgeingHandler {
 					BlockPos originalPos = entity.getPosition();
 					Entity agedEntity = null;
 					agedEntity = EntityList.createEntityByIDFromName(AgeingHelper.getEntityLocation(info.getEvolvedEntity()), entity.world);
+					System.out.println(info.getEvolvedEntity().toString());
 					if(agedEntity != null)
 					{
 						agedEntity.copyLocationAndAnglesFrom(entity);
@@ -774,7 +774,7 @@ public class AgeingHandler {
 					}
 					else
 					{
-						AgeingMobs.logger.error("Aged Entity invalid: %s", new Object[] {info.getEvolvedEntity().toString()});
+						AgeingMobs.logger.error("Magic Aged Entity invalid [Line 777, Report this to the author of Ageing Mobs]: " + info.getEvolvedEntity().toString());
 					}
 					
 					tag.removeTag(uniqueTag);
