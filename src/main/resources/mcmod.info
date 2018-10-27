@@ -1,0 +1,16 @@
+[
+	{
+		"modid": "ageingmobs",
+		"name": "Ageing Mobs",
+		"description": "This mod allows mobs to age and transform.",
+		"version": "${version}",
+		"mcversion": "${mcversion}",
+		"url": "",
+		"updateUrl": "",
+		"authorList": ["svennieke", "Mrbysco"],
+		"credits": "Plutosion for testing",
+		"logoFile": "assets/ageingmobs/logo.png",
+		"screenshots": [],
+		"dependencies": []
+	}
+]

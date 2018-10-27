@@ -1,0 +1,7 @@
+#Config
+ageingmobs.config.title=Ageing Mobs Config
+
+#Endermite Stuff
+tile.ageingmobs:endermiteeggpurpur.name=Purpur Block Monster Egg
+tile.ageingmobs:endermiteeggpillar.name=Purpur Pillar Egg
+tile.ageingmobs:endermiteeggdoubleslab.name=Purpur Double Slab Monster Egg
