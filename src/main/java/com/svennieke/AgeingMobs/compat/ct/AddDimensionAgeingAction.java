@@ -13,6 +13,7 @@ public class AddDimensionAgeingAction implements IAction{
 	private NBTTagCompound changedEntityData;
 	private int tickTime;
 	private int dimension;
+	private String gamestage;
 	
 	public AddDimensionAgeingAction(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int dimension, int tickTime) {
 		this.uniqueID = uniqueID;
@@ -24,14 +25,31 @@ public class AddDimensionAgeingAction implements IAction{
 		this.dimension = dimension;
 	}
 	
+	public AddDimensionAgeingAction(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int dimension, int tickTime) {
+		this.uniqueID = uniqueID;
+		this.entity = entity;
+		this.entityData = entityData;
+		this.transformedEntity = transformedEntity;
+		this.changedEntityData = changedEntityData;
+		this.tickTime = tickTime;
+		this.dimension = dimension;
+		this.gamestage = gamestage;
+	}
+	
 	@Override
 	public void apply()
 	{
-		AgeList.addDimensionBasedBothAging(uniqueID, entity, entityData, transformedEntity, changedEntityData, dimension, tickTime);
+		if(gamestage != null && !gamestage.isEmpty())
+			AgeList.addStagedDimensionBasedAgeing(uniqueID, gamestage, entity, entityData, transformedEntity, changedEntityData, dimension, tickTime);
+		else
+			AgeList.addDimensionBasedAgeing(uniqueID, entity, entityData, transformedEntity, changedEntityData, dimension, tickTime);
 	}
 
 	@Override
 	public String describe() {
-		return String.format("%s has been added to the Dimension ageing list.", new Object[] {this.uniqueID});	
+		if(gamestage != null && !gamestage.isEmpty())
+			return String.format("%s has been added to the staged Dimension ageing list.", new Object[] {this.uniqueID});	
+		else
+			return String.format("%s has been added to the Dimension ageing list.", new Object[] {this.uniqueID});	
 	}
 }

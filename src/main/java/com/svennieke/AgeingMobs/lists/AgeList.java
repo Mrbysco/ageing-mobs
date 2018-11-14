@@ -10,7 +10,10 @@ import com.svennieke.AgeingMobs.lists.info.BiomeTypeBasedAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.BlockBasedAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.BossAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.DimensionBasedAgingInfo;
+import com.svennieke.AgeingMobs.lists.info.EntityBasedAgingInfo;
+import com.svennieke.AgeingMobs.lists.info.HeightBasedAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.LightBasedAgingInfo;
+import com.svennieke.AgeingMobs.lists.info.LiquidBasedAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.MagicBasedAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.MoonBasedAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.RegularAgingInfo;
@@ -24,6 +27,7 @@ import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.common.Optional;
 
 public class AgeList {
 
@@ -31,33 +35,33 @@ public class AgeList {
 		
 	public static void initializeAgeing() {
 		if(AgeingMobsConfigGen.general.chargedcreeper.creeperAgeing)
-			addWeatherBasedSecondOnlyAging("CreeperToCharged", "minecraft:creeper", "minecraft:creeper", createNBTTag("{powered:1b}"), "thunder", AgeingMobsConfigGen.general.chargedcreeper.creeperAgeingTime);
+			addWeatherBasedAgeing("CreeperToCharged", "minecraft:creeper", createNBTTag(""), "minecraft:creeper", createNBTTag("{powered:1b}"), "thunder", AgeingMobsConfigGen.general.chargedcreeper.creeperAgeingTime);
 		
 		if(AgeingMobsConfigGen.general.zombiehusk.zombieToHuskAgeing)
 		{
-			addBiomeTypeBasedSecondOnlyAging("ZombieToHusk", "minecraft:zombie", "minecraft:husk", createNBTTag("{IsBaby:0}"), BiomeDictionary.Type.HOT, AgeingMobsConfigGen.general.zombiehusk.zombieToHuskAgeingTime);
-			addBiomeTypeBasedBothAging("BabyZombieToBabyHusk", "minecraft:zombie", createNBTTag("{IsBaby:1b}"), "minecraft:husk", createNBTTag("{IsBaby:1b}"), BiomeDictionary.Type.HOT, AgeingMobsConfigGen.general.zombiehusk.zombieToHuskAgeingTime);
+			addBiomeTypeBasedAgeing("ZombieToHusk", "minecraft:zombie", createNBTTag(""), "minecraft:husk", createNBTTag("{IsBaby:0}"), BiomeDictionary.Type.HOT, AgeingMobsConfigGen.general.zombiehusk.zombieToHuskAgeingTime);
+			addBiomeTypeBasedAgeing("BabyZombieToBabyHusk", "minecraft:zombie", createNBTTag("{IsBaby:1b}"), "minecraft:husk", createNBTTag("{IsBaby:1b}"), BiomeDictionary.Type.HOT, AgeingMobsConfigGen.general.zombiehusk.zombieToHuskAgeingTime);
 		}
 		
 		if(AgeingMobsConfigGen.general.huskzombie.huskToZombieAgeing)
 		{
-			addBiomeTypeBasedSecondOnlyAging("HuskToZombie", "minecraft:husk", "minecraft:zombie", createNBTTag("{IsBaby:0}"), BiomeDictionary.Type.COLD, AgeingMobsConfigGen.general.huskzombie.huskToZombieAgeingTime);
-			addBiomeTypeBasedBothAging("BabyHuskToBabyZombie", "minecraft:husk", createNBTTag("{IsBaby:1b}"), "minecraft:zombie", createNBTTag("{IsBaby:1b}"), BiomeDictionary.Type.COLD, AgeingMobsConfigGen.general.huskzombie.huskToZombieAgeingTime);
+			addBiomeTypeBasedAgeing("HuskToZombie", "minecraft:husk", createNBTTag(""), "minecraft:zombie", createNBTTag("{IsBaby:0}"), BiomeDictionary.Type.COLD, AgeingMobsConfigGen.general.huskzombie.huskToZombieAgeingTime);
+			addBiomeTypeBasedAgeing("BabyHuskToBabyZombie", "minecraft:husk", createNBTTag("{IsBaby:1b}"), "minecraft:zombie", createNBTTag("{IsBaby:1b}"), BiomeDictionary.Type.COLD, AgeingMobsConfigGen.general.huskzombie.huskToZombieAgeingTime);
 		}
 		
-		if(AgeingMobsConfigGen.general.villagervindicator.villagerToVindicatorAgeing)			
-			addDarknessBasedAging("VillagerToVindicator", "minecraft:villager", "minecraft:vindication_illager", AgeingMobsConfigGen.general.villagervindicator.minimumLightLevel, AgeingMobsConfigGen.general.villagervindicator.maximumLightLevel, false, true, AgeingMobsConfigGen.general.villagervindicator.villagerToVindicatorAgeingTime);
+		if(AgeingMobsConfigGen.general.villagervindicator.villagerToVindicatorAgeing)		
+			addDarknessBasedAgeing("VillagerToVindicator", "minecraft:villager", createNBTTag(""), "minecraft:vindication_illager", createNBTTag(""), AgeingMobsConfigGen.general.villagervindicator.minimumLightLevel, AgeingMobsConfigGen.general.villagervindicator.maximumLightLevel, false, true, AgeingMobsConfigGen.general.villagervindicator.villagerToVindicatorAgeingTime);
 		
 		if(AgeingMobsConfigGen.general.vindicatorevoker.vindicatorToEvokerAgeing)			
-			addMagicBasedAging("VindicatorToEvoker", "minecraft:vindication_illager", "minecraft:evocation_illager", AgeingMobsConfigGen.general.vindicatorevoker.vindicatorToEvokerAgeingTime);
+			addMagicBasedAgeing("VindicatorToEvoker", "minecraft:vindication_illager", createNBTTag(""), "minecraft:evocation_illager", createNBTTag(""), AgeingMobsConfigGen.general.vindicatorevoker.vindicatorToEvokerAgeingTime);
 		
 		if(AgeingMobsConfigGen.general.guardianelder.guardianToElderAgeing)
-			addBossAging("GuardianToElder", "minecraft:guardian", "minecraft:elder_guardian", AgeingMobsConfigGen.general.guardianelder.guardianToElderAgeingMax, AgeingMobsConfigGen.general.guardianelder.guardianToElderRange, AgeingMobsConfigGen.general.guardianelder.guardianToElderAgeingTime);
+			addBossAgeing("GuardianToElder", "minecraft:guardian", createNBTTag(""), "minecraft:elder_guardian", createNBTTag(""), AgeingMobsConfigGen.general.guardianelder.guardianToElderAgeingMax, AgeingMobsConfigGen.general.guardianelder.guardianToElderRange, AgeingMobsConfigGen.general.guardianelder.guardianToElderAgeingTime);
 	
 		if(AgeingMobsConfigGen.general.babyzombie.babyToZombieAgeing)
 		{
-			addRegularBothAging("BabyToZombie", "minecraft:zombie", createNBTTag("{IsBaby:1b}"), "minecraft:zombie", createNBTTag("{IsBaby:0}"), AgeingMobsConfigGen.general.babyzombie.babyToZombieAgeingTime);
-			addRegularBothAging("BabyToHusk", "minecraft:husk", createNBTTag("{IsBaby:1b}"), "minecraft:husk", createNBTTag("{IsBaby:0}"), AgeingMobsConfigGen.general.babyzombie.babyToZombieAgeingTime);
+			addRegularAgeing("BabyToZombie", "minecraft:zombie", createNBTTag("{IsBaby:1b}"), "minecraft:zombie", createNBTTag("{IsBaby:0}"), AgeingMobsConfigGen.general.babyzombie.babyToZombieAgeingTime);
+			addRegularAgeing("BabyToHusk", "minecraft:husk", createNBTTag("{IsBaby:1b}"), "minecraft:husk", createNBTTag("{IsBaby:0}"), AgeingMobsConfigGen.general.babyzombie.babyToZombieAgeingTime);
 		}
 		
 		if(AgeingMobsConfigGen.general.endermiteshulker.endermiteToShulkerAgeing)
@@ -66,65 +70,35 @@ public class AgeList {
 		}
 		
 		if(AgeingMobsConfigGen.general.skeletonstray.skeletonToStrayAgeing)
-			addBiomeTypeBasedAging("SkeletonToStray", "minecraft:skeleton", "minecraft:stray", BiomeDictionary.Type.COLD, AgeingMobsConfigGen.general.skeletonstray.skeletonToStrayAgeingTime);
+			addBiomeTypeBasedAgeing("SkeletonToStray", "minecraft:skeleton", createNBTTag(""), "minecraft:stray", createNBTTag(""), BiomeDictionary.Type.COLD, AgeingMobsConfigGen.general.skeletonstray.skeletonToStrayAgeingTime);
 		
 		if(AgeingMobsConfigGen.general.strayskeleton.strayToSkeletonAgeing)
-			addBiomeTypeBasedAging("StrayToSkeleton", "minecraft:stray", "minecraft:skeleton", BiomeDictionary.Type.HOT, AgeingMobsConfigGen.general.strayskeleton.strayToSkeletonAgeingTime);
+			addBiomeTypeBasedAgeing("StrayToSkeleton", "minecraft:stray", createNBTTag(""), "minecraft:skeleton", createNBTTag(""), BiomeDictionary.Type.HOT, AgeingMobsConfigGen.general.strayskeleton.strayToSkeletonAgeingTime);
 		
 		if(AgeingMobsConfigGen.general.rabbitkiller.rabbitToKillerAgeing)
-			addDarknessBasedSecondOnlyAging("RabbitToKiller", "minecraft:rabbit", "minecraft:rabbit", createNBTTag("{RabbitType:99}"), AgeingMobsConfigGen.general.rabbitkiller.minimumLightLevel, AgeingMobsConfigGen.general.rabbitkiller.maximumLightLevel, true, false, AgeingMobsConfigGen.general.rabbitkiller.rabbitToKillerAgeingTime);
+			addDarknessBasedAgeing("RabbitToKiller", "minecraft:rabbit", createNBTTag(""), "minecraft:rabbit", createNBTTag("{RabbitType:99}"), AgeingMobsConfigGen.general.rabbitkiller.minimumLightLevel, AgeingMobsConfigGen.general.rabbitkiller.maximumLightLevel, true, false, AgeingMobsConfigGen.general.rabbitkiller.rabbitToKillerAgeingTime);
 		
 		if(AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeing)
 		{
-			addBlockBasedAging("CowToMooshroom", "minecraft:cow", "minecraft:mooshroom", Blocks.MYCELIUM.getDefaultState(), false, 0, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingTime);
-			addBlockBasedAging("CowToMooshroom", "minecraft:cow", "minecraft:mooshroom", Blocks.BROWN_MUSHROOM.getDefaultState(), true, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingRadius, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingTime);
-			addBlockBasedAging("CowToMooshroom", "minecraft:cow", "minecraft:mooshroom", Blocks.BROWN_MUSHROOM_BLOCK.getDefaultState(), true, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingRadius, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingTime);
-			addBlockBasedAging("CowToMooshroom", "minecraft:cow", "minecraft:mooshroom", Blocks.RED_MUSHROOM.getDefaultState(), true, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingRadius, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingTime);
-			addBlockBasedAging("CowToMooshroom", "minecraft:cow", "minecraft:mooshroom", Blocks.RED_MUSHROOM_BLOCK.getDefaultState(), true, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingRadius, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingTime);
+			addBlockBasedAgeing("CowToMooshroom", "minecraft:cow", createNBTTag(""), "minecraft:mooshroom", createNBTTag(""), Blocks.MYCELIUM.getDefaultState(), false, 0, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingTime);
+			addBlockBasedAgeing("CowToMooshroom", "minecraft:cow", createNBTTag(""), "minecraft:mooshroom", createNBTTag(""), Blocks.BROWN_MUSHROOM.getDefaultState(), true, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingRadius, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingTime);
+			addBlockBasedAgeing("CowToMooshroom", "minecraft:cow", createNBTTag(""), "minecraft:mooshroom", createNBTTag(""), Blocks.BROWN_MUSHROOM_BLOCK.getDefaultState(), true, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingRadius, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingTime);
+			addBlockBasedAgeing("CowToMooshroom", "minecraft:cow", createNBTTag(""), "minecraft:mooshroom", createNBTTag(""), Blocks.RED_MUSHROOM.getDefaultState(), true, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingRadius, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingTime);
+			addBlockBasedAgeing("CowToMooshroom", "minecraft:cow", createNBTTag(""), "minecraft:mooshroom", createNBTTag(""), Blocks.RED_MUSHROOM_BLOCK.getDefaultState(), true, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingRadius, AgeingMobsConfigGen.general.cowmooshroom.cowToMooshroomAgeingTime);
 		}
 		
 		if(AgeingMobsConfigGen.general.skeletonwitherskelly.skeletonToWitherSkeletonAgeing)
-			addDimensionBasedAging("SkeletonToWitherSkelly", "minecraft:skeleton", "minecraft:wither_skeleton", -1, AgeingMobsConfigGen.general.skeletonwitherskelly.skeletonToWitherSkeletonAgeingTime);
+			addDimensionBasedAgeing("SkeletonToWitherSkelly", "minecraft:skeleton", createNBTTag(""), "minecraft:wither_skeleton", createNBTTag(""), -1, AgeingMobsConfigGen.general.skeletonwitherskelly.skeletonToWitherSkeletonAgeingTime);
 	
 		if(AgeingMobsConfigGen.general.slimemagma.slimeToMagmaCubeAgeing)
-			addDimensionBasedAging("SlimeToMagmaCube", "minecraft:slime", "minecraft:magma_cube", -1, AgeingMobsConfigGen.general.slimemagma.slimeToMagmaCubeAgeingTime);
+			addDimensionBasedAgeing("SlimeToMagmaCube", "minecraft:slime", createNBTTag(""), "minecraft:magma_cube", createNBTTag(""), -1, AgeingMobsConfigGen.general.slimemagma.slimeToMagmaCubeAgeingTime);
 
 		if(AgeingMobsConfigGen.general.batvex.batToVexAgeing)
-			addRegularAging("BatToVex", "minecraft:bat", "minecraft:vex", AgeingMobsConfigGen.general.batvex.batToVexAgeingTime);
+			addRegularAgeing("BatToVex", "minecraft:bat", createNBTTag(""), "minecraft:vex", createNBTTag(""), AgeingMobsConfigGen.general.batvex.batToVexAgeingTime);
 	}
 	
 	//Regular
-	public static void addRegularAging(String uniqueID, String entity, String transformedEntity, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		RegularAgingInfo regular_info = new RegularAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, createNBTTag(""), tickTime);
-		if(agingList.contains(regular_info))
-			return;
-		else
-			agingList.add(regular_info);
-	}
-	
-	public static void addRegularFirstOnlyAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		RegularAgingInfo regular_info = new RegularAgingInfo(uniqueID, entity, entityData, transformedEntity, createNBTTag(""), tickTime);
-		if(agingList.contains(regular_info))
-			return;
-		else
-			agingList.add(regular_info);
-	}
-	
-	public static void addRegularSecondOnlyAging(String uniqueID, String entity, String transformedEntity, NBTTagCompound changedEntityData, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		RegularAgingInfo regular_info = new RegularAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, changedEntityData, tickTime);
-		if(agingList.contains(regular_info))
-			return;
-		else
-			agingList.add(regular_info);
-	}
-	
-	public static void addRegularBothAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int tickTime)
+	public static void addRegularAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int tickTime)
 	{
 		// Check if the info doesn't already exist
 		RegularAgingInfo regular_info = new RegularAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, tickTime);
@@ -135,37 +109,7 @@ public class AgeList {
 	}
 	
 	//Boss
-	public static void addBossAging(String uniqueID, String entity, String transformedEntity, int maxInArea, int checkRadius, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		BossAgingInfo boss_info = new BossAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, createNBTTag(""), maxInArea, checkRadius, tickTime);
-		if(agingList.contains(boss_info))
-			return;
-		else
-			agingList.add(boss_info);
-	}
-	
-	public static void addBossFirstOnlyAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, int maxInArea, int checkRadius, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		BossAgingInfo boss_info = new BossAgingInfo(uniqueID, entity, entityData, transformedEntity, createNBTTag(""), maxInArea, checkRadius, tickTime);
-		if(agingList.contains(boss_info))
-			return;
-		else
-			agingList.add(boss_info);
-	}
-	
-	public static void addBossSecondOnlyAging(String uniqueID, String entity, String transformedEntity, NBTTagCompound changedEntityData, int maxInArea, int checkRadius, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		BossAgingInfo boss_info = new BossAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, changedEntityData, maxInArea, checkRadius, tickTime);
-		if(agingList.contains(boss_info))
-			return;
-		else
-			agingList.add(boss_info);
-	}
-	
-	public static void addBossBothAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int maxInArea, int checkRadius, int tickTime)
+	public static void addBossAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int maxInArea, int checkRadius, int tickTime)
 	{
 		// Check if the info doesn't already exist
 		BossAgingInfo boss_info = new BossAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, maxInArea, checkRadius, tickTime);
@@ -176,37 +120,7 @@ public class AgeList {
 	}
 	
 	//Biome
-	public static void addBiomeBasedAging(String uniqueID, String entity, String transformedEntity, Biome biome, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		BiomeBasedAgingInfo biomeBased_info = new BiomeBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, createNBTTag(""), biome, tickTime);
-		if(agingList.contains(biomeBased_info))
-			return;
-		else
-			agingList.add(biomeBased_info);
-	}
-	
-	public static void addBiomeBasedFirstOnlyAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, Biome biome, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		BiomeBasedAgingInfo biomeBased_info = new BiomeBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, createNBTTag(""), biome, tickTime);
-		if(agingList.contains(biomeBased_info))
-			return;
-		else
-			agingList.add(biomeBased_info);
-	}
-	
-	public static void addBiomeBasedSecondOnlyAging(String uniqueID, String entity, String transformedEntity, NBTTagCompound changedEntityData, Biome biome, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		BiomeBasedAgingInfo biomeBased_info = new BiomeBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, changedEntityData, biome, tickTime);
-		if(agingList.contains(biomeBased_info))
-			return;
-		else
-			agingList.add(biomeBased_info);
-	}
-	
-	public static void addBiomeBasedBothAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, Biome biome, int tickTime)
+	public static void addBiomeBasedAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, Biome biome, int tickTime)
 	{
 		// Check if the info doesn't already exist
 		BiomeBasedAgingInfo biomeBased_info = new BiomeBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, biome, tickTime);
@@ -217,37 +131,7 @@ public class AgeList {
 	}
 	
 	//Biome Type
-	public static void addBiomeTypeBasedAging(String uniqueID, String entity, String transformedEntity, BiomeDictionary.Type biomeType, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		BiomeTypeBasedAgingInfo biomeTypeBased_info = new BiomeTypeBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, createNBTTag(""), biomeType, tickTime);
-		if(agingList.contains(biomeTypeBased_info))
-			return;
-		else
-			agingList.add(biomeTypeBased_info);
-	}
-	
-	public static void addBiomeTypeBasedFirstOnlyAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, BiomeDictionary.Type biomeType, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		BiomeTypeBasedAgingInfo biomeTypeBased_info = new BiomeTypeBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, createNBTTag(""), biomeType, tickTime);
-		if(agingList.contains(biomeTypeBased_info))
-			return;
-		else
-			agingList.add(biomeTypeBased_info);
-	}
-	
-	public static void addBiomeTypeBasedSecondOnlyAging(String uniqueID, String entity, String transformedEntity, NBTTagCompound changedEntityData, BiomeDictionary.Type biomeType, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		BiomeTypeBasedAgingInfo biomeTypeBased_info = new BiomeTypeBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, changedEntityData, biomeType, tickTime);
-		if(agingList.contains(biomeTypeBased_info))
-			return;
-		else
-			agingList.add(biomeTypeBased_info);
-	}
-	
-	public static void addBiomeTypeBasedBothAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, BiomeDictionary.Type biomeType, int tickTime)
+	public static void addBiomeTypeBasedAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, BiomeDictionary.Type biomeType, int tickTime)
 	{
 		// Check if the info doesn't already exist
 		BiomeTypeBasedAgingInfo biomeTypeBased_info = new BiomeTypeBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, biomeType, tickTime);
@@ -256,39 +140,9 @@ public class AgeList {
 		else
 			agingList.add(biomeTypeBased_info);
 	}
-	
-	public static void addWeatherBasedAging(String uniqueID, String entity, String transformedEntity, String weather, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		WeatherBasedAgingInfo weatherBased_info = new WeatherBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, createNBTTag(""), weather, tickTime);
-		if(agingList.contains(weatherBased_info))
-			return;
-		else
-			agingList.add(weatherBased_info);
-	}
-	
+
 	//Weather
-	public static void addWeatherBasedFirstOnlyAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, String weather, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		WeatherBasedAgingInfo weatherBased_info = new WeatherBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, createNBTTag(""), weather, tickTime);
-		if(agingList.contains(weatherBased_info))
-			return;
-		else
-			agingList.add(weatherBased_info);
-	}
-	
-	public static void addWeatherBasedSecondOnlyAging(String uniqueID, String entity, String transformedEntity, NBTTagCompound changedEntityData, String weather, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		WeatherBasedAgingInfo weatherBased_info = new WeatherBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, changedEntityData, weather, tickTime);
-		if(agingList.contains(weatherBased_info))
-			return;
-		else
-			agingList.add(weatherBased_info);
-	}
-	
-	public static void addWeatherBasedBothAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String weather, int tickTime)
+	public static void addWeatherBasedAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String weather, int tickTime)
 	{
 		// Check if the info doesn't already exist
 		WeatherBasedAgingInfo weatherBased_info = new WeatherBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, weather, tickTime);
@@ -299,78 +153,18 @@ public class AgeList {
 	}
 	
 	//Time
-	public static void addTimeBasedAging(String uniqueID, String entity, String transformedEntity, int minTime, int maxTime, int tickTime)
+	public static void addTimeBasedAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int minTime, int maxTime, int tickTime)
 	{
 		// Check if the info doesn't already exist
-		TimeBasedAgingInfo timeBased_info = new TimeBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, createNBTTag(""), minTime, maxTime, tickTime);
-		if(agingList.contains(timeBased_info))
+		TimeBasedAgingInfo heightBased_info = new TimeBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, minTime, maxTime, tickTime);
+		if(agingList.contains(heightBased_info))
 			return;
 		else
-			agingList.add(timeBased_info);
-	}
-	
-	public static void addTimeBasedFirstOnlyAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, int minTime, int maxTime, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		TimeBasedAgingInfo timeBased_info = new TimeBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, createNBTTag(""), minTime, maxTime, tickTime);
-		if(agingList.contains(timeBased_info))
-			return;
-		else
-			agingList.add(timeBased_info);
-	}
-	
-	public static void addTimeBasedSecondOnlyAging(String uniqueID, String entity, String transformedEntity, NBTTagCompound changedEntityData, int minTime, int maxTime, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		TimeBasedAgingInfo timeBased_info = new TimeBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, changedEntityData, minTime, maxTime, tickTime);
-		if(agingList.contains(timeBased_info))
-			return;
-		else
-			agingList.add(timeBased_info);
-	}
-	
-	public static void addTimeBasedBothAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int minTime, int maxTime, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		TimeBasedAgingInfo timeBased_info = new TimeBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, minTime, maxTime, tickTime);
-		if(agingList.contains(timeBased_info))
-			return;
-		else
-			agingList.add(timeBased_info);
+			agingList.add(heightBased_info);
 	}
 	
 	//Moon
-	public static void addMoonBasedAging(String uniqueID, String entity, String transformedEntity, String moonPhase, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		MoonBasedAgingInfo moonBased_info = new MoonBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, createNBTTag(""), moonPhase, tickTime);
-		if(agingList.contains(moonBased_info))
-			return;
-		else
-			agingList.add(moonBased_info);
-	}
-	
-	public static void addMoonBasedFirstOnlyAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, String moonPhase, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		MoonBasedAgingInfo moonBased_info = new MoonBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, createNBTTag(""), moonPhase, tickTime);
-		if(agingList.contains(moonBased_info))
-			return;
-		else
-			agingList.add(moonBased_info);
-	}
-	
-	public static void addMoonBasedSecondOnlyAging(String uniqueID, String entity, String transformedEntity, NBTTagCompound changedEntityData, String moonPhase, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		MoonBasedAgingInfo moonBased_info = new MoonBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, changedEntityData, moonPhase, tickTime);
-		if(agingList.contains(moonBased_info))
-			return;
-		else
-			agingList.add(moonBased_info);
-	}
-	
-	public static void addMoonBasedBothAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String moonPhase, int tickTime)
+	public static void addMoonBasedAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String moonPhase, int tickTime)
 	{
 		// Check if the info doesn't already exist
 		MoonBasedAgingInfo moonBased_info = new MoonBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, moonPhase, tickTime);
@@ -381,37 +175,7 @@ public class AgeList {
 	}
 	
 	//Magic
-	public static void addMagicBasedAging(String uniqueID, String entity, String transformedEntity, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		MagicBasedAgingInfo magicBased_info = new MagicBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, createNBTTag(""), tickTime);
-		if(agingList.contains(magicBased_info))
-			return;
-		else
-			agingList.add(magicBased_info);
-	}
-	
-	public static void addMagicBasedFirstOnlyAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		MagicBasedAgingInfo magicBased_info = new MagicBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, createNBTTag(""), tickTime);
-		if(agingList.contains(magicBased_info))
-			return;
-		else
-			agingList.add(magicBased_info);
-	}
-	
-	public static void addMagicBasedSecondOnlyAging(String uniqueID, String entity, String transformedEntity, NBTTagCompound changedEntityData, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		MagicBasedAgingInfo magicBased_info = new MagicBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, changedEntityData, tickTime);
-		if(agingList.contains(magicBased_info))
-			return;
-		else
-			agingList.add(magicBased_info);
-	}
-	
-	public static void addMagicBasedBothAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int tickTime)
+	public static void addMagicBasedAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int tickTime)
 	{
 		// Check if the info doesn't already exist
 		MagicBasedAgingInfo magicBased_info = new MagicBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, tickTime);
@@ -422,37 +186,7 @@ public class AgeList {
 	}
 	
 	//Darkness
-	public static void addDarknessBasedAging(String uniqueID, String entity, String transformedEntity, int lightLevelMin, int lightLevelMax, boolean alone, boolean reversable, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		LightBasedAgingInfo darknessBased_info = new LightBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, createNBTTag(""), lightLevelMin, lightLevelMax, alone, reversable, tickTime);
-		if(agingList.contains(darknessBased_info))
-			return;
-		else
-			agingList.add(darknessBased_info);
-	}
-	
-	public static void addDarknessBasedFirstOnlyAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, int lightLevelMin, int lightLevelMax, boolean alone, boolean reversable, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		LightBasedAgingInfo darknessBased_info = new LightBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, createNBTTag(""), lightLevelMin, lightLevelMax, alone, reversable, tickTime);
-		if(agingList.contains(darknessBased_info))
-			return;
-		else
-			agingList.add(darknessBased_info);
-	}
-	
-	public static void addDarknessBasedSecondOnlyAging(String uniqueID, String entity, String transformedEntity, NBTTagCompound changedEntityData, int lightLevelMin, int lightLevelMax, boolean alone, boolean reversable, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		LightBasedAgingInfo darknessBased_info = new LightBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, changedEntityData, lightLevelMin, lightLevelMax, alone, reversable, tickTime);
-		if(agingList.contains(darknessBased_info))
-			return;
-		else
-			agingList.add(darknessBased_info);
-	}
-	
-	public static void addDarknessBasedBothAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int lightLevelMin, int lightLevelMax, boolean alone, boolean reversable, int tickTime)
+	public static void addDarknessBasedAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int lightLevelMin, int lightLevelMax, boolean alone, boolean reversable, int tickTime)
 	{
 		// Check if the info doesn't already exist
 		LightBasedAgingInfo darknessBased_info = new LightBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, lightLevelMin, lightLevelMax, alone, reversable, tickTime);
@@ -463,37 +197,7 @@ public class AgeList {
 	}
 	
 	//Dimension
-	public static void addDimensionBasedAging(String uniqueID, String entity, String transformedEntity, int dimension, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		DimensionBasedAgingInfo dimensionBased_info = new DimensionBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, createNBTTag(""), dimension, tickTime);
-		if(agingList.contains(dimensionBased_info))
-			return;
-		else
-			agingList.add(dimensionBased_info);
-	}
-	
-	public static void addDimensionBasedFirstOnlyAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, int dimension, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		DimensionBasedAgingInfo dimensionBased_info = new DimensionBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, createNBTTag(""), dimension, tickTime);
-		if(agingList.contains(dimensionBased_info))
-			return;
-		else
-			agingList.add(dimensionBased_info);
-	}
-	
-	public static void addDimensionBasedSecondOnlyAging(String uniqueID, String entity, String transformedEntity, NBTTagCompound changedEntityData, int dimension, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		DimensionBasedAgingInfo dimensionBased_info = new DimensionBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, changedEntityData, dimension, tickTime);
-		if(agingList.contains(dimensionBased_info))
-			return;
-		else
-			agingList.add(dimensionBased_info);
-	}
-	
-	public static void addDimensionBasedBothAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int dimension, int tickTime)
+	public static void addDimensionBasedAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int dimension, int tickTime)
 	{
 		// Check if the info doesn't already exist
 		DimensionBasedAgingInfo dimensionBased_info = new DimensionBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, dimension, tickTime);
@@ -504,37 +208,7 @@ public class AgeList {
 	}
 	
 	//Block
-	public static void addBlockBasedAging(String uniqueID, String entity, String transformedEntity, IBlockState state, boolean nearby, int radius, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		BlockBasedAgingInfo blockBased_info = new BlockBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, createNBTTag(""), state, nearby, radius, tickTime);
-		if(agingList.contains(blockBased_info))
-			return;
-		else
-			agingList.add(blockBased_info);
-	}
-	
-	public static void addBlockBasedFirstOnlyAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, IBlockState state, boolean nearby, int radius, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		BlockBasedAgingInfo blockBased_info = new BlockBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, createNBTTag(""), state, nearby, radius, tickTime);
-		if(agingList.contains(blockBased_info))
-			return;
-		else
-			agingList.add(blockBased_info);
-	}
-	
-	public static void addBlockBasedSecondOnlyAging(String uniqueID, String entity, String transformedEntity, NBTTagCompound changedEntityData, IBlockState state, boolean nearby, int radius, int tickTime)
-	{
-		// Check if the info doesn't already exist
-		BlockBasedAgingInfo blockBased_info = new BlockBasedAgingInfo(uniqueID, entity, createNBTTag(""), transformedEntity, changedEntityData, state, nearby, radius, tickTime);
-		if(agingList.contains(blockBased_info))
-			return;
-		else
-			agingList.add(blockBased_info);
-	}
-	
-	public static void addBlockBasedBothAging(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, IBlockState state, boolean nearby, int radius, int tickTime)
+	public static void addBlockBasedAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, IBlockState state, boolean nearby, int radius, int tickTime)
 	{
 		// Check if the info doesn't already exist
 		BlockBasedAgingInfo blockBased_info = new BlockBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, state, nearby, radius, tickTime);
@@ -542,6 +216,39 @@ public class AgeList {
 			return;
 		else
 			agingList.add(blockBased_info);
+	}
+	
+	//Liquid
+	public static void addLiquidBasedAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String liquid, boolean reversible, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		LiquidBasedAgingInfo liquidBased_info = new LiquidBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, liquid, reversible, tickTime);
+		if(agingList.contains(liquidBased_info))
+			return;
+		else
+			agingList.add(liquidBased_info);
+	}
+	
+	//Height
+	public static void addHeightBasedAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int minHeight, int maxHeight, int tickHeight)
+	{
+		// Check if the info doesn't already exist
+		HeightBasedAgingInfo heightBased_info = new HeightBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, minHeight, maxHeight, tickHeight);
+		if(agingList.contains(heightBased_info))
+			return;
+		else
+			agingList.add(heightBased_info);
+	}
+	
+	//Entity
+	public static void addEntityBasedAgeing(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String entityNearby, NBTTagCompound entityNearbyData, int radius, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		EntityBasedAgingInfo entityBased_info = new EntityBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, entityNearby, entityNearbyData, radius, tickTime);
+		if(agingList.contains(entityBased_info))
+			return;
+		else
+			agingList.add(entityBased_info);
 	}
 	
 	public static void addEndermite()
@@ -552,6 +259,189 @@ public class AgeList {
 			return;
 		else
 			agingList.add(endermite_info);
+	}
+	
+	//GAMESTAGES
+	//Regular
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedRegularAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		RegularAgingInfo regular_info = new RegularAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, tickTime);
+		regular_info.setGameStage(gamestage);
+		if(agingList.contains(regular_info))
+			return;
+		else
+			agingList.add(regular_info);
+	}
+	
+	//Boss
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedBossAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int maxInArea, int checkRadius, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		BossAgingInfo boss_info = new BossAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, maxInArea, checkRadius, tickTime);
+		boss_info.setGameStage(gamestage);
+		if(agingList.contains(boss_info))
+			return;
+		else
+			agingList.add(boss_info);
+	}
+	
+	//Biome
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedBiomeBasedAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, Biome biome, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		BiomeBasedAgingInfo biomeBased_info = new BiomeBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, biome, tickTime);
+		biomeBased_info.setGameStage(gamestage);
+		if(agingList.contains(biomeBased_info))
+			return;
+		else
+			agingList.add(biomeBased_info);
+	}
+	
+	//Biome Type
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedBiomeTypeBasedAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, BiomeDictionary.Type biomeType, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		BiomeTypeBasedAgingInfo biomeTypeBased_info = new BiomeTypeBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, biomeType, tickTime);
+		biomeTypeBased_info.setGameStage(gamestage);
+		if(agingList.contains(biomeTypeBased_info))
+			return;
+		else
+			agingList.add(biomeTypeBased_info);
+	}
+
+	//Weather
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedWeatherBasedAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String weather, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		WeatherBasedAgingInfo weatherBased_info = new WeatherBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, weather, tickTime);
+		weatherBased_info.setGameStage(gamestage);
+		if(agingList.contains(weatherBased_info))
+			return;
+		else
+			agingList.add(weatherBased_info);
+	}
+	
+	//Time
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedTimeBasedAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int minTime, int maxTime, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		TimeBasedAgingInfo heightBased_info = new TimeBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, minTime, maxTime, tickTime);
+		heightBased_info.setGameStage(gamestage);
+		if(agingList.contains(heightBased_info))
+			return;
+		else
+			agingList.add(heightBased_info);
+	}
+	
+	//Moon
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedMoonBasedAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String moonPhase, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		MoonBasedAgingInfo moonBased_info = new MoonBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, moonPhase, tickTime);
+		moonBased_info.setGameStage(gamestage);
+		if(agingList.contains(moonBased_info))
+			return;
+		else
+			agingList.add(moonBased_info);
+	}
+	
+	//Magic
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedMagicBasedAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		MagicBasedAgingInfo magicBased_info = new MagicBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, tickTime);
+		magicBased_info.setGameStage(gamestage);
+		if(agingList.contains(magicBased_info))
+			return;
+		else
+			agingList.add(magicBased_info);
+	}
+	
+	//Darkness
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedDarknessBasedAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int lightLevelMin, int lightLevelMax, boolean alone, boolean reversable, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		LightBasedAgingInfo darknessBased_info = new LightBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, lightLevelMin, lightLevelMax, alone, reversable, tickTime);
+		darknessBased_info.setGameStage(gamestage);
+		if(agingList.contains(darknessBased_info))
+			return;
+		else
+			agingList.add(darknessBased_info);
+	}
+	
+	//Dimension
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedDimensionBasedAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int dimension, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		DimensionBasedAgingInfo dimensionBased_info = new DimensionBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, dimension, tickTime);
+		dimensionBased_info.setGameStage(gamestage);
+		if(agingList.contains(dimensionBased_info))
+			return;
+		else
+			agingList.add(dimensionBased_info);
+	}
+	
+	//Block
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedBlockBasedAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, IBlockState state, boolean nearby, int radius, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		BlockBasedAgingInfo blockBased_info = new BlockBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, state, nearby, radius, tickTime);
+		blockBased_info.setGameStage(gamestage);
+		if(agingList.contains(blockBased_info))
+			return;
+		else
+			agingList.add(blockBased_info);
+	}
+	
+	//Liquid
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedLiquidBasedAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String liquid, boolean reversible, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		LiquidBasedAgingInfo liquidBased_info = new LiquidBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, liquid, reversible, tickTime);
+		liquidBased_info.setGameStage(gamestage);
+		if(agingList.contains(liquidBased_info))
+			return;
+		else
+			agingList.add(liquidBased_info);
+	}
+	
+	//Height
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedHeightBasedAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, int minHeight, int maxHeight, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		HeightBasedAgingInfo heightBased_info = new HeightBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, minHeight, maxHeight, tickTime);
+		heightBased_info.setGameStage(gamestage);
+		if(agingList.contains(heightBased_info))
+			return;
+		else
+			agingList.add(heightBased_info);
+	}
+	
+	//Entity
+	@Optional.Method(modid = "gamestages")
+	public static void addStagedEntityBasedAgeing(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String entityNearby, NBTTagCompound entityNearbyData, int radius, int tickTime)
+	{
+		// Check if the info doesn't already exist
+		EntityBasedAgingInfo entityBased_info = new EntityBasedAgingInfo(uniqueID, entity, entityData, transformedEntity, changedEntityData, entityNearby, entityNearbyData, radius, tickTime);
+		entityBased_info.setGameStage(gamestage);
+		if(agingList.contains(entityBased_info))
+			return;
+		else
+			agingList.add(entityBased_info);
 	}
 	
 	public static NBTTagCompound createNBTTag(String nbtData)

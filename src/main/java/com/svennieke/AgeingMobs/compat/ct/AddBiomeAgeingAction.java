@@ -16,6 +16,7 @@ public class AddBiomeAgeingAction implements IAction{
 	private NBTTagCompound changedEntityData;
 	private int tickTime;
 	private Biome biome;
+	private String gamestage;
 	
 	public AddBiomeAgeingAction(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String biome, int tickTime) {
 		this.uniqueID = uniqueID;
@@ -29,15 +30,34 @@ public class AddBiomeAgeingAction implements IAction{
 		this.biome = selectedBiome;
 	}
 	
+	public AddBiomeAgeingAction(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String biome, int tickTime) {
+		this.uniqueID = uniqueID;
+		this.entity = entity;
+		this.entityData = entityData;
+		this.transformedEntity = transformedEntity;
+		this.changedEntityData = changedEntityData;
+		this.tickTime = tickTime;
+		this.gamestage = gamestage;
+		
+		Biome selectedBiome = ForgeRegistries.BIOMES.getValue(getBiomeResourceLocation(biome));
+		this.biome = selectedBiome;
+	}
+	
 	@Override
 	public void apply()
 	{
-		AgeList.addBiomeBasedBothAging(uniqueID, entity, entityData, transformedEntity, changedEntityData, biome, tickTime);
+		if(gamestage != null && !gamestage.isEmpty())
+			AgeList.addStagedBiomeBasedAgeing(uniqueID, gamestage, entity, entityData, transformedEntity, changedEntityData, biome, tickTime);
+		else
+			AgeList.addBiomeBasedAgeing(uniqueID, entity, entityData, transformedEntity, changedEntityData, biome, tickTime);
 	}
 
 	@Override
 	public String describe() {
-		return String.format("%s has been added to the Biome ageing list.", new Object[] {this.uniqueID});	
+		if(gamestage != null && !gamestage.isEmpty())
+			return String.format("%s has been added to the staged Biome ageing list.", new Object[] {this.uniqueID});	
+		else
+			return String.format("%s has been added to the Biome ageing list.", new Object[] {this.uniqueID});	
 	}
 	
 	public static ResourceLocation getBiomeResourceLocation(String name)

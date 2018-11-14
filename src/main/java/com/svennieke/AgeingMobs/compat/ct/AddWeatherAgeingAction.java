@@ -13,6 +13,7 @@ public class AddWeatherAgeingAction implements IAction{
 	private NBTTagCompound changedEntityData;
 	private int tickTime;
 	private String weather;
+	private String gamestage;
 	
 	public AddWeatherAgeingAction(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String weather, int tickTime) {
 		this.uniqueID = uniqueID;
@@ -24,14 +25,31 @@ public class AddWeatherAgeingAction implements IAction{
 		this.weather = weather;
 	}
 	
+	public AddWeatherAgeingAction(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String weather, int tickTime) {
+		this.uniqueID = uniqueID;
+		this.entity = entity;
+		this.entityData = entityData;
+		this.transformedEntity = transformedEntity;
+		this.changedEntityData = changedEntityData;
+		this.tickTime = tickTime;
+		this.weather = weather;
+		this.gamestage = gamestage;
+	}
+	
 	@Override
 	public void apply()
 	{
-		AgeList.addWeatherBasedBothAging(uniqueID, entity, entityData, transformedEntity, changedEntityData, weather, tickTime);
+		if(gamestage != null && !gamestage.isEmpty())
+			AgeList.addStagedWeatherBasedAgeing(uniqueID, gamestage, entity, entityData, transformedEntity, changedEntityData, weather, tickTime);
+		else
+			AgeList.addWeatherBasedAgeing(uniqueID, entity, entityData, transformedEntity, changedEntityData, weather, tickTime);
 	}
 
 	@Override
 	public String describe() {
-		return String.format("%s has been added to the Weather ageing list.", new Object[] {this.uniqueID});	
+		if(gamestage != null && !gamestage.isEmpty())
+			return String.format("%s has been added to the staged Weather ageing list.", new Object[] {this.uniqueID});	
+		else
+			return String.format("%s has been added to the Weather ageing list.", new Object[] {this.uniqueID});	
 	}
 }

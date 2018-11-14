@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.0.1"
+version = "1.1"
 group = "com.svennieke.AgeingMobs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Ageing-Mobs"
 
@@ -36,11 +36,16 @@ repositories {
 	maven {
         url "http://maven.blamejared.com"
 	}
+	maven { 
+		url 'https://maven.mcmoddev.com' 
+	}
 }
 
 dependencies {
 	deobfCompile "mezz.jei:jei_1.12.2:4.11.0.+"
 	deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.11.+"
+	deobfCompile "net.darkhax.gamestages:GameStages-1.12.2:2.0.110"
+	deobfCompile "net.darkhax.bookshelf:Bookshelf-1.12.2:2.3.568"
 }
 
 processResources {

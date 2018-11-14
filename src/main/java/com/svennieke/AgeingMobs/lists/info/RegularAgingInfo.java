@@ -1,8 +1,10 @@
 package com.svennieke.AgeingMobs.lists.info;
 
 import net.minecraft.nbt.NBTTagCompound;
-
-public class RegularAgingInfo {
+import net.minecraftforge.fml.common.Optional;
+public class RegularAgingInfo{
+	private String gamestage;
+	
 	private String uniqueID;
 	private String entity;
 	private NBTTagCompound entityData;
@@ -65,5 +67,15 @@ public class RegularAgingInfo {
 	
 	public void setTickTime(int tickTime) {
 		this.tickTime = tickTime;
+	}
+	
+	@Optional.Method(modid = "gamestages")
+	public void setGameStage(String stage) {
+		this.gamestage = stage;
+	}
+
+	@Optional.Method(modid = "gamestages")
+	public String getGameStage() {
+		return this.gamestage;
 	}
 }

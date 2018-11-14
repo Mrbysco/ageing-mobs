@@ -15,7 +15,10 @@ import com.svennieke.AgeingMobs.lists.info.BiomeTypeBasedAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.BlockBasedAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.BossAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.DimensionBasedAgingInfo;
+import com.svennieke.AgeingMobs.lists.info.EntityBasedAgingInfo;
+import com.svennieke.AgeingMobs.lists.info.HeightBasedAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.LightBasedAgingInfo;
+import com.svennieke.AgeingMobs.lists.info.LiquidBasedAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.MagicBasedAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.MoonBasedAgingInfo;
 import com.svennieke.AgeingMobs.lists.info.RegularAgingInfo;
@@ -24,21 +27,26 @@ import com.svennieke.AgeingMobs.lists.info.WeatherBasedAgingInfo;
 import com.svennieke.AgeingMobs.util.AgeingHelper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.monster.EntityEndermite;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -113,14 +121,14 @@ public class AgeingHandler {
 				{
 					if(!info.getChangedEntityData().hasNoTags())
 					{
-						NBTTagCompound entityTag = entityToNBT(entity);
+						NBTTagCompound entityTag = AgeingHelper.entityToNBT(entity);
 						NBTTagCompound entityTag2 = info.getChangedEntityData();
 						
 						if(!entityTag2.hasNoTags())
 						{
 							if(!NBTUtil.areNBTEquals(entityTag2, entityTag, true))
 							{
-								ExecuteAppropiateMethod(info, entity, world);
+								extraChecks(info, entity, world);
 							}
 						}
 					}
@@ -133,7 +141,7 @@ public class AgeingHandler {
 				{
 					if(!info.getChangedEntityData().hasNoTags())
 					{
-						NBTTagCompound entityTag = entityToNBT(entity);
+						NBTTagCompound entityTag = AgeingHelper.entityToNBT(entity);
 						NBTTagCompound entityTag2 = info.getEntityData();
 						NBTTagCompound entityTag3 = info.getChangedEntityData();
 
@@ -141,20 +149,20 @@ public class AgeingHandler {
 						{
 							if(NBTUtil.areNBTEquals(entityTag2, entityTag, true) && !NBTUtil.areNBTEquals(entityTag3, entityTag, true))
 							{
-								ExecuteAppropiateMethod(info, entity, world);
+								extraChecks(info, entity, world);
 							}
 						}
 					}
 					else
 					{
-						NBTTagCompound entityTag = entityToNBT(entity);
+						NBTTagCompound entityTag = AgeingHelper.entityToNBT(entity);
 						NBTTagCompound entityTag2 = info.getEntityData();
 
 						if(!entityTag2.hasNoTags())
 						{							
 							if(NBTUtil.areNBTEquals(entityTag2, entityTag, true))
 							{
-								ExecuteAppropiateMethod(info, entity, world);
+								extraChecks(info, entity, world);
 							}
 						}
 					}
@@ -165,7 +173,7 @@ public class AgeingHandler {
 		{
 			if(!info.getEntityData().hasNoTags())
 			{
-				NBTTagCompound entityTag = entityToNBT(entity);
+				NBTTagCompound entityTag = AgeingHelper.entityToNBT(entity);
 				NBTTagCompound entityTag2 = info.getEntityData();
 				NBTTagCompound entityTag3 = info.getChangedEntityData();
 
@@ -173,14 +181,55 @@ public class AgeingHandler {
 				{
 					if(NBTUtil.areNBTEquals(entityTag2, entityTag, true) && !NBTUtil.areNBTEquals(entityTag3, entityTag, true))
 					{
-						ExecuteAppropiateMethod(info, entity, world);
+						extraChecks(info, entity, world);
 					}
 				}
 			}
 			else
 			{
-				ExecuteAppropiateMethod(info, entity, world);
+				extraChecks(info, entity, world);
 			}
+		}
+	}
+	
+	public void extraChecks(RegularAgingInfo info, Entity entity, World world)
+	{
+		if(Loader.isModLoaded("gamestages"))
+		{
+			gamestageChecks(info, entity, world);
+		}
+		else
+		{
+			ExecuteAppropiateMethod(info, entity, world);
+		}
+	}
+	
+	@Optional.Method(modid = "gamestages")
+	public void gamestageChecks(RegularAgingInfo info, Entity entity, World world)
+	{
+		if(info.getGameStage() != null)
+		{
+			if(!info.getGameStage().isEmpty())
+			{
+				for (final EntityPlayer player : world.playerEntities) {
+		            if (net.darkhax.gamestages.GameStageHelper.hasStage(player, info.getGameStage()) && net.darkhax.bookshelf.util.EntityUtils.getDistanceFromEntity(player, entity) <= 32) {
+		            	ExecuteAppropiateMethod(info, entity, world);
+		            	break;
+		            }
+				}
+			}
+			else
+			{
+				AgeingMobs.logger.error("Given stage of ageing is empty: %s", new Object[] {info.getUniqueID()});
+				if(AgeList.agingList.contains(info))
+				{
+					AgeList.agingList.remove(info);
+				}
+			}
+		}
+		else
+		{
+			ExecuteAppropiateMethod(info, entity, world);
 		}
 	}
 	
@@ -250,6 +299,21 @@ public class AgeingHandler {
 			WeatherBasedAgingInfo weatherInfo = (WeatherBasedAgingInfo)info;
 			weatherChecks(weatherInfo, entity, world);
 		}
+		else if(info instanceof LiquidBasedAgingInfo)
+		{
+			LiquidBasedAgingInfo liquidInfo = (LiquidBasedAgingInfo)info;
+			liquidChecks(liquidInfo, entity, world);
+		}
+		else if(info instanceof HeightBasedAgingInfo)
+		{
+			HeightBasedAgingInfo heightInfo = (HeightBasedAgingInfo)info;
+			heightChecks(heightInfo, entity, world);
+		}
+		else if(info instanceof EntityBasedAgingInfo)
+		{
+			EntityBasedAgingInfo entityInfo = (EntityBasedAgingInfo)info;
+			entityChecks(entityInfo, entity, world);
+		}
 		else
 		{
 			AgeTheMob(info, entity, world);
@@ -316,7 +380,7 @@ public class AgeingHandler {
 						{
 							if(!info.getChangedEntityData().hasNoTags())
 							{
-								NBTTagCompound entityTag = entityToNBT(foundEntity);
+								NBTTagCompound entityTag = AgeingHelper.entityToNBT(foundEntity);
 								NBTTagCompound entityTag2 = info.getChangedEntityData();
 								
 								if(!NBTUtil.areNBTEquals(entityTag2, entityTag, true))
@@ -569,6 +633,91 @@ public class AgeingHandler {
 		}
 	}
 	
+	public void liquidChecks(LiquidBasedAgingInfo info, Entity entity, World world)
+	{
+		Fluid fluid = FluidRegistry.getFluid(info.getLiquid());
+		AxisAlignedBB bb = entity.getEntityBoundingBox().grow(0.0D, -0.4000000059604645D, 0.0D).shrink(0.001D);
+		int j2 = MathHelper.floor(bb.minX);
+        int k2 = MathHelper.ceil(bb.maxX);
+        int l2 = MathHelper.floor(bb.minY);
+        int i3 = MathHelper.ceil(bb.maxY);
+        int j3 = MathHelper.floor(bb.minZ);
+        int k3 = MathHelper.ceil(bb.maxZ);
+        BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
+
+        for (int l3 = j2; l3 < k2; ++l3)
+        {
+            for (int i4 = l2; i4 < i3; ++i4)
+            {
+                for (int j4 = j3; j4 < k3; ++j4)
+                {
+                    IBlockState state = world.getBlockState(blockpos$pooledmutableblockpos.setPos(l3, i4, j4));
+                    
+                    if (state.getMaterial() != Material.AIR && state.getBlock() == fluid.getBlock())
+                    {
+                        blockpos$pooledmutableblockpos.release();
+        				AgeTheMob(info, entity, world);
+        				break;
+                    }
+                }
+            }
+        }
+
+        blockpos$pooledmutableblockpos.release();
+	}
+	
+	public void heightChecks(HeightBasedAgingInfo info, Entity entity, World world)
+	{
+		int minHeight = info.getMinHeight();
+		int maxHeight = info.getMaxHeight();
+		int entityHeight = entity.getPosition().getY();
+
+		if(entityHeight >= minHeight && entityHeight <= maxHeight)
+		{
+			AgeTheMob(info, entity, world);
+		}
+	}
+	
+	public void entityChecks(EntityBasedAgingInfo info, Entity entity, World world)
+	{
+		BlockPos entityPos = entity.getPosition();
+		int checkRadius = info.getRadius();
+		int nearbyEntityAmount = 0;
+		
+		AxisAlignedBB areaHitbox = new AxisAlignedBB(entityPos.getX() - 0.5f, entityPos.getY() - 0.5f, entityPos.getZ() - 0.5f, entityPos.getX() + 0.5f, entityPos.getY() + 0.5f, entityPos.getZ() + 0.5f)
+				.expand(-checkRadius, -checkRadius, -checkRadius).expand(checkRadius, checkRadius, checkRadius);
+
+		if(!world.getEntitiesWithinAABB(Entity.class, areaHitbox).isEmpty())
+		{
+			for(Entity foundEntity: world.getEntitiesWithinAABB(Entity.class, areaHitbox)) {
+				if(!(foundEntity instanceof EntityPlayer) && !(foundEntity instanceof FakePlayer))
+				{
+					if(EntityList.isMatchingName(foundEntity, AgeingHelper.getEntityLocation(info.getNearbyEntity())))
+					{
+						if(!info.getChangedEntityData().hasNoTags())
+						{
+							NBTTagCompound entityTag = AgeingHelper.entityToNBT(foundEntity);
+							NBTTagCompound entityTag2 = info.getNearbyEntityData();
+							
+							if(!NBTUtil.areNBTEquals(entityTag2, entityTag, true))
+							{
+								nearbyEntityAmount++;
+							}
+						}
+						else
+						{
+							nearbyEntityAmount++;
+						}
+					}
+				}
+			}
+		}
+		if(nearbyEntityAmount != 0)
+		{
+			AgeTheMob(info, entity, world);
+		}
+	}
+	
 	public void AgeTheMob(RegularAgingInfo info, Entity entity, World world)
 	{
 		int maxTime = info.getTickTime();
@@ -594,7 +743,7 @@ public class AgeingHandler {
 						agedEntity.copyLocationAndAnglesFrom(entity);
 						world.spawnEntity(agedEntity);
 						
-						NBTTagCompound entityTag = entityToNBT(entity);
+						NBTTagCompound entityTag = AgeingHelper.entityToNBT(entity);
 						NBTTagCompound entityTagCopy = entityTag.copy();
 						NBTTagCompound entityTag2 = info.getChangedEntityData();
 						
@@ -628,7 +777,7 @@ public class AgeingHandler {
 					{
 						agedEntity.copyLocationAndAnglesFrom(entity);
 						
-						NBTTagCompound entityTag = entityToNBT(entity);
+						NBTTagCompound entityTag = AgeingHelper.entityToNBT(entity);
 						NBTTagCompound entityTagCopy = entityTag.copy();
 						NBTTagCompound entityTag2 = info.getChangedEntityData();
 						
@@ -705,7 +854,7 @@ public class AgeingHandler {
 						agedEntity.copyLocationAndAnglesFrom(entity);
 						world.spawnEntity(agedEntity);
 						
-						NBTTagCompound entityTag = entityToNBT(entity);
+						NBTTagCompound entityTag = AgeingHelper.entityToNBT(entity);
 						NBTTagCompound entityTagCopy = entityTag.copy();
 						NBTTagCompound entityTag2 = info.getChangedEntityData();
 						
@@ -739,7 +888,7 @@ public class AgeingHandler {
 					{
 						agedEntity.copyLocationAndAnglesFrom(entity);
 						
-						NBTTagCompound entityTag = entityToNBT(entity);
+						NBTTagCompound entityTag = AgeingHelper.entityToNBT(entity);
 						NBTTagCompound entityTagCopy = entityTag.copy();
 						NBTTagCompound entityTag2 = info.getChangedEntityData();
 						
@@ -826,21 +975,4 @@ public class AgeingHandler {
 			tag.setInteger(uniqueTag, currentAge);
 		}
 	}
-	
-	public static NBTTagCompound entityToNBT(Entity theEntity)
-    {
-        NBTTagCompound nbttagcompound = theEntity.writeToNBT(new NBTTagCompound());
-
-        if (theEntity instanceof EntityPlayer)
-        {
-            ItemStack itemstack = ((EntityPlayer)theEntity).inventory.getCurrentItem();
-
-            if (!itemstack.isEmpty())
-            {
-                nbttagcompound.setTag("SelectedItem", itemstack.writeToNBT(new NBTTagCompound()));
-            }
-        }
-
-        return nbttagcompound;
-    }
 }

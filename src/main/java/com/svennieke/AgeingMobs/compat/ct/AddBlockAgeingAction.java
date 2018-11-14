@@ -17,6 +17,7 @@ public class AddBlockAgeingAction implements IAction{
 	private IBlockState state;
 	private boolean nearby;
 	private int radius;
+	private String gamestage;
 	
 	public AddBlockAgeingAction(String uniqueID, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String blockName, int radius, int tickTime) {
 		this.uniqueID = uniqueID;
@@ -42,17 +43,53 @@ public class AddBlockAgeingAction implements IAction{
 		this.radius = 0;
 	}
 	
+	public AddBlockAgeingAction(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String blockName, int radius, int tickTime) {
+		this.uniqueID = uniqueID;
+		this.entity = entity;
+		this.entityData = entityData;
+		this.transformedEntity = transformedEntity;
+		this.changedEntityData = changedEntityData;
+		this.tickTime = tickTime;
+		this.nearby = true;
+		this.state = Block.getBlockFromName(blockName).getDefaultState();
+		this.radius = radius;
+		this.gamestage = gamestage;
+	}
+	
+	public AddBlockAgeingAction(String uniqueID, String gamestage, String entity, NBTTagCompound entityData, String transformedEntity, NBTTagCompound changedEntityData, String blockName, int tickTime) {
+		this.uniqueID = uniqueID;
+		this.entity = entity;
+		this.entityData = entityData;
+		this.transformedEntity = transformedEntity;
+		this.changedEntityData = changedEntityData;
+		this.tickTime = tickTime;
+		this.nearby = false;
+		this.state = Block.getBlockFromName(blockName).getDefaultState();
+		this.radius = 0;
+		this.gamestage = gamestage;
+	}
+	
 	@Override
 	public void apply()
 	{
 		if(state != null)
-			AgeList.addBlockBasedBothAging(uniqueID, entity, entityData, transformedEntity, changedEntityData, state, nearby, radius, tickTime);
+		{
+			if(gamestage != null && !gamestage.isEmpty())
+				AgeList.addStagedBlockBasedAgeing(uniqueID, gamestage, entity, entityData, transformedEntity, changedEntityData, state, nearby, radius, tickTime);
+			else
+				AgeList.addBlockBasedAgeing(uniqueID, entity, entityData, transformedEntity, changedEntityData, state, nearby, radius, tickTime);
+		}
 	}
 
 	@Override
 	public String describe() {
 		if(state != null)
-			return String.format("%s has been added to the Block ageing list.", new Object[] {this.uniqueID});
+		{
+			if(gamestage != null && !gamestage.isEmpty())
+				return String.format("%s has been added to the staged Block ageing list.", new Object[] {this.uniqueID});	
+			else
+				return String.format("%s has been added to the Block ageing list.", new Object[] {this.uniqueID});
+		}
 		else
 			return String.format("%s has an invalid block %s", new Object[] {this.uniqueID, this.state.toString()});
 	}
