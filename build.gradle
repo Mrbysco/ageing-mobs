@@ -1,68 +1,121 @@
 buildscript {
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'net.minecraftforge.gradle'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.1"
-group = "com.svennieke.AgeingMobs" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Ageing-Mobs"
+version = '1.0'
+group = 'com.svennieke.ageingmobs' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'Ageing-Mobs-1.14'
 
-sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    version = "1.12.2-14.23.5.2768"
-    runDir = "run"
-    mappings = "snapshot_20171003"
+    mappings channel: 'snapshot', version: '20191230-1.14.3'
+	
+    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                ageingmobs {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                ageingmobs {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            // property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', 'ageingmobs', '--all', '--output', file('src/generated/resources/')
+
+            mods {
+                ageingmobs {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 repositories {
-	maven {
-		url = "http://dvs1.progwml6.com/files/maven"
-	}
-	maven {
-		url = "modmaven.k-4u.nl"
-	}
 	maven {
         url "http://maven.blamejared.com"
 	}
 	maven { 
 		url 'https://maven.mcmoddev.com' 
 	}
+	maven {
+		url = "http://dvs1.progwml6.com/files/maven"
+	}
+	maven {
+		url = "https://modmaven.k-4u.nl/"
+	}
+	maven { 
+		url "http://tehnut.info/maven" 
+	}
 }
 
 dependencies {
-	deobfCompile "mezz.jei:jei_1.12.2:4.11.0.+"
-	deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.11.+"
-	deobfCompile "net.darkhax.gamestages:GameStages-1.12.2:2.0.110"
-	deobfCompile "net.darkhax.bookshelf:Bookshelf-1.12.2:2.3.568"
+    minecraft 'net.minecraftforge:forge:1.14.4-28.1.111'
+	
+    compile fg.deobf("mezz.jei:jei-1.14.4:6.0.0.27")
+    compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.14.4:5.0.1.150")
+	compile fg.deobf("net.darkhax.gamestages:GameStages-1.14.4:4.2.15")
+	compile fg.deobf("net.darkhax.bookshelf:Bookshelf-1.14.4:4.4.72")
 }
 
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    // copy everything else except the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+// Example for how to get properties into the manifest for reading by the runtime..
+jar {
+    manifest {
+        attributes([
+            "Specification-Title": "ageingmobs",
+            "Specification-Vendor": "ShyNieke",
+            "Specification-Version": "1", // We are version 1 of ourselves
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${version}",
+            "Implementation-Vendor" :"ShyNieke",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
     }
 }

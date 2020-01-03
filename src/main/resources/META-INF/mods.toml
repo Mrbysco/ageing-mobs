@@ -1,0 +1,15 @@
+modLoader="javafml"
+loaderVersion="[28,)"
+issueTrackerURL="https://github.com/Mrbysco/ageing-mobs/issues"
+
+[[mods]]
+modId="ageingmobs"
+version="${file.jarVersion}"
+displayName="Ageing Mobs Mod"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/ageing-mobs"
+logoFile="logo.png"
+authors="ShyNieke, Mrbysco"
+credits="Plutosion for testing"
+description='''
+This mod allows mobs to age and transform.
+'''
