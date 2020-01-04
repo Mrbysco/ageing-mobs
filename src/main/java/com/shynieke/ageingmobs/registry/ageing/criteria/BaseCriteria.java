@@ -13,12 +13,16 @@ public class BaseCriteria implements iCriteria {
     private CompoundNBT evolvedEntityEntityData;
     private String uniqueID;
 
+    private iAgeing ageingData;
+
     public BaseCriteria(iAgeing ageing) {
         this.entity = ageing.getEntity();
         this.entityData = ageing.getEntityData();
         this.evolvedEntity = ageing.getTransformedEntity();
         this.evolvedEntityEntityData = ageing.getTransformedEntityData();
         this.uniqueID = ageing.getName();
+
+        this.ageingData = ageing;
     }
 
     public EntityType<? extends Entity> getEntity() {
@@ -38,7 +42,11 @@ public class BaseCriteria implements iCriteria {
     }
 
     public String getUniqueID() {
-        return uniqueID;
+        return this.uniqueID;
+    }
+
+    public iAgeing getAgeingData() {
+        return this.ageingData;
     }
 
     @Override

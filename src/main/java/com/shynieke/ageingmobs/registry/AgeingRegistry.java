@@ -14,7 +14,6 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.DimensionCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.LightCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.MagicCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
-import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -39,8 +38,8 @@ public class AgeingRegistry {
     public static AgeingRegistry INSTANCE = new AgeingRegistry();
 
     public static List<String> nameList = Lists.newArrayList();
-    public static List<iAgeing> ageingList = Lists.newArrayList();
-    private Map<String, iAgeing> nameToAgeing = Maps.newHashMap();
+    public static List<AgeingData> ageingList = Lists.newArrayList();
+    private Map<String, AgeingData> nameToAgeing = Maps.newHashMap();
 
     private static HashMap<Block, Double> importanceList = new HashMap<>();
     private static List<Integer> moonDimensions = Lists.newArrayList();
@@ -140,10 +139,17 @@ public class AgeingRegistry {
         }
     }
 
-    public void registerAgeing(iAgeing ageing)
+    public void registerAgeing(AgeingData ageing)
     {
         this.nameList.add(ageing.getName());
         nameToAgeing.put(ageing.getName(), ageing);
+        sortList(ageing);
+    }
+
+    public void removeAgeing(AgeingData ageing)
+    {
+        this.nameList.remove(ageing.getName());
+        nameToAgeing.remove(ageing.getName(), ageing);
         sortList(ageing);
     }
 
@@ -151,12 +157,12 @@ public class AgeingRegistry {
         return !this.nameList.contains(ID);
     }
 
-    private void sortList(@Nullable iAgeing ageing)
+    private void sortList(@Nullable AgeingData ageing)
     {
         if(ageing != null)
             ageingList.add(ageing);
 
-        ageingList.sort(Comparator.comparingInt(iAgeing::getAgeingTme));
+        ageingList.sort(Comparator.comparingInt(AgeingData::getAgeingTme));
     }
 
     public void triggerAgeing(World worldIn, BlockPos pos, PlayerEntity playerIn) {
@@ -220,6 +226,14 @@ public class AgeingRegistry {
 
     public List<Integer> getMoonDimensions() {
         return this.moonDimensions;
+    }
+
+    public List<AgeingData> getAgeingList() {
+        return this.ageingList;
+    }
+
+    public Map<String, AgeingData> getNameToAgeing() {
+        return this.nameToAgeing;
     }
 
     public static CompoundNBT entityToNBT(Entity theEntity)

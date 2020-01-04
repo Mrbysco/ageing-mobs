@@ -75,7 +75,16 @@ public class AgeingData implements iAgeing {
         this.criteria = criteria;
     }
 
+    public AgeingData addCriteria(BaseCriteria[] criteria) {
+        this.criteria = criteria;
+        return this;
+    }
+
     @Override
+    public BaseCriteria[] getCriteria() {
+        return this.criteria;
+    }
+
     public AgeingData setAgeingCriteria(BaseCriteria[] ageingCriteria) {
         AgeingData ageingData = new AgeingData(this.uniqueID, this.entity, this.entityData, this.evolvedEntity, this.evolvedEntityEntityData, this.tickTime);
         ageingData.setGamestage(this.gamestage);

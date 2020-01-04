@@ -3,6 +3,7 @@ package com.shynieke.ageingmobs.handler;
 import com.shynieke.ageingmobs.AgeingMobs;
 import com.shynieke.ageingmobs.Reference;
 import com.shynieke.ageingmobs.registry.AgeingRegistry;
+import com.shynieke.ageingmobs.registry.ageing.AgeingData;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.entity.Entity;
@@ -32,7 +33,7 @@ public class AgeHandler {
                     Iterator<Entity> entityIterator = world.getEntities().iterator();
                     while(entityIterator.hasNext()) {
                         Entity entityIn = entityIterator.next();
-                        for(iAgeing info : AgeingRegistry.ageingList) {
+                        for(AgeingData info : AgeingRegistry.ageingList) {
                             if(!(entityIn instanceof PlayerEntity) && !(entityIn instanceof FakePlayer)) {
                                 if(entityIn.getType().equals(info.getEntity())) {
                                     if(info.getEntity().equals(info.getTransformedEntity()))
@@ -44,10 +45,10 @@ public class AgeHandler {
                                         else
                                         {
                                             AgeingMobs.LOGGER.error("An error has occured. A mob can not transform into itself. See id: %s", new Object[] {info.getName()});
-//                                            if(AgeList.agingList.contains(info)) TODO: Still needed?
-//                                            {
-//                                                AgeList.agingList.remove(info);
-//                                            }
+                                            if(AgeingRegistry.ageingList.contains(info))
+                                            {
+                                                AgeingRegistry.INSTANCE.removeAgeing(info);
+                                            }
                                         }
                                     }
                                     else
@@ -164,24 +165,19 @@ public class AgeHandler {
     public void checkCriteria(iAgeing info, Entity entity, World world) {
         if(info.getCriteria().length > 0) {
             boolean ableToAge = true;
-            boolean reversal = false;
             for(int i = 0; i < info.getCriteria().length; i++) {
                 BaseCriteria criteria = info.getCriteria()[i];
                 if(!criteria.checkCriteria(world, entity)) {
                     ableToAge = false;
-                    return;
+                    break;
                 } else {
                     if(criteria.isReversing()) {
-                        reversal = true;
+                        BabifyTheMob(info, entity, world);
                     }
                 }
             }
             if(ableToAge) {
-                if(reversal) {
-                    BabifyTheMob(info, entity, world);
-                } else {
-                    ageTheMob(info, entity, world);
-                }
+                ageTheMob(info, entity, world);
             }
         } else {
             ageTheMob(info, entity, world);
