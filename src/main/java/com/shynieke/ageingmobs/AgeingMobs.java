@@ -2,7 +2,6 @@ package com.shynieke.ageingmobs;
 
 import com.shynieke.ageingmobs.config.AgeingConfig;
 import com.shynieke.ageingmobs.handler.AgeHandler;
-import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -27,6 +26,6 @@ public class AgeingMobs {
 
     private void setup(final FMLCommonSetupEvent event)
     {
-        AgeingRegistry.initializeAgeing();
+        //geingRegistry.initializeAgeing();
     }
 }

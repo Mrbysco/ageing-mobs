@@ -339,6 +339,7 @@ public class AgeingConfig {
     public static void onLoad(final ModConfig.Loading configEvent) {
         AgeingMobs.LOGGER.debug("Loaded Ageing Mobs' config file {}", configEvent.getConfig().getFileName());
 
+        AgeingRegistry.INSTANCE.initializeAgeing();
         AgeingRegistry.INSTANCE.initializeMagicMap();
         AgeingRegistry.INSTANCE.initializeMoonDimensions();
     }
