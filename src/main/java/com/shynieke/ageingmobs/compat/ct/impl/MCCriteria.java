@@ -1,12 +1,12 @@
 package com.shynieke.ageingmobs.compat.ct.impl;
 
 import com.blamejared.crafttweaker.api.annotations.ZenRegister;
-import com.blamejared.crafttweaker.api.data.IData;
 import com.blamejared.crafttweaker.impl.blocks.MCBlock;
 import com.blamejared.crafttweaker.impl.entity.MCEntityType;
 import com.blamejared.crafttweaker.impl.world.MCBiome;
 import com.google.common.collect.Lists;
 import com.shynieke.ageingmobs.AgeingMobs;
+import com.shynieke.ageingmobs.helper.NBTHelper;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BiomeCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BiomeTypeCriteria;
@@ -22,7 +22,6 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.MoonCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.TimeCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
 import net.minecraft.block.Block;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import org.openzen.zencode.java.ZenCodeType;
@@ -87,6 +86,26 @@ public class MCCriteria {
     }
 
     @ZenCodeType.Method
+    public MCCriteria constructBlockBased(String[] blocks, Boolean nearBlock, int radius) {
+        if(blocks.length > 0) {
+            List<Block> blockList = Lists.newArrayList();
+            for(int i = 0; i < blocks.length; i++) {
+                String blockName = blocks[i];
+                Block block = net.minecraftforge.registries.ForgeRegistries.BLOCKS.getValue(new ResourceLocation(blockName));
+                if(block != null) {
+                    blockList.add(block);
+                } else {
+                    AgeingMobs.LOGGER.error("Could not resolve block: " + blockName);
+                }
+            }
+            Block[] blockArray = new Block[blockList.size()];
+            blockArray = blockList.toArray(blockArray);
+            return new MCCriteria(new BlockBasedCriteria(this.internal.getAgeingData(), blockArray,nearBlock, radius));
+        }
+        return this;
+    }
+
+    @ZenCodeType.Method
     public MCCriteria constructBoss(int maxInArea, int checkRadius) {
         return new MCCriteria(new BossCriteria(this.internal.getAgeingData(), maxInArea, checkRadius));
     }
@@ -107,8 +126,8 @@ public class MCCriteria {
     }
 
     @ZenCodeType.Method
-    public MCCriteria constructEntity(MCEntityType nearbyEntity, IData nearbyEntityData, int radius) {
-        return new MCCriteria(new EntityCriteria(this.internal.getAgeingData(), nearbyEntity.getInternal(), (CompoundNBT)nearbyEntityData.getInternal(), radius));
+    public MCCriteria constructEntity(MCEntityType nearbyEntity, String nearbyEntityData, int radius) {
+        return new MCCriteria(new EntityCriteria(this.internal.getAgeingData(), nearbyEntity.getInternal(), NBTHelper.createNBTTag(nearbyEntityData), radius));
     }
 
     @ZenCodeType.Method
@@ -142,7 +161,7 @@ public class MCCriteria {
     }
 
     @ZenCodeType.Method
-    public MCCriteria constructTime(String weather) {
+    public MCCriteria constructWeather(String weather) {
         return new MCCriteria(new WeatherCriteria(this.internal.getAgeingData(), weather));
     }
 

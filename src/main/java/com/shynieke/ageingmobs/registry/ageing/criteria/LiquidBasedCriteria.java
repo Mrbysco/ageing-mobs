@@ -2,6 +2,7 @@ package com.shynieke.ageingmobs.registry.ageing.criteria;
 
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class LiquidBasedCriteria extends BaseCriteria {
@@ -38,7 +39,7 @@ public class LiquidBasedCriteria extends BaseCriteria {
     public boolean checkCriteria(World worldIn, Entity entityIn) {
         boolean inFluid = entityIn.isOffsetPositionInLiquid(entityIn.posX, entityIn.posY-1, entityIn.posZ);
         if(inFluid) {
-            if(worldIn.getFluidState(entityIn.getPosition().add(0,-1,0)).getFluid().getRegistryName().equals(getLiquid())) {
+            if(worldIn.getFluidState(entityIn.getPosition().add(0,-1,0)).getFluid().getRegistryName().equals(new ResourceLocation(getLiquid()))) {
                 this.isReversing = false;
                 return true;
             } else {
