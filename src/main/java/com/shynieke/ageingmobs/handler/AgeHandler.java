@@ -5,7 +5,6 @@ import com.shynieke.ageingmobs.Reference;
 import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import com.shynieke.ageingmobs.registry.ageing.AgeingData;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
-import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,7 +13,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -38,7 +36,7 @@ public class AgeHandler {
                     while(entityIterator.hasNext()) {
                         Entity entityIn = entityIterator.next();
                         for(AgeingData info : ageingList) {
-                            if(!(entityIn instanceof PlayerEntity) && !(entityIn instanceof FakePlayer)) {
+                            if(!(entityIn instanceof PlayerEntity)) {
                                 if(entityIn.getType().equals(info.getEntity())) {
                                     if(info.getEntity().equals(info.getTransformedEntity()))
                                     {
@@ -68,13 +66,13 @@ public class AgeHandler {
         }
     }
 
-    public void CheckList(iAgeing info, Entity entity, World world)
+    public void CheckList(AgeingData info, Entity entity, World world)
     {
         if(info.getEntity().equals(info.getTransformedEntity()))
         {
             if(info.getEntityData().equals(info.getTransformedEntityData()))
             {
-                AgeingMobs.LOGGER.error("Aged Entity nbt identical to the original: %s", new Object[] {info.getName()});
+                AgeingMobs.LOGGER.error("Aged Entity nbt identical to the original: " + info.getName());
             }
             else
             {
@@ -95,7 +93,7 @@ public class AgeHandler {
                     }
                     else
                     {
-                        AgeingMobs.LOGGER.error("Aged Entity identical to the original: %s", new Object[] {info.getName()});
+                        AgeingMobs.LOGGER.error("Aged Entity identical to the original: " + info.getName());
                     }
                 }
                 else
@@ -153,12 +151,17 @@ public class AgeHandler {
         }
     }
 
-    public void extraChecks(iAgeing info, Entity entity, World world)
+    public void extraChecks(AgeingData info, Entity entity, World world)
     {
         if(ModList.get().isLoaded("gamestages"))
         {
-            checkCriteria(info, entity, world);
-            //gamestageChecks(info, entity, world);
+            if(!info.getGamestage().isEmpty()) {
+                if(GamestagesHandler.gamestageChecks(info, entity, world)) {
+                    checkCriteria(info, entity, world);
+                }
+            } else {
+                checkCriteria(info, entity, world);
+            }
         }
         else
         {
@@ -166,7 +169,7 @@ public class AgeHandler {
         }
     }
 
-    public void checkCriteria(iAgeing info, Entity entity, World world) {
+    public void checkCriteria(AgeingData info, Entity entity, World world) {
         if(info.getCriteria().length > 0) {
             boolean ableToAge = true;
             for(int i = 0; i < info.getCriteria().length; i++) {
@@ -188,7 +191,7 @@ public class AgeHandler {
         }
     }
 
-    public void ageTheMob(iAgeing info, Entity entity, World world)
+    public void ageTheMob(AgeingData info, Entity entity, World world)
     {
         int maxTime = info.getAgeingTme();
 
@@ -226,11 +229,11 @@ public class AgeHandler {
                     }
                     else
                     {
-                        AgeingMobs.LOGGER.error("Aged Entity invalid [Line 224, Report this to the author of Ageing Mobs]: " + info.getTransformedEntity().toString());
+                        AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + info.getTransformedEntity().getRegistryName());
                     }
 
                     tag.remove(uniqueTag);
-                    entity.captureDrops(null); //TODO: Check what this even does
+                    entity.captureDrops(null);
                     entity.remove();
                 }
             }
@@ -259,7 +262,7 @@ public class AgeHandler {
                     }
                     else
                     {
-                        AgeingMobs.LOGGER.error("Aged Entity invalid [Line 256, Report this to the author of Ageing Mobs]: " + info.getTransformedEntity().toString());
+                        AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + info.getTransformedEntity().getRegistryName());
                     }
 
                     tag.remove(uniqueTag);
@@ -277,7 +280,7 @@ public class AgeHandler {
                     }
                     else
                     {
-                        AgeingMobs.LOGGER.error("Aged Entity invalid [Line 273, Report this to the author of Ageing Mobs]: " + info.getTransformedEntity().toString());
+                        AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + info.getTransformedEntity().getRegistryName());
                     }
 
                     tag.remove(uniqueTag);
@@ -295,7 +298,7 @@ public class AgeHandler {
         }
     }
 
-    public void BabifyTheMob(iAgeing info, Entity entity)
+    public void BabifyTheMob(AgeingData info, Entity entity)
     {
         String uniqueTag = Reference.MOD_PREFIX + info.getName();
         CompoundNBT tag = entity.getPersistentData();
