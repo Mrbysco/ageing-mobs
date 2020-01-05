@@ -139,6 +139,7 @@ public class AgeingRegistry {
 
     public static void updateAgeing() {
         Map<String, AgeingData> nameToAgeing = INSTANCE.getNameToAgeing();
+        System.out.println(nameList.contains("CreeperToCharged"));
         if(!nameList.contains("CreeperToCharged") && AgeingConfig.SERVER.creeperAgeing.get()) {
             AgeingData creeperToCharged = new AgeingData("CreeperToCharged", EntityType.CREEPER, createNBTTag(""), EntityType.CREEPER, createNBTTag("{powered:1b}"), AgeingConfig.SERVER.creeperAgeingTime.get());
             creeperToCharged.setCriteria(new BaseCriteria[] { new WeatherCriteria(creeperToCharged, "thunder") });
@@ -153,9 +154,9 @@ public class AgeingRegistry {
         }
 
         if(!nameList.contains("ZombieToHusk") && AgeingConfig.SERVER.zombieToHuskAgeing.get()) {
-            AgeingData babyZombieToBabyHusk = new AgeingData("BabyZombieToBabyHusk", EntityType.ZOMBIE, createNBTTag("{IsBaby:1b}"), EntityType.HUSK, createNBTTag("{IsBaby:1b}"), AgeingConfig.SERVER.zombieToHuskAgeingTime.get());
-            babyZombieToBabyHusk.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(babyZombieToBabyHusk, BiomeDictionary.Type.HOT)});
-            INSTANCE.registerAgeing(babyZombieToBabyHusk);
+            AgeingData zombieToHusk = new AgeingData("ZombieToHusk", EntityType.ZOMBIE, createNBTTag("{IsBaby:0b}"), EntityType.HUSK, createNBTTag("{IsBaby:0b}"), AgeingConfig.SERVER.zombieToHuskAgeingTime.get());
+            zombieToHusk.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(zombieToHusk, BiomeDictionary.Type.HOT)});
+            INSTANCE.registerAgeing(zombieToHusk);
         } else if (nameList.contains("ZombieToHusk")){
             AgeingData zombieToHusk = nameToAgeing.get("ZombieToHusk");
             int ageingTime = AgeingConfig.SERVER.zombieToHuskAgeingTime.get();
@@ -167,7 +168,7 @@ public class AgeingRegistry {
 
         if(!nameList.contains("BabyZombieToBabyHusk") && AgeingConfig.SERVER.zombieToHuskAgeing.get()) {
             AgeingData babyZombieToBabyHusk = new AgeingData("BabyZombieToBabyHusk", EntityType.ZOMBIE, createNBTTag("{IsBaby:1b}"), EntityType.HUSK, createNBTTag("{IsBaby:1b}"), AgeingConfig.SERVER.zombieToHuskAgeingTime.get());
-            babyZombieToBabyHusk.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(babyZombieToBabyHusk, BiomeDictionary.Type.HOT)});
+            babyZombieToBabyHusk.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(babyZombieToBabyHusk, BiomeDictionary.Type.HOT) });
             INSTANCE.registerAgeing(babyZombieToBabyHusk);
         } else if (nameList.contains("BabyZombieToBabyHusk")){
             AgeingData babyZombieToBabyHusk = nameToAgeing.get("BabyZombieToBabyHusk");
@@ -180,7 +181,7 @@ public class AgeingRegistry {
 
         if(!nameList.contains("HuskToZombie") && AgeingConfig.SERVER.huskToZombieAgeing.get()) {
             AgeingData huskToZombie = new AgeingData("HuskToZombie", EntityType.HUSK, createNBTTag("{IsBaby:0b}"), EntityType.ZOMBIE, createNBTTag("{IsBaby:0b}"), AgeingConfig.SERVER.huskToZombieAgeingTime.get());
-            huskToZombie.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(huskToZombie, BiomeDictionary.Type.COLD)});
+            huskToZombie.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(huskToZombie, BiomeDictionary.Type.COLD) });
             INSTANCE.registerAgeing(huskToZombie);
         } else if (nameList.contains("HuskToZombie")){
             AgeingData huskToZombie = nameToAgeing.get("HuskToZombie");
@@ -193,7 +194,7 @@ public class AgeingRegistry {
 
         if(!nameList.contains("BabyHuskToBabyZombie") && AgeingConfig.SERVER.huskToZombieAgeing.get()) {
             AgeingData babyHuskToBabyZombie = new AgeingData("BabyHuskToBabyZombie", EntityType.HUSK, createNBTTag("{IsBaby:1b}"), EntityType.ZOMBIE, createNBTTag("{IsBaby:1b}"), AgeingConfig.SERVER.huskToZombieAgeingTime.get());
-            babyHuskToBabyZombie.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(babyHuskToBabyZombie, BiomeDictionary.Type.COLD)});
+            babyHuskToBabyZombie.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(babyHuskToBabyZombie, BiomeDictionary.Type.COLD) });
             INSTANCE.registerAgeing(babyHuskToBabyZombie);
         } else if (nameList.contains("BabyHuskToBabyZombie")){
             AgeingData babyHuskToBabyZombie = nameToAgeing.get("BabyHuskToBabyZombie");
@@ -338,8 +339,8 @@ public class AgeingRegistry {
             AgeingData strayToSkeleton = new AgeingData("StrayToSkeleton", EntityType.STRAY, createNBTTag(""), EntityType.SKELETON, createNBTTag(""), AgeingConfig.SERVER.strayToSkeletonAgeingTime.get());
             strayToSkeleton.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(strayToSkeleton, BiomeDictionary.Type.HOT)});
             INSTANCE.registerAgeing(strayToSkeleton);
-        } else if (nameList.contains("SkeletonToStray")){
-            AgeingData strayToSkeleton = nameToAgeing.get("SkeletonToStray");
+        } else if (nameList.contains("StrayToSkeleton")){
+            AgeingData strayToSkeleton = nameToAgeing.get("StrayToSkeleton");
             int ageingTime = AgeingConfig.SERVER.strayToSkeletonAgeingTime.get();
             if(strayToSkeleton.getAgeingTme() != ageingTime) {
                 strayToSkeleton.setAgeingTme(ageingTime);
