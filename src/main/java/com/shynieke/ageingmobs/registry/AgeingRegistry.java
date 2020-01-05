@@ -291,7 +291,7 @@ public class AgeingRegistry {
             }
         }
 
-        if(AgeingConfig.SERVER.cowToMooshroomAgeing.get()) {
+        if(!nameList.contains("CowToMooshroom") && AgeingConfig.SERVER.cowToMooshroomAgeing.get()) {
             AgeingData cowToMooshroom = new AgeingData("CowToMooshroom", EntityType.COW, createNBTTag(""), EntityType.MOOSHROOM, createNBTTag(""), AgeingConfig.SERVER.cowToMooshroomAgeingTime.get());
             cowToMooshroom.setCriteria(new BaseCriteria[] { new BlockBasedCriteria(cowToMooshroom, new Block[]{Blocks.MYCELIUM, Blocks.BROWN_MUSHROOM, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.RED_MUSHROOM, Blocks.RED_MUSHROOM_BLOCK}, false, AgeingConfig.SERVER.cowToMooshroomAgeingRadius.get())});
             INSTANCE.registerAgeing(cowToMooshroom);
@@ -374,13 +374,22 @@ public class AgeingRegistry {
     {
         nameList.remove(ageing.getName());
         nameToAgeing.remove(ageing.getName(), ageing);
-        sortList(ageing);
+        removeAndSort(ageing);
     }
 
     public void replaceAgeing(AgeingData ageing)
     {
-        nameToAgeing.put(ageing.getName(), ageing);
+//        System.out.println("Changing " + ageing.getName() + " list is at " + ageingList.size());
+        AgeingData oldAgeing = nameToAgeing.get(ageing.getName());
+        nameToAgeing.remove(oldAgeing.getName(), oldAgeing);
+        nameToAgeing.put(oldAgeing.getName(), ageing);
+        ageingList.remove(oldAgeing);
         sortList(ageing);
+//        System.out.println("Changed " + ageing.getName() + " list is at " + ageingList.size());
+    }
+
+    public List<AgeingData> getAgeingList() {
+        return ageingList;
     }
 
     public boolean isIDUnique(String ID) {
@@ -391,6 +400,13 @@ public class AgeingRegistry {
     {
         if(ageing != null)
             ageingList.add(ageing);
+
+        ageingList.sort(Comparator.comparingInt(AgeingData::getAgeingTme));
+    }
+
+    private void removeAndSort(@Nullable AgeingData ageing) {
+        if(ageing != null)
+            ageingList.remove(ageing);
 
         ageingList.sort(Comparator.comparingInt(AgeingData::getAgeingTme));
     }

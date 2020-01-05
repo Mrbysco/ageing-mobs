@@ -7,7 +7,9 @@ import com.shynieke.ageingmobs.registry.ageing.AgeingData;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
@@ -18,6 +20,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 public class AgeHandler {
@@ -29,11 +32,12 @@ public class AgeHandler {
         {
             ServerWorld world = (ServerWorld)event.world;
             if (world.getGameTime() % 20 == 0) {
-                if(!AgeingRegistry.ageingList.isEmpty()) {
+                List<AgeingData> ageingList = AgeingRegistry.ageingList;
+                if(!ageingList.isEmpty()) {
                     Iterator<Entity> entityIterator = world.getEntities().iterator();
                     while(entityIterator.hasNext()) {
                         Entity entityIn = entityIterator.next();
-                        for(AgeingData info : AgeingRegistry.ageingList) {
+                        for(AgeingData info : ageingList) {
                             if(!(entityIn instanceof PlayerEntity) && !(entityIn instanceof FakePlayer)) {
                                 if(entityIn.getType().equals(info.getEntity())) {
                                     if(info.getEntity().equals(info.getTransformedEntity()))
@@ -44,7 +48,7 @@ public class AgeHandler {
                                         }
                                         else
                                         {
-                                            AgeingMobs.LOGGER.error("An error has occured. A mob can not transform into itself. See id: %s", new Object[] {info.getName()});
+                                            AgeingMobs.LOGGER.error("An error has occured. A mob can not transform into itself. See id: " + info.getName());
                                             if(AgeingRegistry.ageingList.contains(info))
                                             {
                                                 AgeingRegistry.INSTANCE.removeAgeing(info);
@@ -168,7 +172,7 @@ public class AgeHandler {
             for(int i = 0; i < info.getCriteria().length; i++) {
                 BaseCriteria criteria = info.getCriteria()[i];
                 if(criteria.isReversing()) {
-                    BabifyTheMob(info, entity, world);
+                    BabifyTheMob(info, entity);
                 }
 
                 if(!criteria.checkCriteria(world, entity)) {
@@ -205,7 +209,7 @@ public class AgeHandler {
                     if(agedEntity != null)
                     {
                         agedEntity.copyLocationAndAnglesFrom(entity);
-                        world.addEntity(agedEntity);
+                        copyEquipment(entity, agedEntity);
 
                         CompoundNBT entityTag = AgeingRegistry.entityToNBT(entity);
                         CompoundNBT entityTagCopy = entityTag.copy();
@@ -218,6 +222,7 @@ public class AgeHandler {
                             agedEntity.read(entityTagCopy);
                             agedEntity.setUniqueId(uuid);
                         }
+                        world.addEntity(agedEntity);
                     }
                     else
                     {
@@ -237,6 +242,7 @@ public class AgeHandler {
                     if(agedEntity != null)
                     {
                         agedEntity.copyLocationAndAnglesFrom(entity);
+                        copyEquipment(entity, agedEntity);
 
                         CompoundNBT entityTag = AgeingRegistry.entityToNBT(entity);
                         CompoundNBT entityTagCopy = entityTag.copy();
@@ -266,6 +272,7 @@ public class AgeHandler {
                     if(agedEntity != null)
                     {
                         agedEntity.copyLocationAndAnglesFrom(entity);
+                        copyEquipment(entity, agedEntity);
                         world.addEntity(agedEntity);
                     }
                     else
@@ -284,10 +291,11 @@ public class AgeHandler {
             int currentAge = tag.getInt(uniqueTag);
             currentAge++;
             tag.putInt(uniqueTag, currentAge);
+            //System.out.println(info.getName() + " " + currentAge + " / " + maxTime);
         }
     }
 
-    public void BabifyTheMob(iAgeing info, Entity entity, World world)
+    public void BabifyTheMob(iAgeing info, Entity entity)
     {
         String uniqueTag = Reference.MOD_PREFIX + info.getName();
         CompoundNBT tag = entity.getPersistentData();
@@ -299,6 +307,19 @@ public class AgeHandler {
             } else {
                 tag.remove(uniqueTag);
             }
+        }
+    }
+
+    public void copyEquipment(Entity original, Entity changedEntity) {
+        if(original instanceof MobEntity && changedEntity instanceof MobEntity) {
+            MobEntity originalMob = (MobEntity)original;
+            MobEntity changedMob = (MobEntity)changedEntity;
+            changedMob.setItemStackToSlot(EquipmentSlotType.MAINHAND, originalMob.getItemStackFromSlot(EquipmentSlotType.MAINHAND));
+            changedMob.setItemStackToSlot(EquipmentSlotType.OFFHAND, originalMob.getItemStackFromSlot(EquipmentSlotType.OFFHAND));
+            changedMob.setItemStackToSlot(EquipmentSlotType.HEAD, originalMob.getItemStackFromSlot(EquipmentSlotType.HEAD));
+            changedMob.setItemStackToSlot(EquipmentSlotType.CHEST, originalMob.getItemStackFromSlot(EquipmentSlotType.CHEST));
+            changedMob.setItemStackToSlot(EquipmentSlotType.LEGS, originalMob.getItemStackFromSlot(EquipmentSlotType.LEGS));
+            changedMob.setItemStackToSlot(EquipmentSlotType.FEET, originalMob.getItemStackFromSlot(EquipmentSlotType.FEET));
         }
     }
 }
