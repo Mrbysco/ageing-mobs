@@ -4,7 +4,6 @@ import com.shynieke.ageingmobs.AgeingMobs;
 import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -32,16 +31,18 @@ public class MagicCriteria extends BaseCriteria {
     public boolean checkCriteria(World worldIn, Entity entityIn) {
         BlockPos entityPos = entityIn.getPosition();
         HashMap<Block, Double> magicMap = AgeingRegistry.INSTANCE.getMagicMap();
+        System.out.println(magicMap.size());
         if(!magicMap.isEmpty()) {
-            HashMap<Block, Double> importanceList = new HashMap<>();
             double totalImportance = 0;
+            BlockPos downPos = new BlockPos(entityPos.add(-getRange(), -getRange(), -getRange()));
+            BlockPos upPos = new BlockPos(entityPos.add(getRange(), getRange(), getRange()));
 
-            Iterator<BlockPos> posIterator = BlockPos.getAllInBox(entityPos.add(-getRange(), -getRange(), -getRange()), entityPos.add(getRange(), getRange(), getRange())).iterator();
+            Iterator<BlockPos> posIterator = BlockPos.getAllInBox(downPos,upPos).iterator();
             while(posIterator.hasNext()) {
                 BlockPos pos = posIterator.next();
-                BlockState foundState = worldIn.getBlockState(pos);
+                Block foundState = worldIn.getBlockState(pos).getBlock();
                 if(magicMap.containsKey(foundState)) {
-                    double importanceFound = importanceList.get(foundState);
+                    double importanceFound = magicMap.getOrDefault(foundState, 0.0D).doubleValue();
                     totalImportance = totalImportance + importanceFound;
                 }
             }

@@ -39,24 +39,19 @@ public class LiquidBasedCriteria extends BaseCriteria {
         boolean inFluid = entityIn.isOffsetPositionInLiquid(entityIn.posX, entityIn.posY-1, entityIn.posZ);
         if(inFluid) {
             if(worldIn.getFluidState(entityIn.getPosition().add(0,-1,0)).getFluid().getRegistryName().equals(getLiquid())) {
+                this.isReversing = false;
                 return true;
             } else {
                 if(isReversible()) {
                     this.isReversing = true;
-                    return true;
-                } else {
-                    this.isReversing = false;
-                    return false;
                 }
+                return false;
             }
         } else {
             if(isReversible()) {
                 this.isReversing = true;
-                return true;
-            } else {
-                this.isReversing = false;
-                return false;
             }
+            return false;
         }
     }
 

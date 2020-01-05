@@ -43,103 +43,7 @@ public class AgeingRegistry {
     private static List<Integer> moonDimensions = Lists.newArrayList();
 
     public static void initializeAgeing() {
-        if(AgeingConfig.SERVER.creeperAgeing.get()) {
-            AgeingData creeperToCharged = new AgeingData("CreeperToCharged", EntityType.CREEPER, createNBTTag(""), EntityType.CREEPER, createNBTTag("{powered:1b}"), AgeingConfig.SERVER.creeperAgeingTime.get());
-            creeperToCharged.setCriteria(new BaseCriteria[] { new WeatherCriteria(creeperToCharged, "thunder") });
-            INSTANCE.registerAgeing(creeperToCharged);
-        }
-
-        if(AgeingConfig.SERVER.zombieToHuskAgeing.get()) {
-            AgeingData zombieToHusk = new AgeingData("ZombieToHusk", EntityType.ZOMBIE, createNBTTag("{IsBaby:0b}"), EntityType.HUSK, createNBTTag("{IsBaby:0b}"), AgeingConfig.SERVER.zombieToHuskAgeingTime.get());
-            zombieToHusk.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(zombieToHusk, BiomeDictionary.Type.HOT)});
-            INSTANCE.registerAgeing(zombieToHusk);
-
-            AgeingData babyZombieToBabyHusk = new AgeingData("BabyZombieToBabyHusk", EntityType.ZOMBIE, createNBTTag("{IsBaby:1b}"), EntityType.HUSK, createNBTTag("{IsBaby:1b}"), AgeingConfig.SERVER.zombieToHuskAgeingTime.get());
-            babyZombieToBabyHusk.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(babyZombieToBabyHusk, BiomeDictionary.Type.HOT)});
-            INSTANCE.registerAgeing(babyZombieToBabyHusk);
-        }
-
-        if(AgeingConfig.SERVER.huskToZombieAgeing.get()) {
-            AgeingData huskToZombie = new AgeingData("HuskToZombie", EntityType.HUSK, createNBTTag("{IsBaby:0b}"), EntityType.ZOMBIE, createNBTTag("{IsBaby:0b}"), AgeingConfig.SERVER.huskToZombieAgeingTime.get());
-            huskToZombie.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(huskToZombie, BiomeDictionary.Type.COLD)});
-            INSTANCE.registerAgeing(huskToZombie);
-
-            AgeingData babyHuskToBabyZombie = new AgeingData("BabyHuskToBabyZombie", EntityType.HUSK, createNBTTag("{IsBaby:1b}"), EntityType.ZOMBIE, createNBTTag("{IsBaby:1b}"), AgeingConfig.SERVER.huskToZombieAgeingTime.get());
-            babyHuskToBabyZombie.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(babyHuskToBabyZombie, BiomeDictionary.Type.COLD)});
-            INSTANCE.registerAgeing(babyHuskToBabyZombie);
-        }
-
-        if(AgeingConfig.SERVER.villagerToVindicatorAgeing.get()) {
-            AgeingData villagerToVindicator = new AgeingData("VillagerToVindicator", EntityType.VILLAGER, createNBTTag(""), EntityType.VINDICATOR, createNBTTag(""), AgeingConfig.SERVER.villagerToVindicatorAgeingTime.get());
-            villagerToVindicator.setCriteria(new BaseCriteria[] { new LightCriteria(villagerToVindicator, AgeingConfig.SERVER.villagerToVindicatorMinLight.get(), AgeingConfig.SERVER.villagerToVindicatorMaxLight.get(), false, true)});
-            INSTANCE.registerAgeing(villagerToVindicator);
-        }
-
-        if(AgeingConfig.SERVER.vindicatorToEvokerAgeing.get()) {
-            AgeingData vindicatorToEvoker = new AgeingData("VindicatorToEvoker", EntityType.VINDICATOR, createNBTTag(""), EntityType.EVOKER, createNBTTag(""), AgeingConfig.SERVER.vindicatorToEvokerAgeingTime.get());
-            vindicatorToEvoker.setCriteria(new BaseCriteria[] { new MagicCriteria(vindicatorToEvoker, 5)});
-            INSTANCE.registerAgeing(vindicatorToEvoker);
-        }
-
-        if(AgeingConfig.SERVER.guardianToElderAgeing.get()) {
-            AgeingData guardianToElder = new AgeingData("GuardianToElder", EntityType.GUARDIAN, createNBTTag(""), EntityType.ELDER_GUARDIAN, createNBTTag(""), AgeingConfig.SERVER.guardianToElderAgeingTime.get());
-            guardianToElder.setCriteria(new BaseCriteria[] { new BossCriteria(guardianToElder, AgeingConfig.SERVER.guardianToElderAgeingMax.get(), AgeingConfig.SERVER.guardianToElderRange.get())});
-            INSTANCE.registerAgeing(guardianToElder);
-        }
-
-        if(AgeingConfig.SERVER.babyToZombieAgeing.get()) {
-            INSTANCE.registerAgeing(new AgeingData("BabyToZombie", EntityType.ZOMBIE, createNBTTag("{IsBaby:1b}"), EntityType.ZOMBIE, createNBTTag("{IsBaby:0b}"), AgeingConfig.SERVER.babyToZombieAgeingTime.get()));
-            INSTANCE.registerAgeing(new AgeingData("BabyToHusk", EntityType.HUSK, createNBTTag("{IsBaby:1b}"), EntityType.HUSK, createNBTTag("{IsBaby:0b}"), AgeingConfig.SERVER.babyToZombieAgeingTime.get()));
-        }
-
-        //if(AgeingConfig.SERVER.endermiteToShulkerAgeing.get()) {
-            //TODO: addEndermite()
-        //}
-
-        if(AgeingConfig.SERVER.skeletonToStrayAgeing.get()) {
-            AgeingData skeletonToStray = new AgeingData("SkeletonToStray", EntityType.SKELETON, createNBTTag(""), EntityType.STRAY, createNBTTag(""), AgeingConfig.SERVER.skeletonToStrayAgeingTime.get());
-            skeletonToStray.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(skeletonToStray, BiomeDictionary.Type.COLD)});
-            INSTANCE.registerAgeing(skeletonToStray);
-        }
-
-        if(AgeingConfig.SERVER.strayToSkeletonAgeing.get()) {
-            AgeingData strayToSkeleton = new AgeingData("StrayToSkeleton", EntityType.STRAY, createNBTTag(""), EntityType.SKELETON, createNBTTag(""), AgeingConfig.SERVER.strayToSkeletonAgeingTime.get());
-            strayToSkeleton.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(strayToSkeleton, BiomeDictionary.Type.HOT)});
-            INSTANCE.registerAgeing(strayToSkeleton);
-        }
-
-        if(AgeingConfig.SERVER.rabbitToKillerAgeing.get()) {
-            AgeingData rabbitToKiller = new AgeingData("RabbitToKiller", EntityType.RABBIT, createNBTTag(""), EntityType.RABBIT, createNBTTag("{RabbitType:99}"), AgeingConfig.SERVER.rabbitToKillerAgeingTime.get());
-            rabbitToKiller.setCriteria(new BaseCriteria[] { new LightCriteria(rabbitToKiller, AgeingConfig.SERVER.rabbitToKillerMinLight.get(), AgeingConfig.SERVER.rabbitToKillerMaxLight.get(), true, false)});
-            INSTANCE.registerAgeing(rabbitToKiller);
-        }
-
-        if(AgeingConfig.SERVER.cowToMooshroomAgeing.get()) {
-            AgeingData cowToMooshroom = new AgeingData("CowToMooshroom", EntityType.COW, createNBTTag(""), EntityType.MOOSHROOM, createNBTTag(""), AgeingConfig.SERVER.cowToMooshroomAgeingTime.get());
-            cowToMooshroom.setCriteria(new BaseCriteria[] { new BlockBasedCriteria(cowToMooshroom, new Block[]{Blocks.MYCELIUM, Blocks.BROWN_MUSHROOM, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.RED_MUSHROOM, Blocks.RED_MUSHROOM_BLOCK}, false, AgeingConfig.SERVER.cowToMooshroomAgeingRadius.get())});
-            INSTANCE.registerAgeing(cowToMooshroom);
-        }
-
-        if(AgeingConfig.SERVER.skeletonToWitherSkeletonAgeing.get()) {
-            AgeingData skeletonToWitherSkelly = new AgeingData("SkeletonToWitherSkelly", EntityType.SKELETON, createNBTTag(""), EntityType.WITHER_SKELETON, createNBTTag(""), AgeingConfig.SERVER.skeletonToWitherSkeletonAgeingTime.get());
-            skeletonToWitherSkelly.setCriteria(new BaseCriteria[] { new DimensionCriteria(skeletonToWitherSkelly, new Integer[]{-1})});
-            INSTANCE.registerAgeing(skeletonToWitherSkelly);
-        }
-
-        if(AgeingConfig.SERVER.slimeToMagmaCubeAgeing.get()) {
-            AgeingData slimeToMagmaCube = new AgeingData("SlimeToMagmaCube", EntityType.SLIME, createNBTTag(""), EntityType.MAGMA_CUBE, createNBTTag(""), AgeingConfig.SERVER.slimeToMagmaCubeAgeingTime.get());
-            slimeToMagmaCube.setCriteria(new BaseCriteria[] { new DimensionCriteria(slimeToMagmaCube, new Integer[]{-1})});
-            INSTANCE.registerAgeing(slimeToMagmaCube);
-        }
-
-        if(AgeingConfig.SERVER.batToVexAgeing.get()) {
-            INSTANCE.registerAgeing(new AgeingData("BatToVex", EntityType.BAT, createNBTTag(""), EntityType.VEX, createNBTTag(""), AgeingConfig.SERVER.batToVexAgeingTime.get()));
-        }
-    }
-
-    public static void updateAgeing() {
         Map<String, AgeingData> nameToAgeing = INSTANCE.getNameToAgeing();
-        System.out.println(nameList.contains("CreeperToCharged"));
         if(!nameList.contains("CreeperToCharged") && AgeingConfig.SERVER.creeperAgeing.get()) {
             AgeingData creeperToCharged = new AgeingData("CreeperToCharged", EntityType.CREEPER, createNBTTag(""), EntityType.CREEPER, createNBTTag("{powered:1b}"), AgeingConfig.SERVER.creeperAgeingTime.get());
             creeperToCharged.setCriteria(new BaseCriteria[] { new WeatherCriteria(creeperToCharged, "thunder") });
@@ -154,7 +58,7 @@ public class AgeingRegistry {
         }
 
         if(!nameList.contains("ZombieToHusk") && AgeingConfig.SERVER.zombieToHuskAgeing.get()) {
-            AgeingData zombieToHusk = new AgeingData("ZombieToHusk", EntityType.ZOMBIE, createNBTTag("{IsBaby:0b}"), EntityType.HUSK, createNBTTag("{IsBaby:0b}"), AgeingConfig.SERVER.zombieToHuskAgeingTime.get());
+            AgeingData zombieToHusk = new AgeingData("ZombieToHusk", EntityType.ZOMBIE, createNBTTag(""), EntityType.HUSK, createNBTTag(""), AgeingConfig.SERVER.zombieToHuskAgeingTime.get());
             zombieToHusk.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(zombieToHusk, BiomeDictionary.Type.HOT)});
             INSTANCE.registerAgeing(zombieToHusk);
         } else if (nameList.contains("ZombieToHusk")){
@@ -180,7 +84,7 @@ public class AgeingRegistry {
         }
 
         if(!nameList.contains("HuskToZombie") && AgeingConfig.SERVER.huskToZombieAgeing.get()) {
-            AgeingData huskToZombie = new AgeingData("HuskToZombie", EntityType.HUSK, createNBTTag("{IsBaby:0b}"), EntityType.ZOMBIE, createNBTTag("{IsBaby:0b}"), AgeingConfig.SERVER.huskToZombieAgeingTime.get());
+            AgeingData huskToZombie = new AgeingData("HuskToZombie", EntityType.HUSK, createNBTTag(""), EntityType.ZOMBIE, createNBTTag(""), AgeingConfig.SERVER.huskToZombieAgeingTime.get());
             huskToZombie.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(huskToZombie, BiomeDictionary.Type.COLD) });
             INSTANCE.registerAgeing(huskToZombie);
         } else if (nameList.contains("HuskToZombie")){

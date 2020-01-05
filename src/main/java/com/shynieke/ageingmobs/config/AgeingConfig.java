@@ -338,17 +338,13 @@ public class AgeingConfig {
     @SubscribeEvent
     public static void onLoad(final ModConfig.Loading configEvent) {
         AgeingMobs.LOGGER.debug("Loaded Ageing Mobs' config file {}", configEvent.getConfig().getFileName());
-
-        AgeingRegistry.INSTANCE.initializeAgeing();
-        AgeingRegistry.INSTANCE.initializeMagicMap();
-        AgeingRegistry.INSTANCE.initializeMoonDimensions();
     }
 
     @SubscribeEvent
     public static void onFileChange(final ModConfig.ConfigReloading configEvent) {
         AgeingMobs.LOGGER.fatal("Ageing Mobs' config just got changed on the file system!");
 
-        AgeingRegistry.INSTANCE.updateAgeing();
+        AgeingRegistry.INSTANCE.initializeAgeing();
         AgeingRegistry.INSTANCE.initializeMagicMap();
         AgeingRegistry.INSTANCE.initializeMoonDimensions();
     }
