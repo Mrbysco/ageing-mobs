@@ -379,17 +379,11 @@ public class AgeingRegistry {
 
     public void replaceAgeing(AgeingData ageing)
     {
-//        System.out.println("Changing " + ageing.getName() + " list is at " + ageingList.size());
         AgeingData oldAgeing = nameToAgeing.get(ageing.getName());
         nameToAgeing.remove(oldAgeing.getName(), oldAgeing);
         nameToAgeing.put(oldAgeing.getName(), ageing);
         ageingList.remove(oldAgeing);
         sortList(ageing);
-//        System.out.println("Changed " + ageing.getName() + " list is at " + ageingList.size());
-    }
-
-    public List<AgeingData> getAgeingList() {
-        return ageingList;
     }
 
     public boolean isIDUnique(String ID) {

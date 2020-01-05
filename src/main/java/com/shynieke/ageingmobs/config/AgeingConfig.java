@@ -344,14 +344,7 @@ public class AgeingConfig {
     public static void onFileChange(final ModConfig.ConfigReloading configEvent) {
         AgeingMobs.LOGGER.fatal("Ageing Mobs' config just got changed on the file system!");
 
-        System.out.println("hey");
-        for(int i = 0; i < AgeingRegistry.INSTANCE.getAgeingList().size(); i++) {
-            System.out.println(i + " " + AgeingRegistry.INSTANCE.getAgeingList().get(i).getName());
-        }
         AgeingRegistry.INSTANCE.initializeAgeing();
-        for(int i = 0; i < AgeingRegistry.INSTANCE.getAgeingList().size(); i++) {
-            System.out.println(i + " " + AgeingRegistry.INSTANCE.getAgeingList().get(i).getName());
-        }
         AgeingRegistry.INSTANCE.initializeMagicMap();
         AgeingRegistry.INSTANCE.initializeMoonDimensions();
     }
