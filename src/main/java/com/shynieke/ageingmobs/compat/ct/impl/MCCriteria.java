@@ -6,6 +6,7 @@ import com.blamejared.crafttweaker.impl.blocks.MCBlock;
 import com.blamejared.crafttweaker.impl.entity.MCEntityType;
 import com.blamejared.crafttweaker.impl.world.MCBiome;
 import com.google.common.collect.Lists;
+import com.shynieke.ageingmobs.AgeingMobs;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BiomeCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BiomeTypeCriteria;
@@ -22,6 +23,7 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.TimeCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import org.openzen.zencode.java.ZenCodeType;
 
@@ -44,6 +46,17 @@ public class MCCriteria {
     @ZenCodeType.Method
     public MCCriteria constructBiome(MCBiome biome) {
         return new MCCriteria(new BiomeCriteria(this.internal.getAgeingData(), biome.getInternal()));
+    }
+
+    @ZenCodeType.Method
+    public MCCriteria constructBiome(String biomeName) {
+        net.minecraft.world.biome.Biome biome = net.minecraft.world.biome.Biomes.THE_VOID;
+        if(net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName)) != null) {
+            biome = net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName));
+        } else {
+            AgeingMobs.LOGGER.error("Could not find biome with ID: " + biomeName);
+        }
+        return new MCCriteria(new BiomeCriteria(this.internal.getAgeingData(), biome));
     }
 
     @ZenCodeType.Method
