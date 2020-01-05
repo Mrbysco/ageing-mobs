@@ -17,4 +17,9 @@ public class ChangeAgeingCT {
     public static void removeAgeing(String uniqueID) {
         CraftTweakerAPI.apply(new ActionRemoveAgeing(uniqueID));
     }
+
+    @ZenCodeType.Method
+    public static void replaceAgeing(MCAgeing ageing) {
+        CraftTweakerAPI.apply(new ActionReplaceAgeing(ageing));
+    }
 }
