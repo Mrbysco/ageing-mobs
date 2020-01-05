@@ -28,7 +28,7 @@ import org.openzen.zencode.java.ZenCodeType;
 import java.util.List;
 
 @ZenRegister
-@ZenCodeType.Name("mods.ageingmobs.MCCriteria")
+@ZenCodeType.Name("mods.ageingmobs.AgeingCriteria")
 public class MCCriteria {
     private final BaseCriteria internal;
 

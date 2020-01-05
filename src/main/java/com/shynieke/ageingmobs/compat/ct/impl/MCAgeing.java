@@ -2,18 +2,20 @@ package com.shynieke.ageingmobs.compat.ct.impl;
 
 
 import com.blamejared.crafttweaker.api.annotations.ZenRegister;
-import com.blamejared.crafttweaker.api.data.IData;
 import com.blamejared.crafttweaker.impl.entity.MCEntityType;
 import com.google.common.collect.Lists;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.shynieke.ageingmobs.AgeingMobs;
 import com.shynieke.ageingmobs.registry.ageing.AgeingData;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.JsonToNBT;
 import org.openzen.zencode.java.ZenCodeType;
 
 import java.util.List;
 
 @ZenRegister
-@ZenCodeType.Name("mods.ageingmobs.MCAgeing")
+@ZenCodeType.Name("mods.ageingmobs.AgeingData")
 public class MCAgeing {
     private final AgeingData internal;
 
@@ -22,8 +24,8 @@ public class MCAgeing {
     }
 
     @ZenCodeType.Constructor
-    public MCAgeing(String uniqueID, MCEntityType entity, IData entityData, MCEntityType transformedEntity, IData evolvedEntityEntityData, int tickTime) {
-        this(new AgeingData(uniqueID, entity.getInternal(), (CompoundNBT)entityData.getInternal(), transformedEntity.getInternal(), (CompoundNBT)evolvedEntityEntityData.getInternal(), tickTime));
+    public MCAgeing(String uniqueID, MCEntityType entity, String entityData, MCEntityType transformedEntity, String evolvedEntityEntityData, int tickTime) {
+        this(new AgeingData(uniqueID, entity.getInternal(), createNBTTag(entityData), transformedEntity.getInternal(), createNBTTag(evolvedEntityEntityData), tickTime));
     }
 
     @ZenCodeType.Method
@@ -40,6 +42,30 @@ public class MCAgeing {
         }
 
         return this;
+    }
+
+    public static CompoundNBT createNBTTag(String nbtData)
+    {
+        CompoundNBT tag = new CompoundNBT();
+
+        try
+        {
+            String data = nbtData;
+            if(data.startsWith("{") && data.endsWith("}"))
+            {
+                tag = JsonToNBT.getTagFromJson(data);
+            }
+            else
+            {
+                tag = JsonToNBT.getTagFromJson("{" + data + "}");
+            }
+        }
+        catch (CommandSyntaxException nbtexception)
+        {
+            AgeingMobs.LOGGER.error("nope... " +  nbtexception);
+        }
+
+        return tag;
     }
 
     public AgeingData getInternal() {
