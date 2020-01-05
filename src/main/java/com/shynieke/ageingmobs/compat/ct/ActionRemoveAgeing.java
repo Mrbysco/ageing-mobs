@@ -23,9 +23,9 @@ public class ActionRemoveAgeing implements IUndoableAction {
     @Override
     public String describe() {
         if (ageingData != null) {
-            return String.format("Ageing from " + ageingData.getEntity().getTranslationKey() + " to " + ageingData.getTransformedEntity().getTranslationKey() + " has been removed with unique ID: " + ageingData.getName());
+            return String.format("Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> has been removed with unique ID: " + ageingData.getName());
         } else {
-            return String.format("Ageing from " + ageingData.getEntity().getTranslationKey() + " to " + ageingData.getTransformedEntity().getTranslationKey() + " could not be removed, ID: " + ageingData.getName() + " doesn't exists");
+            return String.format("Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> could not be removed, ID: " + ageingData.getName() + " doesn't exists");
         }
     }
 
@@ -38,6 +38,6 @@ public class ActionRemoveAgeing implements IUndoableAction {
 
     @Override
     public String describeUndo() {
-        return String.format("Ageing from " + oldAgeingData.getEntity().getTranslationKey() + " to " + oldAgeingData.getTransformedEntity().getTranslationKey() + " has been re-added, unique ID: " + oldAgeingData.getName());
+        return String.format("Ageing from <" + oldAgeingData.getEntity().getRegistryName() + "> to <" + oldAgeingData.getTransformedEntity().getRegistryName() + "> has been re-added, unique ID: " + oldAgeingData.getName());
     }
 }
