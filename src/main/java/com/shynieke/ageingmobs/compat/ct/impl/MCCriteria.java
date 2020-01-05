@@ -42,12 +42,12 @@ public class MCCriteria {
     }
 
     @ZenCodeType.Method
-    public MCCriteria createBiome(MCBiome biome) {
+    public MCCriteria constructBiome(MCBiome biome) {
         return new MCCriteria(new BiomeCriteria(this.internal.getAgeingData(), biome.getInternal()));
     }
 
     @ZenCodeType.Method
-    public MCCriteria createBiomeType(String biomeType) {
+    public MCCriteria constructBiomeType(String biomeType) {
         BiomeDictionary.Type returnType = BiomeDictionary.Type.WATER;
         for(BiomeDictionary.Type type : BiomeDictionary.Type.getAll()) {
             if(type.getName().equals(biomeType)) {
@@ -59,7 +59,7 @@ public class MCCriteria {
     }
 
     @ZenCodeType.Method
-    public MCCriteria createBlock(MCBlock[] blocks, Boolean nearBlock, int radius) {
+    public MCCriteria constructBlockBased(MCBlock[] blocks, Boolean nearBlock, int radius) {
         if(blocks.length > 0) {
             List<Block> blockList = Lists.newArrayList();
             for(int i = 0; i < blocks.length; i++) {
@@ -74,12 +74,12 @@ public class MCCriteria {
     }
 
     @ZenCodeType.Method
-    public MCCriteria createBoss(int maxInArea, int checkRadius) {
+    public MCCriteria constructBoss(int maxInArea, int checkRadius) {
         return new MCCriteria(new BossCriteria(this.internal.getAgeingData(), maxInArea, checkRadius));
     }
 
     @ZenCodeType.Method
-    public MCCriteria createDimension(Integer[] dimensions) {
+    public MCCriteria constructDimension(Integer[] dimensions) {
         if(dimensions.length > 0) {
             List<Integer> blockList = Lists.newArrayList();
             for(int i = 0; i < dimensions.length; i++) {
@@ -94,42 +94,42 @@ public class MCCriteria {
     }
 
     @ZenCodeType.Method
-    public MCCriteria createEntity(MCEntityType nearbyEntity, IData nearbyEntityData, int radius) {
+    public MCCriteria constructEntity(MCEntityType nearbyEntity, IData nearbyEntityData, int radius) {
         return new MCCriteria(new EntityCriteria(this.internal.getAgeingData(), nearbyEntity.getInternal(), (CompoundNBT)nearbyEntityData.getInternal(), radius));
     }
 
     @ZenCodeType.Method
-    public MCCriteria createHeight(int minHeight, int maxHeight) {
+    public MCCriteria constructHeight(int minHeight, int maxHeight) {
         return new MCCriteria(new HeightCriteria(this.internal.getAgeingData(), minHeight, maxHeight));
     }
 
     @ZenCodeType.Method
-    public MCCriteria createLight(int lightLevelMin, int lightLevelMax, boolean aloneBased, boolean reversible) {
+    public MCCriteria constructLight(int lightLevelMin, int lightLevelMax, boolean aloneBased, boolean reversible) {
         return new MCCriteria(new LightCriteria(this.internal.getAgeingData(), lightLevelMin, lightLevelMax, aloneBased, reversible));
     }
 
     @ZenCodeType.Method
-    public MCCriteria createLiquid(String liquid, Boolean reversible) {
+    public MCCriteria constructLiquidBased(String liquid, Boolean reversible) {
         return new MCCriteria(new LiquidBasedCriteria(this.internal.getAgeingData(), liquid, reversible));
     }
 
     @ZenCodeType.Method
-    public MCCriteria createMagic(int range) {
+    public MCCriteria constructMagic(int range) {
         return new MCCriteria(new MagicCriteria(this.internal.getAgeingData(), range));
     }
 
     @ZenCodeType.Method
-    public MCCriteria createMoon(String moonPhase) {
+    public MCCriteria constructMoon(String moonPhase) {
         return new MCCriteria(new MoonCriteria(this.internal.getAgeingData(), moonPhase));
     }
 
     @ZenCodeType.Method
-    public MCCriteria createTime(int minTime, int maxTime) {
+    public MCCriteria constructTime(int minTime, int maxTime) {
         return new MCCriteria(new TimeCriteria(this.internal.getAgeingData(), minTime, maxTime));
     }
 
     @ZenCodeType.Method
-    public MCCriteria createTime(String weather) {
+    public MCCriteria constructTime(String weather) {
         return new MCCriteria(new WeatherCriteria(this.internal.getAgeingData(), weather));
     }
 
