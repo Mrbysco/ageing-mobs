@@ -221,7 +221,7 @@ public class AgeHandler {
                     }
                     else
                     {
-                        AgeingMobs.LOGGER.error("Aged Entity invalid [Line 200, Report this to the author of Ageing Mobs]: " + info.getTransformedEntity().toString());
+                        AgeingMobs.LOGGER.error("Aged Entity invalid [Line 224, Report this to the author of Ageing Mobs]: " + info.getTransformedEntity().toString());
                     }
 
                     tag.remove(uniqueTag);
@@ -253,7 +253,7 @@ public class AgeHandler {
                     }
                     else
                     {
-                        AgeingMobs.LOGGER.error("Aged Entity invalid [Line 235, Report this to the author of Ageing Mobs]: " + info.getTransformedEntity().toString());
+                        AgeingMobs.LOGGER.error("Aged Entity invalid [Line 256, Report this to the author of Ageing Mobs]: " + info.getTransformedEntity().toString());
                     }
 
                     tag.remove(uniqueTag);
@@ -270,7 +270,7 @@ public class AgeHandler {
                     }
                     else
                     {
-                        AgeingMobs.LOGGER.error("Aged Entity invalid [Line 259, Report this to the author of Ageing Mobs]: " + info.getTransformedEntity().toString());
+                        AgeingMobs.LOGGER.error("Aged Entity invalid [Line 273, Report this to the author of Ageing Mobs]: " + info.getTransformedEntity().toString());
                     }
 
                     tag.remove(uniqueTag);
