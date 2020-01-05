@@ -31,7 +31,6 @@ public class MagicCriteria extends BaseCriteria {
     public boolean checkCriteria(World worldIn, Entity entityIn) {
         BlockPos entityPos = entityIn.getPosition();
         HashMap<Block, Double> magicMap = AgeingRegistry.INSTANCE.getMagicMap();
-        System.out.println(magicMap.size());
         if(!magicMap.isEmpty()) {
             double totalImportance = 0;
             BlockPos downPos = new BlockPos(entityPos.add(-getRange(), -getRange(), -getRange()));

@@ -167,13 +167,13 @@ public class AgeHandler {
             boolean ableToAge = true;
             for(int i = 0; i < info.getCriteria().length; i++) {
                 BaseCriteria criteria = info.getCriteria()[i];
+                if(criteria.isReversing()) {
+                    BabifyTheMob(info, entity, world);
+                }
+
                 if(!criteria.checkCriteria(world, entity)) {
                     ableToAge = false;
                     break;
-                } else {
-                    if(criteria.isReversing()) {
-                        BabifyTheMob(info, entity, world);
-                    }
                 }
             }
             if(ableToAge) {
@@ -291,11 +291,14 @@ public class AgeHandler {
     {
         String uniqueTag = Reference.MOD_PREFIX + info.getName();
         CompoundNBT tag = entity.getPersistentData();
-        if(tag.getInt(uniqueTag) == 0)
-            tag.remove(uniqueTag);
-
-        int currentAge = tag.getInt(uniqueTag);
-        currentAge--;
-        tag.putInt(uniqueTag, currentAge);
+        if(tag.contains(uniqueTag)) {
+            if(tag.getInt(uniqueTag) >= 0) {
+                int currentAge = tag.getInt(uniqueTag);
+                currentAge--;
+                tag.putInt(uniqueTag, currentAge);
+            } else {
+                tag.remove(uniqueTag);
+            }
+        }
     }
 }

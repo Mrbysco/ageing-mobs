@@ -161,8 +161,8 @@ public class AgeingConfig {
                     .defineInRange("guardianToElderAgeingTime", 1800, 1, Integer.MAX_VALUE);
 
             guardianToElderAgeingMax = builder
-                    .comment("This specifies max amount of elder guardians in the area, 0 = infinite (Default: 3)")
-                    .defineInRange("guardianToElderAgeingMax", 3, 0, Integer.MAX_VALUE);
+                    .comment("This specifies max amount of elder guardians in the area, 0 = infinite (Default: 2)")
+                    .defineInRange("guardianToElderAgeingMax", 2, 0, Integer.MAX_VALUE);
 
             guardianToElderRange = builder
                     .comment("This specifies radius (not the diameter) around the original mob in which it checks for the boss mob, 16 = infinite (Default: 16)")

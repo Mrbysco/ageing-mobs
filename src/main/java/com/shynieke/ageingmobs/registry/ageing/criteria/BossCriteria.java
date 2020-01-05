@@ -14,11 +14,14 @@ import net.minecraftforge.common.util.FakePlayer;
 public class BossCriteria extends BaseCriteria {
     private int maxInArea;
     private int checkRadius;
+    private boolean isReversing;
 
     public BossCriteria(iAgeing ageing, int maxInArea, int checkRadius) {
         super(ageing);
         this.maxInArea = maxInArea;
         this.checkRadius = checkRadius;
+
+        this.isReversing = false;
     }
 
     public int getMaxInArea() {
@@ -53,8 +56,7 @@ public class BossCriteria extends BaseCriteria {
                 for(Entity foundEntity: worldIn.getEntitiesWithinAABB(Entity.class, areaHitbox)) {
                     if(!(foundEntity instanceof PlayerEntity) && !(foundEntity instanceof FakePlayer))
                     {
-                        if(foundEntity.getType().equals(getTransformedEntity()))
-                            {
+                        if(foundEntity.getType().equals(getTransformedEntity())) {
                             if(!getTransformedEntityData().isEmpty())
                             {
                                 CompoundNBT entityTag = AgeingRegistry.entityToNBT(foundEntity);
@@ -73,11 +75,23 @@ public class BossCriteria extends BaseCriteria {
                     }
                 }
             }
-            return bossAmount < getMaxInArea();
+            if(bossAmount < getMaxInArea()) {
+                this.isReversing = false;
+                return true;
+            } else {
+                this.isReversing = true;
+                return false;
+            }
         }
         else
         {
+            this.isReversing = false;
             return true;
         }
+    }
+
+    @Override
+    public boolean isReversing() {
+        return isReversing;
     }
 }
