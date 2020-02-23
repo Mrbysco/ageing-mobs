@@ -19,7 +19,7 @@ archivesBaseName = 'Ageing-Mobs-1.14'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    mappings channel: 'snapshot', version: '20191230-1.14.3'
+    mappings channel: 'snapshot', version: '20200223-1.15.1'
 	
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -97,12 +97,12 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.1.111'
+    minecraft 'net.minecraftforge:forge:1.15.2-31.1.14'
 	
-    compile fg.deobf("mezz.jei:jei-1.14.4:6.0.0.27")
-    compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.14.4:5.0.1.150")
-	compile fg.deobf("net.darkhax.gamestages:GameStages-1.14.4:4.2.15")
-	compile fg.deobf("net.darkhax.bookshelf:Bookshelf-1.14.4:4.4.72")
+    compile fg.deobf("mezz.jei:jei-1.15.2:6.0.0.2")
+    compile fg.deobf("com.blamejared.crafttweaker:CraftTweaker-1.15.2:6.0.0.6")
+	//compile fg.deobf("net.darkhax.gamestages:GameStages-1.14.4:4.2.15")
+	//compile fg.deobf("net.darkhax.bookshelf:Bookshelf-1.14.4:4.4.72")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

@@ -43,9 +43,9 @@ public class AgeingConfig {
         public final BooleanValue babyToZombieAgeing;
         public final IntValue babyToZombieAgeingTime;
 
-        public final BooleanValue endermiteToShulkerAgeing;
-        public final IntValue endermiteToShulkerAgeingTime;
-        public final IntValue endermiteToShulkerBlockTime;
+//        public final BooleanValue endermiteToShulkerAgeing;
+//        public final IntValue endermiteToShulkerAgeingTime;
+//        public final IntValue endermiteToShulkerBlockTime;
 
         public final BooleanValue skeletonToStrayAgeing;
         public final IntValue skeletonToStrayAgeingTime;
@@ -186,17 +186,17 @@ public class AgeingConfig {
             builder.comment("Endermite -> Shulker")
                     .push("endermite_to_shulker");
 
-            endermiteToShulkerAgeing = builder
-                    .comment("Setting this to false disables the endermite -> shulker ageing (Default: true)")
-                    .define("endermiteToShulkerAgeing", true);
-
-            endermiteToShulkerAgeingTime = builder
-                    .comment("This specifies the time in second(s) which dictates how long a mob needs to age (Default: 360)")
-                    .defineInRange("endermiteToShulkerAgeingTime", 360, 1, Integer.MAX_VALUE);
-
-            endermiteToShulkerBlockTime = builder
-                    .comment("This specifies the time in second(s) which dictates how long you need to wait when the endermite insert themselves into a purpur block (Default: 60)")
-                    .defineInRange("endermiteToShulkerBlockTime", 60, 1, Integer.MAX_VALUE);
+//            endermiteToShulkerAgeing = builder
+//                    .comment("Setting this to false disables the endermite -> shulker ageing (Default: true)")
+//                    .define("endermiteToShulkerAgeing", true);
+//
+//            endermiteToShulkerAgeingTime = builder
+//                    .comment("This specifies the time in second(s) which dictates how long a mob needs to age (Default: 360)")
+//                    .defineInRange("endermiteToShulkerAgeingTime", 360, 1, Integer.MAX_VALUE);
+//
+//            endermiteToShulkerBlockTime = builder
+//                    .comment("This specifies the time in second(s) which dictates how long you need to wait when the endermite insert themselves into a purpur block (Default: 60)")
+//                    .defineInRange("endermiteToShulkerBlockTime", 60, 1, Integer.MAX_VALUE);
 
             builder.pop();
 
@@ -341,7 +341,7 @@ public class AgeingConfig {
     }
 
     @SubscribeEvent
-    public static void onFileChange(final ModConfig.ConfigReloading configEvent) {
+    public static void onFileChange(final ModConfig.Reloading configEvent) {
         AgeingMobs.LOGGER.fatal("Ageing Mobs' config just got changed on the file system!");
 
         AgeingRegistry.INSTANCE.initializeAgeing();
