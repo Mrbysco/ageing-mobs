@@ -1,6 +1,7 @@
 modLoader="javafml"
 loaderVersion="[32,)"
 issueTrackerURL="https://github.com/Mrbysco/ageing-mobs/issues"
+license="MIT"
 
 [[mods]]
 modId="ageingmobs"
