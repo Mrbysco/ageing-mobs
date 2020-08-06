@@ -111,15 +111,15 @@ public class MCCriteria {
     }
 
     @ZenCodeType.Method
-    public MCCriteria constructDimension(Integer[] dimensions) {
+    public MCCriteria constructDimension(String[] dimensions) {
         if(dimensions.length > 0) {
-            List<Integer> blockList = Lists.newArrayList();
+            List<ResourceLocation> dimensionList = Lists.newArrayList();
             for(int i = 0; i < dimensions.length; i++) {
-                Integer dimension = dimensions[i];
-                blockList.add(dimension);
+                ResourceLocation dimension = new ResourceLocation(dimensions[i]);
+                dimensionList.add(dimension);
             }
-            Integer[] dimensionArray = new Integer[blockList.size()];
-            dimensionArray = blockList.toArray(dimensionArray);
+            ResourceLocation[] dimensionArray = new ResourceLocation[dimensionList.size()];
+            dimensionArray = dimensionList.toArray(dimensionArray);
             return new MCCriteria(new DimensionCriteria(this.internal.getAgeingData(), dimensionArray));
         }
         return this;

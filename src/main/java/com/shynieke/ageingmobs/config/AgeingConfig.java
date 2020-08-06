@@ -72,8 +72,8 @@ public class AgeingConfig {
         public final IntValue batToVexAgeingTime;
 
         //Rest
-        public final ConfigValue<List<String>> magical_blocks;
-        public final ConfigValue<List<Integer>> moon_dimensions;
+        public final ConfigValue<List<? extends String>> magical_blocks;
+        public final ConfigValue<List<? extends String>> moon_dimensions;
 
         Server(ForgeConfigSpec.Builder builder) {
             builder.comment("Creeper -> Charged Creeper")
@@ -315,12 +315,12 @@ public class AgeingConfig {
 
             magical_blocks = builder
                     .comment("Blocks that are seen as magical, by removing the blocks they won't be seen as magical by the mod. syntax: modid:block;effectiveness")
-                    .define("magical_blocks", Arrays.asList(magicalList));
+                    .defineList("magical_blocks", Arrays.asList(magicalList), o -> (o instanceof String));
 
-            Integer[] dimensionList = new Integer[]{ 0 };
+            String[] dimensionList = new String[]{ "minecraft:overworld" };
             moon_dimensions = builder
                     .comment("Dimensions that the mod recognizes having a moon. By default only has the overworld")
-                    .define("moon_dimensions", Arrays.asList(dimensionList));
+                    .defineList("moon_dimensions", Arrays.asList(dimensionList), o -> (o instanceof String));
 
             builder.pop();
 

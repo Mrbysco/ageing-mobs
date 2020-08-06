@@ -15,7 +15,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +23,7 @@ import java.util.UUID;
 public class AgeHandler {
 
     @SubscribeEvent
-    public void AgeHandler(TickEvent.WorldTickEvent event)
+    public void ageHandler(TickEvent.WorldTickEvent event)
     {
         if (event.phase.equals(TickEvent.Phase.END) && event.side.isServer())
         {
@@ -153,20 +152,20 @@ public class AgeHandler {
 
     public void extraChecks(AgeingData info, Entity entity, World world)
     {
-        if(ModList.get().isLoaded("gamestages"))
-        {
-            if(!info.getGamestage().isEmpty()) {
-                if(GamestagesHandler.gamestageChecks(info, entity, world)) {
-                    checkCriteria(info, entity, world);
-                }
-            } else {
-                checkCriteria(info, entity, world);
-            }
-        }
-        else
-        {
+//        if(ModList.get().isLoaded("gamestages"))
+//        {
+//            if(!info.getGamestage().isEmpty()) { TODO: re-add
+//                if(GamestagesHandler.gamestageChecks(info, entity, world)) {
+//                    checkCriteria(info, entity, world);
+//                }
+//            } else {
+//                checkCriteria(info, entity, world);
+//            }
+//        }
+//        else
+//        {
             checkCriteria(info, entity, world);
-        }
+//        }
     }
 
     public void checkCriteria(AgeingData info, Entity entity, World world) {

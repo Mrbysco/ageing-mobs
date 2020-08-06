@@ -10,8 +10,7 @@ public class NBTHelper {
     {
         CompoundNBT tag = new CompoundNBT();
 
-        try
-        {
+        try {
             String data = nbtData;
             if(data.startsWith("{") && data.endsWith("}"))
             {
@@ -21,9 +20,7 @@ public class NBTHelper {
             {
                 tag = JsonToNBT.getTagFromJson("{" + data + "}");
             }
-        }
-        catch (CommandSyntaxException nbtexception)
-        {
+        } catch (CommandSyntaxException nbtexception) {
             AgeingMobs.LOGGER.error("nope... " +  nbtexception);
         }
 

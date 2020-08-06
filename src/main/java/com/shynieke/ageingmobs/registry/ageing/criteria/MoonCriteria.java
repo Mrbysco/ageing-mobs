@@ -4,6 +4,7 @@ import com.shynieke.ageingmobs.AgeingMobs;
 import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -28,10 +29,10 @@ public class MoonCriteria extends BaseCriteria {
     public boolean checkCriteria(World worldIn, Entity entityIn) {
         World entityWorld = entityIn.getEntityWorld();
         if(!entityWorld.isDaytime()) {
-            int moonPhase = entityWorld.dimension.getMoonPhase(entityWorld.getDayTime());
-            List<Integer> moonDimensions = AgeingRegistry.INSTANCE.getMoonDimensions();
+            int moonPhase = entityWorld.func_230315_m_().func_236035_c_(entityWorld.getWorldInfo().getDayTime());
+            List<ResourceLocation> moonDimensions = AgeingRegistry.INSTANCE.getMoonDimensions();
 
-            if(!moonDimensions.isEmpty() && moonDimensions.contains(entityWorld.getDimension().getType().getId())) {
+            if(!moonDimensions.isEmpty() && moonDimensions.contains(entityWorld.func_234923_W_().func_240901_a_())) {
                 int wantedPhase = moonPhaseFromString(getMoonPhase());
 
                 return moonPhase == wantedPhase;

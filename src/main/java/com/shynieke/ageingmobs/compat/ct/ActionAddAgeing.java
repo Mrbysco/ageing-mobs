@@ -22,9 +22,9 @@ public class ActionAddAgeing implements IUndoableAction {
     @Override
     public String describe() {
         if (AgeingRegistry.INSTANCE.isIDUnique(ageingData.getName())) {
-            return String.format("Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> has been added with unique ID: " + ageingData.getName());
+            return String.format("Ageing from <%s> to <%s> has been added with unique ID: %s", ageingData.getEntity().getRegistryName(), ageingData.getTransformedEntity().getRegistryName(), ageingData.getName());
         } else {
-            return String.format("Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> could not be added, ID: " + ageingData.getName() + " already exists");
+            return String.format("Ageing from <%s> to <%s> could not be added, ID: %s", ageingData.getEntity().getRegistryName(), ageingData.getTransformedEntity().getRegistryName(), ageingData.getName());
         }
     }
 
@@ -35,6 +35,6 @@ public class ActionAddAgeing implements IUndoableAction {
 
     @Override
     public String describeUndo() {
-        return String.format("Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> has been removed again, unique ID: " + ageingData.getName());
+        return String.format("Ageing from <%s> to <%s> has been removed again, unique ID: %s", ageingData.getEntity().getRegistryName(), ageingData.getTransformedEntity().getRegistryName(), ageingData.getName());
     }
 }

@@ -27,6 +27,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +41,7 @@ public class AgeingRegistry {
     private Map<String, AgeingData> nameToAgeing = Maps.newHashMap();
 
     private static HashMap<Block, Double> importanceList = new HashMap<>();
-    private static List<Integer> moonDimensions = Lists.newArrayList();
+    private static List<ResourceLocation> moonDimensions = Lists.newArrayList();
 
     public static void initializeAgeing() {
         Map<String, AgeingData> nameToAgeing = INSTANCE.getNameToAgeing();
@@ -327,7 +328,7 @@ public class AgeingRegistry {
 
         if(!nameList.contains("SkeletonToWitherSkelly") && AgeingConfig.SERVER.skeletonToWitherSkeletonAgeing.get()) {
             AgeingData skeletonToWitherSkelly = new AgeingData("SkeletonToWitherSkelly", EntityType.SKELETON, createNBTTag(""), EntityType.WITHER_SKELETON, createNBTTag(""), AgeingConfig.SERVER.skeletonToWitherSkeletonAgeingTime.get());
-            skeletonToWitherSkelly.setCriteria(new BaseCriteria[] { new DimensionCriteria(skeletonToWitherSkelly, new Integer[]{-1})});
+            skeletonToWitherSkelly.setCriteria(new BaseCriteria[] { new DimensionCriteria(skeletonToWitherSkelly, new ResourceLocation[]{new ResourceLocation("the_end")})});
             INSTANCE.registerAgeing(skeletonToWitherSkelly);
         } else if (nameList.contains("SkeletonToWitherSkelly")){
             AgeingData skeletonToWitherSkelly = nameToAgeing.get("SkeletonToWitherSkelly");
@@ -340,7 +341,7 @@ public class AgeingRegistry {
 
         if(!nameList.contains("SlimeToMagmaCube") && AgeingConfig.SERVER.slimeToMagmaCubeAgeing.get()) {
             AgeingData slimeToMagmaCube = new AgeingData("SlimeToMagmaCube", EntityType.SLIME, createNBTTag(""), EntityType.MAGMA_CUBE, createNBTTag(""), AgeingConfig.SERVER.slimeToMagmaCubeAgeingTime.get());
-            slimeToMagmaCube.setCriteria(new BaseCriteria[] { new DimensionCriteria(slimeToMagmaCube, new Integer[]{-1})});
+            slimeToMagmaCube.setCriteria(new BaseCriteria[] { new DimensionCriteria(slimeToMagmaCube, new ResourceLocation[]{new ResourceLocation("the_end")})});
             INSTANCE.registerAgeing(slimeToMagmaCube);
         } else if (nameList.contains("SlimeToMagmaCube")){
             AgeingData slimeToMagmaCube = nameToAgeing.get("SlimeToMagmaCube");
@@ -429,7 +430,7 @@ public class AgeingRegistry {
     }
 
     public void initializeMagicMap() {
-        List<String> magicalBlocks = AgeingConfig.SERVER.magical_blocks.get();
+        List<? extends String> magicalBlocks = AgeingConfig.SERVER.magical_blocks.get();
         if(!magicalBlocks.isEmpty()) {
             importanceList = new HashMap<>();
 
@@ -455,10 +456,18 @@ public class AgeingRegistry {
     }
 
     public void initializeMoonDimensions() {
-        moonDimensions = AgeingConfig.SERVER.moon_dimensions.get();
+        List<? extends String> dimensions = AgeingConfig.SERVER.moon_dimensions.get();
+        List<ResourceLocation> dimensionList = new ArrayList<>();
+        for(String string : dimensions) {
+            ResourceLocation dim = new ResourceLocation(string);
+            if(!dimensionList.contains(dim)) {
+                dimensionList.add(dim);
+            }
+        }
+        moonDimensions = dimensionList;
     }
 
-    public List<Integer> getMoonDimensions() {
+    public List<ResourceLocation> getMoonDimensions() {
         return moonDimensions;
     }
 
