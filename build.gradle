@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 
 
 version = "${version}"
-group = 'com.svennieke.ageingmobs' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'com.shynieke.ageingmobs' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Ageing-Mobs-${mc_version}"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
