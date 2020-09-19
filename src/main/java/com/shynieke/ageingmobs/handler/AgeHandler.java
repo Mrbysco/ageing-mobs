@@ -24,10 +24,8 @@ import java.util.UUID;
 public class AgeHandler {
 
     @SubscribeEvent
-    public void AgeHandler(TickEvent.WorldTickEvent event)
-    {
-        if (event.phase.equals(TickEvent.Phase.END) && event.side.isServer())
-        {
+    public void AgeHandler(TickEvent.WorldTickEvent event) {
+        if (event.phase.equals(TickEvent.Phase.END) && event.side.isServer()) {
             ServerWorld world = (ServerWorld)event.world;
             if (world.getGameTime() % 20 == 0) {
                 List<AgeingData> ageingList = AgeingRegistry.ageingList;
@@ -36,25 +34,18 @@ public class AgeHandler {
                     while(entityIterator.hasNext()) {
                         Entity entityIn = entityIterator.next();
                         for(AgeingData info : ageingList) {
-                            if(!(entityIn instanceof PlayerEntity)) {
+                            if(entityIn != null && !(entityIn instanceof PlayerEntity) && entityIn.getType() != null && info.getEntity() != null) {
                                 if(entityIn.getType().equals(info.getEntity())) {
-                                    if(info.getEntity().equals(info.getTransformedEntity()))
-                                    {
-                                        if(!info.getTransformedEntityData().isEmpty())
-                                        {
+                                    if(info.getTransformedEntity() != null && info.getEntity().equals(info.getTransformedEntity())) {
+                                        if(!info.getTransformedEntityData().isEmpty()) {
                                             CheckList(info, entityIn, world);
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             AgeingMobs.LOGGER.error("An error has occured. A mob can not transform into itself. See id: " + info.getName());
-                                            if(AgeingRegistry.ageingList.contains(info))
-                                            {
+                                            if(AgeingRegistry.ageingList.contains(info)) {
                                                 AgeingRegistry.INSTANCE.removeAgeing(info);
                                             }
                                         }
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         CheckList(info, entityIn, world);
                                     }
                                 }
@@ -66,95 +57,67 @@ public class AgeHandler {
         }
     }
 
-    public void CheckList(AgeingData info, Entity entity, World world)
-    {
-        if(info.getEntity().equals(info.getTransformedEntity()))
-        {
-            if(info.getEntityData().equals(info.getTransformedEntityData()))
-            {
+    public void CheckList(AgeingData info, Entity entity, World world) {
+        if(info.getEntity().equals(info.getTransformedEntity())) {
+            if(info.getEntityData().equals(info.getTransformedEntityData())) {
                 AgeingMobs.LOGGER.error("Aged Entity nbt identical to the original: " + info.getName());
-            }
-            else
-            {
-                if(info.getEntityData().isEmpty())
-                {
-                    if(!info.getTransformedEntityData().isEmpty())
-                    {
+            } else {
+                if(info.getEntityData().isEmpty()) {
+                    if(!info.getTransformedEntityData().isEmpty()) {
                         CompoundNBT entityTag = AgeingRegistry.entityToNBT(entity);
                         CompoundNBT entityTag2 = info.getTransformedEntityData();
 
-                        if(!entityTag2.isEmpty())
-                        {
-                            if(!NBTUtil.areNBTEquals(entityTag2, entityTag, true))
-                            {
+                        if(!entityTag2.isEmpty()) {
+                            if(!NBTUtil.areNBTEquals(entityTag2, entityTag, true)) {
                                 extraChecks(info, entity, world);
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         AgeingMobs.LOGGER.error("Aged Entity identical to the original: " + info.getName());
                     }
-                }
-                else
-                {
-                    if(!info.getTransformedEntityData().isEmpty())
-                    {
+                } else {
+                    if(!info.getTransformedEntityData().isEmpty()) {
                         CompoundNBT entityTag = AgeingRegistry.entityToNBT(entity);
                         CompoundNBT entityTag2 = info.getEntityData();
                         CompoundNBT entityTag3 = info.getTransformedEntityData();
 
-                        if(!entityTag2.isEmpty() && !entityTag3.isEmpty())
-                        {
-                            if(NBTUtil.areNBTEquals(entityTag2, entityTag, true) && !NBTUtil.areNBTEquals(entityTag3, entityTag, true))
-                            {
+                        if(!entityTag2.isEmpty() && !entityTag3.isEmpty()) {
+                            if(NBTUtil.areNBTEquals(entityTag2, entityTag, true) && !NBTUtil.areNBTEquals(entityTag3, entityTag, true)) {
                                 extraChecks(info, entity, world);
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         CompoundNBT entityTag = AgeingRegistry.entityToNBT(entity);
                         CompoundNBT entityTag2 = info.getEntityData();
 
-                        if(!entityTag2.isEmpty())
-                        {
-                            if(NBTUtil.areNBTEquals(entityTag2, entityTag, true))
-                            {
+                        if(!entityTag2.isEmpty()) {
+                            if(NBTUtil.areNBTEquals(entityTag2, entityTag, true)) {
                                 extraChecks(info, entity, world);
                             }
                         }
                     }
                 }
             }
-        }
-        else
-        {
-            if(!info.getEntityData().isEmpty())
-            {
+        } else {
+            if(!info.getEntityData().isEmpty()) {
                 CompoundNBT entityTag = AgeingRegistry.entityToNBT(entity);
                 CompoundNBT entityTag2 = info.getEntityData();
                 CompoundNBT entityTag3 = info.getTransformedEntityData();
 
-                if(!entityTag2.isEmpty() && !entityTag3.isEmpty())
-                {
+                if(!entityTag2.isEmpty() && !entityTag3.isEmpty()) {
                     if(NBTUtil.areNBTEquals(entityTag2, entityTag, true) && !NBTUtil.areNBTEquals(entityTag3, entityTag, true))
                     {
                         extraChecks(info, entity, world);
                     }
                 }
-            }
-            else
-            {
+            } else {
                 extraChecks(info, entity, world);
             }
         }
     }
 
-    public void extraChecks(AgeingData info, Entity entity, World world)
-    {
-        if(ModList.get().isLoaded("gamestages"))
-        {
+    public void extraChecks(AgeingData info, Entity entity, World world) {
+        if(ModList.get().isLoaded("gamestages")) {
             if(!info.getGamestage().isEmpty()) {
                 if(GamestagesHandler.gamestageChecks(info, entity, world)) {
                     checkCriteria(info, entity, world);
@@ -162,9 +125,7 @@ public class AgeHandler {
             } else {
                 checkCriteria(info, entity, world);
             }
-        }
-        else
-        {
+        } else {
             checkCriteria(info, entity, world);
         }
     }
@@ -191,26 +152,20 @@ public class AgeHandler {
         }
     }
 
-    public void ageTheMob(AgeingData info, Entity entity, World world)
-    {
+    public void ageTheMob(AgeingData info, Entity entity, World world) {
         int maxTime = info.getAgeingTme();
 
         String uniqueTag = Reference.MOD_PREFIX + info.getName();
         CompoundNBT tag = entity.getPersistentData();
-        if(!tag.contains(uniqueTag))
-        {
+        if(!tag.contains(uniqueTag)) {
             tag.putInt(uniqueTag, 0);
         }
 
-        if(tag.getInt(uniqueTag) >= maxTime)
-        {
-            if(info.getEntity().equals(info.getTransformedEntity()))
-            {
-                if(!info.getTransformedEntityData().isEmpty())
-                {
+        if(tag.getInt(uniqueTag) >= maxTime) {
+            if(info.getEntity().equals(info.getTransformedEntity())) {
+                if(!info.getTransformedEntityData().isEmpty()) {
                     Entity agedEntity = info.getTransformedEntity().create(world);
-                    if(agedEntity != null)
-                    {
+                    if(agedEntity != null) {
                         agedEntity.copyLocationAndAnglesFrom(entity);
                         copyEquipment(entity, agedEntity);
 
@@ -218,17 +173,14 @@ public class AgeHandler {
                         CompoundNBT entityTagCopy = entityTag.copy();
                         CompoundNBT entityTag2 = info.getTransformedEntityData();
 
-                        if(!entityTag2.isEmpty())
-                        {
+                        if(!entityTag2.isEmpty()) {
                             entityTagCopy.merge(entityTag2);
                             UUID uuid = agedEntity.getUniqueID();
                             agedEntity.read(entityTagCopy);
                             agedEntity.setUniqueId(uuid);
                         }
                         world.addEntity(agedEntity);
-                    }
-                    else
-                    {
+                    } else {
                         AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + info.getTransformedEntity().getRegistryName());
                     }
 
@@ -236,14 +188,10 @@ public class AgeHandler {
                     entity.captureDrops(null);
                     entity.remove();
                 }
-            }
-            else
-            {
-                if(!info.getTransformedEntityData().isEmpty())
-                {
+            } else {
+                if(!info.getTransformedEntityData().isEmpty()) {
                     Entity agedEntity = info.getTransformedEntity().create(world);
-                    if(agedEntity != null)
-                    {
+                    if(agedEntity != null) {
                         agedEntity.copyLocationAndAnglesFrom(entity);
                         copyEquipment(entity, agedEntity);
 
@@ -251,35 +199,27 @@ public class AgeHandler {
                         CompoundNBT entityTagCopy = entityTag.copy();
                         CompoundNBT entityTag2 = info.getTransformedEntityData();
 
-                        if(!entityTag2.isEmpty())
-                        {
+                        if(!entityTag2.isEmpty()) {
                             UUID uuid = agedEntity.getUniqueID();
                             entityTagCopy.merge(entityTag2);
                             agedEntity.read(entityTag);
                             agedEntity.setUniqueId(uuid);
                         }
                         world.addEntity(agedEntity);
-                    }
-                    else
-                    {
+                    } else {
                         AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + info.getTransformedEntity().getRegistryName());
                     }
 
                     tag.remove(uniqueTag);
                     entity.captureDrops(null);
                     entity.remove();
-                }
-                else
-                {
+                } else {
                     Entity agedEntity = info.getTransformedEntity().create(world);
-                    if(agedEntity != null)
-                    {
+                    if(agedEntity != null) {
                         agedEntity.copyLocationAndAnglesFrom(entity);
                         copyEquipment(entity, agedEntity);
                         world.addEntity(agedEntity);
-                    }
-                    else
-                    {
+                    } else {
                         AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + info.getTransformedEntity().getRegistryName());
                     }
 
@@ -288,9 +228,7 @@ public class AgeHandler {
                     entity.remove();
                 }
             }
-        }
-        else
-        {
+        } else {
             int currentAge = tag.getInt(uniqueTag);
             currentAge++;
             tag.putInt(uniqueTag, currentAge);
@@ -298,8 +236,7 @@ public class AgeHandler {
         }
     }
 
-    public void BabifyTheMob(AgeingData info, Entity entity)
-    {
+    public void BabifyTheMob(AgeingData info, Entity entity) {
         String uniqueTag = Reference.MOD_PREFIX + info.getName();
         CompoundNBT tag = entity.getPersistentData();
         if(tag.contains(uniqueTag)) {

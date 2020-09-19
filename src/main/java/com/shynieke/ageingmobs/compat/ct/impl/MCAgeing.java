@@ -42,7 +42,7 @@ public class MCAgeing {
     }
 
     @ZenCodeType.Method
-    public MCAgeing setCriteria(String gamestage) {
+    public MCAgeing setGamestage(String gamestage) {
         AgeingData internal = this.internal;
         internal.setGamestage(gamestage);
         return new MCAgeing(internal);
