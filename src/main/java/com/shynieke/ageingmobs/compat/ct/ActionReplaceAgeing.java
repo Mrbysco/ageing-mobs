@@ -24,9 +24,9 @@ public class ActionReplaceAgeing implements IUndoableAction {
     @Override
     public String describe() {
         if (AgeingRegistry.INSTANCE.isIDUnique(ageingData.getName())) {
-            return String.format("Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> has been changed");
+            return "Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> has been changed";
         } else {
-            return String.format("Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> could not be changed");
+            return "Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> could not be changed";
         }
     }
 
@@ -37,6 +37,6 @@ public class ActionReplaceAgeing implements IUndoableAction {
 
     @Override
     public String describeUndo() {
-        return String.format("Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> has been changed back");
+        return "Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> has been changed back";
     }
 }

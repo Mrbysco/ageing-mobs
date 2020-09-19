@@ -32,7 +32,7 @@ public class MoonCriteria extends BaseCriteria {
             int moonPhase = entityWorld.func_230315_m_().func_236035_c_(entityWorld.getWorldInfo().getDayTime());
             List<ResourceLocation> moonDimensions = AgeingRegistry.INSTANCE.getMoonDimensions();
 
-            if(!moonDimensions.isEmpty() && moonDimensions.contains(entityWorld.func_234923_W_().func_240901_a_())) {
+            if(!moonDimensions.isEmpty() && moonDimensions.contains(entityWorld.getDimensionKey().func_240901_a_())) {
                 int wantedPhase = moonPhaseFromString(getMoonPhase());
 
                 return moonPhase == wantedPhase;

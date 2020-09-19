@@ -22,6 +22,8 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.MoonCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.TimeCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import org.openzen.zencode.java.ZenCodeType;
@@ -74,8 +76,8 @@ public class MCCriteria {
     public MCCriteria constructBlockBased(MCBlock[] blocks, Boolean nearBlock, int radius) {
         if(blocks.length > 0) {
             List<Block> blockList = Lists.newArrayList();
-            for(int i = 0; i < blocks.length; i++) {
-                Block newInternal = blocks[i].getInternal();
+            for (MCBlock block : blocks) {
+                Block newInternal = block.getInternal();
                 blockList.add(newInternal);
             }
             Block[] blockArray = new Block[blockList.size()];
@@ -89,10 +91,9 @@ public class MCCriteria {
     public MCCriteria constructBlockBased(String[] blocks, Boolean nearBlock, int radius) {
         if(blocks.length > 0) {
             List<Block> blockList = Lists.newArrayList();
-            for(int i = 0; i < blocks.length; i++) {
-                String blockName = blocks[i];
+            for (String blockName : blocks) {
                 Block block = net.minecraftforge.registries.ForgeRegistries.BLOCKS.getValue(new ResourceLocation(blockName));
-                if(block != null) {
+                if (block != null) {
                     blockList.add(block);
                 } else {
                     AgeingMobs.LOGGER.error("Could not resolve block: " + blockName);
@@ -114,8 +115,8 @@ public class MCCriteria {
     public MCCriteria constructDimension(String[] dimensions) {
         if(dimensions.length > 0) {
             List<ResourceLocation> dimensionList = Lists.newArrayList();
-            for(int i = 0; i < dimensions.length; i++) {
-                ResourceLocation dimension = new ResourceLocation(dimensions[i]);
+            for (String s : dimensions) {
+                ResourceLocation dimension = new ResourceLocation(s);
                 dimensionList.add(dimension);
             }
             ResourceLocation[] dimensionArray = new ResourceLocation[dimensionList.size()];
@@ -127,7 +128,14 @@ public class MCCriteria {
 
     @ZenCodeType.Method
     public MCCriteria constructEntity(MCEntityType nearbyEntity, String nearbyEntityData, int radius) {
-        return new MCCriteria(new EntityCriteria(this.internal.getAgeingData(), nearbyEntity.getInternal(), NBTHelper.createNBTTag(nearbyEntityData), radius));
+        EntityType<? extends Entity> nearbyEntityType = nearbyEntity.getInternal();
+        if(nearbyEntity == null || nearbyEntity.getInternal() == null) {
+            nearbyEntityType = EntityType.EGG;
+            AgeingMobs.LOGGER.error("Could not find supplied nearby Entity with name: '" + nearbyEntity.getName() + "', Replacing with 'minecraft:egg'");
+        }
+
+        return new MCCriteria(new EntityCriteria(this.internal.getAgeingData(), nearbyEntityType, NBTHelper.createNBTTag(nearbyEntityData), radius));
+
     }
 
     @ZenCodeType.Method

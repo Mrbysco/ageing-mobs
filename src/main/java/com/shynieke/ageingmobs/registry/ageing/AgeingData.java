@@ -6,11 +6,11 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 
 public class AgeingData implements iAgeing {
-    private String uniqueID;
-    private EntityType<? extends Entity> entity;
-    private CompoundNBT entityData;
-    private EntityType<? extends Entity> evolvedEntity;
-    private CompoundNBT evolvedEntityEntityData;
+    private final String uniqueID;
+    private final EntityType<? extends Entity> entity;
+    private final CompoundNBT entityData;
+    private final EntityType<? extends Entity> evolvedEntity;
+    private final CompoundNBT evolvedEntityEntityData;
     private int tickTime;
     private String gamestage = "";
     private BaseCriteria[] criteria = new BaseCriteria[]{};

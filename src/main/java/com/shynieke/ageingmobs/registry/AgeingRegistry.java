@@ -43,7 +43,7 @@ public class AgeingRegistry {
     private static HashMap<Block, Double> importanceList = new HashMap<>();
     private static List<ResourceLocation> moonDimensions = Lists.newArrayList();
 
-    public static void initializeAgeing() {
+    public void initializeAgeing() {
         Map<String, AgeingData> nameToAgeing = INSTANCE.getNameToAgeing();
         if(!nameList.contains("CreeperToCharged") && AgeingConfig.SERVER.creeperAgeing.get()) {
             AgeingData creeperToCharged = new AgeingData("CreeperToCharged", EntityType.CREEPER, createNBTTag(""), EntityType.CREEPER, createNBTTag("{powered:1b}"), AgeingConfig.SERVER.creeperAgeingTime.get());

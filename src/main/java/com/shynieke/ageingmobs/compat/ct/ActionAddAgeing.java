@@ -21,6 +21,13 @@ public class ActionAddAgeing implements IUndoableAction {
 
     @Override
     public String describe() {
+        if(ageingData.getEntity() == null) {
+            return "Unknown entity inserted at ageing ID '" + ageingData.getName() + "'";
+        }
+        if(ageingData.getTransformedEntity() == null) {
+            return "Unknown transform entity inserted at ageing ID '" + ageingData.getName() + "'";
+        }
+
         if (AgeingRegistry.INSTANCE.isIDUnique(ageingData.getName())) {
             return String.format("Ageing from <%s> to <%s> has been added with unique ID: %s", ageingData.getEntity().getRegistryName(), ageingData.getTransformedEntity().getRegistryName(), ageingData.getName());
         } else {
