@@ -12,19 +12,18 @@ public class NBTHelper {
 
         try
         {
-            String data = nbtData;
-            if(data.startsWith("{") && data.endsWith("}"))
+            if(nbtData.startsWith("{") && nbtData.endsWith("}"))
             {
-                tag = JsonToNBT.getTagFromJson(data);
+                tag = JsonToNBT.getTagFromJson(nbtData);
             }
             else
             {
-                tag = JsonToNBT.getTagFromJson("{" + data + "}");
+                tag = JsonToNBT.getTagFromJson("{" + nbtData + "}");
             }
         }
-        catch (CommandSyntaxException nbtexception)
+        catch (CommandSyntaxException exception)
         {
-            AgeingMobs.LOGGER.error("nope... " +  nbtexception);
+            AgeingMobs.LOGGER.error("nope... " +  exception);
         }
 
         return tag;

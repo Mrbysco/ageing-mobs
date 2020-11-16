@@ -4,6 +4,7 @@ import com.blamejared.crafttweaker.api.actions.IUndoableAction;
 import com.shynieke.ageingmobs.compat.ct.impl.MCAgeing;
 import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import com.shynieke.ageingmobs.registry.ageing.AgeingData;
+import net.minecraft.util.ResourceLocation;
 
 public class ActionAddAgeing implements IUndoableAction {
     public final AgeingData ageingData;
@@ -14,7 +15,8 @@ public class ActionAddAgeing implements IUndoableAction {
 
     @Override
     public void apply() {
-        if (AgeingRegistry.INSTANCE.isIDUnique(ageingData.getName())) {
+        ResourceLocation resourceLocation = ageingData.getEntity().getRegistryName();
+        if (resourceLocation != null && AgeingRegistry.INSTANCE.isIDUnique(resourceLocation, ageingData.getName())) {
             AgeingRegistry.INSTANCE.registerAgeing(ageingData);
         }
     }
@@ -28,10 +30,15 @@ public class ActionAddAgeing implements IUndoableAction {
             return "Unknown transform entity inserted at ageing ID '" + ageingData.getName() + "'";
         }
 
-        if (AgeingRegistry.INSTANCE.isIDUnique(ageingData.getName())) {
-            return "Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> has been added with unique ID: " + ageingData.getName();
+        ResourceLocation resourceLocation = ageingData.getEntity().getRegistryName();
+        if(resourceLocation != null) {
+            if (AgeingRegistry.INSTANCE.isIDUnique(resourceLocation, ageingData.getName())) {
+                return "Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> has been added with unique ID: " + ageingData.getName();
+            } else {
+                return "Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> could not be added, ID: " + ageingData.getName() + " already exists";
+            }
         } else {
-            return "Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> could not be added, ID: " + ageingData.getName() + " already exists";
+            return "Could not replace ageing of %s as the resource location of the given entity is invalid, please check if your MCEntityType is correct";
         }
     }
 

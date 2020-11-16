@@ -20,7 +20,7 @@ public class GamestagesHandler {
             }
         } else {
             AgeingMobs.LOGGER.error("Stage with ID: " + info.getName() + " is referring to a gamestage " + gamestage + " which is unknown");
-            AgeingRegistry.ageingList.remove(info);
+            AgeingRegistry.INSTANCE.removeAgeing(info);
         }
         return false;
     }

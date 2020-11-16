@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.TickEvent;
@@ -28,25 +29,26 @@ public class AgeHandler {
         if (event.phase.equals(TickEvent.Phase.END) && event.side.isServer()) {
             ServerWorld world = (ServerWorld)event.world;
             if (world.getGameTime() % 20 == 0) {
-                List<AgeingData> ageingList = AgeingRegistry.ageingList;
-                if(!ageingList.isEmpty()) {
+                if(!AgeingRegistry.ageingList.isEmpty()) {
                     Iterator<Entity> entityIterator = world.getEntities().iterator();
                     while(entityIterator.hasNext()) {
                         Entity entityIn = entityIterator.next();
-                        for(AgeingData info : ageingList) {
-                            if(entityIn != null && !(entityIn instanceof PlayerEntity) && entityIn.getType() != null && info.getEntity() != null) {
-                                if(entityIn.getType().equals(info.getEntity())) {
-                                    if(info.getTransformedEntity() != null && info.getEntity().equals(info.getTransformedEntity())) {
-                                        if(!info.getTransformedEntityData().isEmpty()) {
-                                            CheckList(info, entityIn, world);
-                                        } else {
-                                            AgeingMobs.LOGGER.error("An error has occured. A mob can not transform into itself. See id: " + info.getName());
-                                            if(AgeingRegistry.ageingList.contains(info)) {
+                        ResourceLocation entityLocation = entityIn.getType().getRegistryName();
+                        if(entityLocation != null && AgeingRegistry.hasEntityAgeing(entityLocation)) {
+                            List<AgeingData> dataList = AgeingRegistry.getDataList(entityLocation);
+                            for(AgeingData info : dataList) {
+                                if(entityIn != null && !(entityIn instanceof PlayerEntity) && entityIn.getType() != null && info.getEntity() != null) {
+                                    if(entityIn.getType().equals(info.getEntity())) {
+                                        if(info.getTransformedEntity() != null && info.getEntity().equals(info.getTransformedEntity())) {
+                                            if(!info.getTransformedEntityData().isEmpty()) {
+                                                CheckList(info, entityIn, world);
+                                            } else {
+                                                AgeingMobs.LOGGER.error("An error has occured. A mob can not transform into itself. See id: " + info.getName());
                                                 AgeingRegistry.INSTANCE.removeAgeing(info);
                                             }
+                                        } else {
+                                            CheckList(info, entityIn, world);
                                         }
-                                    } else {
-                                        CheckList(info, entityIn, world);
                                     }
                                 }
                             }

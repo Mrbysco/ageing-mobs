@@ -26,6 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import org.openzen.zencode.java.ZenCodeType;
 
+import java.util.Arrays;
 import java.util.List;
 
 @ZenRegister
@@ -74,8 +75,8 @@ public class MCCriteria {
     public MCCriteria constructBlockBased(MCBlock[] blocks, Boolean nearBlock, int radius) {
         if(blocks.length > 0) {
             List<Block> blockList = Lists.newArrayList();
-            for(int i = 0; i < blocks.length; i++) {
-                Block newInternal = blocks[i].getInternal();
+            for (MCBlock block : blocks) {
+                Block newInternal = block.getInternal();
                 blockList.add(newInternal);
             }
             Block[] blockArray = new Block[blockList.size()];
@@ -89,10 +90,9 @@ public class MCCriteria {
     public MCCriteria constructBlockBased(String[] blocks, Boolean nearBlock, int radius) {
         if(blocks.length > 0) {
             List<Block> blockList = Lists.newArrayList();
-            for(int i = 0; i < blocks.length; i++) {
-                String blockName = blocks[i];
+            for (String blockName : blocks) {
                 Block block = net.minecraftforge.registries.ForgeRegistries.BLOCKS.getValue(new ResourceLocation(blockName));
-                if(block != null) {
+                if (block != null) {
                     blockList.add(block);
                 } else {
                     AgeingMobs.LOGGER.error("Could not resolve block: " + blockName);
@@ -114,10 +114,7 @@ public class MCCriteria {
     public MCCriteria constructDimension(Integer[] dimensions) {
         if(dimensions.length > 0) {
             List<Integer> blockList = Lists.newArrayList();
-            for(int i = 0; i < dimensions.length; i++) {
-                Integer dimension = dimensions[i];
-                blockList.add(dimension);
-            }
+            blockList.addAll(Arrays.asList(dimensions));
             Integer[] dimensionArray = new Integer[blockList.size()];
             dimensionArray = blockList.toArray(dimensionArray);
             return new MCCriteria(new DimensionCriteria(this.internal.getAgeingData(), dimensionArray));

@@ -1,7 +1,6 @@
 package com.shynieke.ageingmobs.registry;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.shynieke.ageingmobs.AgeingMobs;
 import com.shynieke.ageingmobs.config.AgeingConfig;
@@ -26,30 +25,29 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 public class AgeingRegistry {
     public static AgeingRegistry INSTANCE = new AgeingRegistry();
 
-    public static List<String> nameList = Lists.newArrayList();
-    public static List<AgeingData> ageingList = Lists.newArrayList();
-    private Map<String, AgeingData> nameToAgeing = Maps.newHashMap();
+    public static LinkedHashMap<ResourceLocation, List<AgeingData>> ageingList = new LinkedHashMap<>();
 
     private static HashMap<Block, Double> importanceList = new HashMap<>();
     private static List<Integer> moonDimensions = Lists.newArrayList();
 
-    public static void initializeAgeing() {
-        Map<String, AgeingData> nameToAgeing = INSTANCE.getNameToAgeing();
-        if(!nameList.contains("CreeperToCharged") && AgeingConfig.SERVER.creeperAgeing.get()) {
+    public void initializeAgeing() {
+        if(INSTANCE.isIDUnique(EntityType.CREEPER.getRegistryName(), "CreeperToCharged") && AgeingConfig.SERVER.creeperAgeing.get()) {
             AgeingData creeperToCharged = new AgeingData("CreeperToCharged", EntityType.CREEPER, createNBTTag(""), EntityType.CREEPER, createNBTTag("{powered:1b}"), AgeingConfig.SERVER.creeperAgeingTime.get());
             creeperToCharged.setCriteria(new BaseCriteria[] { new WeatherCriteria(creeperToCharged, "thunder") });
             INSTANCE.registerAgeing(creeperToCharged);
-        } else if (nameList.contains("CreeperToCharged")){
-            AgeingData creeperToCharged = nameToAgeing.get("CreeperToCharged");
+        } else if (!INSTANCE.isIDUnique(EntityType.CREEPER.getRegistryName(), "CreeperToCharged")){
+            AgeingData creeperToCharged = INSTANCE.getByID(EntityType.CREEPER.getRegistryName(), "CreeperToCharged");
             int ageingTime = AgeingConfig.SERVER.creeperAgeingTime.get();
             if(creeperToCharged.getAgeingTme() != ageingTime) {
                 creeperToCharged.setAgeingTme(ageingTime);
@@ -57,12 +55,12 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("ZombieToHusk") && AgeingConfig.SERVER.zombieToHuskAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.ZOMBIE.getRegistryName(), "ZombieToHusk") && AgeingConfig.SERVER.zombieToHuskAgeing.get()) {
             AgeingData zombieToHusk = new AgeingData("ZombieToHusk", EntityType.ZOMBIE, createNBTTag(""), EntityType.HUSK, createNBTTag(""), AgeingConfig.SERVER.zombieToHuskAgeingTime.get());
             zombieToHusk.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(zombieToHusk, BiomeDictionary.Type.HOT)});
             INSTANCE.registerAgeing(zombieToHusk);
-        } else if (nameList.contains("ZombieToHusk")){
-            AgeingData zombieToHusk = nameToAgeing.get("ZombieToHusk");
+        } else if (!INSTANCE.isIDUnique(EntityType.ZOMBIE.getRegistryName(), "ZombieToHusk")){
+            AgeingData zombieToHusk = INSTANCE.getByID(EntityType.ZOMBIE.getRegistryName(), "ZombieToHusk");
             int ageingTime = AgeingConfig.SERVER.zombieToHuskAgeingTime.get();
             if(zombieToHusk.getAgeingTme() != ageingTime) {
                 zombieToHusk.setAgeingTme(ageingTime);
@@ -70,12 +68,12 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("BabyZombieToBabyHusk") && AgeingConfig.SERVER.zombieToHuskAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.ZOMBIE.getRegistryName(), "BabyZombieToBabyHusk") && AgeingConfig.SERVER.zombieToHuskAgeing.get()) {
             AgeingData babyZombieToBabyHusk = new AgeingData("BabyZombieToBabyHusk", EntityType.ZOMBIE, createNBTTag("{IsBaby:1b}"), EntityType.HUSK, createNBTTag("{IsBaby:1b}"), AgeingConfig.SERVER.zombieToHuskAgeingTime.get());
             babyZombieToBabyHusk.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(babyZombieToBabyHusk, BiomeDictionary.Type.HOT) });
             INSTANCE.registerAgeing(babyZombieToBabyHusk);
-        } else if (nameList.contains("BabyZombieToBabyHusk")){
-            AgeingData babyZombieToBabyHusk = nameToAgeing.get("BabyZombieToBabyHusk");
+        } else if (!INSTANCE.isIDUnique(EntityType.ZOMBIE.getRegistryName(), "BabyZombieToBabyHusk")){
+            AgeingData babyZombieToBabyHusk = INSTANCE.getByID(EntityType.ZOMBIE.getRegistryName(), "BabyZombieToBabyHusk");
             int ageingTime = AgeingConfig.SERVER.zombieToHuskAgeingTime.get();
             if(babyZombieToBabyHusk.getAgeingTme() != ageingTime) {
                 babyZombieToBabyHusk.setAgeingTme(ageingTime);
@@ -83,12 +81,12 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("HuskToZombie") && AgeingConfig.SERVER.huskToZombieAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.HUSK.getRegistryName(), "HuskToZombie") && AgeingConfig.SERVER.huskToZombieAgeing.get()) {
             AgeingData huskToZombie = new AgeingData("HuskToZombie", EntityType.HUSK, createNBTTag(""), EntityType.ZOMBIE, createNBTTag(""), AgeingConfig.SERVER.huskToZombieAgeingTime.get());
             huskToZombie.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(huskToZombie, BiomeDictionary.Type.COLD) });
             INSTANCE.registerAgeing(huskToZombie);
-        } else if (nameList.contains("HuskToZombie")){
-            AgeingData huskToZombie = nameToAgeing.get("HuskToZombie");
+        } else if (!INSTANCE.isIDUnique(EntityType.HUSK.getRegistryName(), "HuskToZombie")){
+            AgeingData huskToZombie = INSTANCE.getByID(EntityType.HUSK.getRegistryName(), "HuskToZombie");
             int ageingTime = AgeingConfig.SERVER.huskToZombieAgeingTime.get();
             if(huskToZombie.getAgeingTme() != ageingTime) {
                 huskToZombie.setAgeingTme(ageingTime);
@@ -96,12 +94,12 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("BabyHuskToBabyZombie") && AgeingConfig.SERVER.huskToZombieAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.HUSK.getRegistryName(), "BabyHuskToBabyZombie") && AgeingConfig.SERVER.huskToZombieAgeing.get()) {
             AgeingData babyHuskToBabyZombie = new AgeingData("BabyHuskToBabyZombie", EntityType.HUSK, createNBTTag("{IsBaby:1b}"), EntityType.ZOMBIE, createNBTTag("{IsBaby:1b}"), AgeingConfig.SERVER.huskToZombieAgeingTime.get());
             babyHuskToBabyZombie.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(babyHuskToBabyZombie, BiomeDictionary.Type.COLD) });
             INSTANCE.registerAgeing(babyHuskToBabyZombie);
-        } else if (nameList.contains("BabyHuskToBabyZombie")){
-            AgeingData babyHuskToBabyZombie = nameToAgeing.get("BabyHuskToBabyZombie");
+        } else if (!INSTANCE.isIDUnique(EntityType.HUSK.getRegistryName(), "BabyHuskToBabyZombie")){
+            AgeingData babyHuskToBabyZombie = INSTANCE.getByID(EntityType.HUSK.getRegistryName(), "BabyHuskToBabyZombie");
             int ageingTime = AgeingConfig.SERVER.huskToZombieAgeingTime.get();
             if(babyHuskToBabyZombie.getAgeingTme() != ageingTime) {
                 babyHuskToBabyZombie.setAgeingTme(ageingTime);
@@ -109,12 +107,12 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("VillagerToVindicator") && AgeingConfig.SERVER.villagerToVindicatorAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.VILLAGER.getRegistryName(), "VillagerToVindicator") && AgeingConfig.SERVER.villagerToVindicatorAgeing.get()) {
             AgeingData villagerToVindicator = new AgeingData("VillagerToVindicator", EntityType.VILLAGER, createNBTTag(""), EntityType.VINDICATOR, createNBTTag(""), AgeingConfig.SERVER.villagerToVindicatorAgeingTime.get());
             villagerToVindicator.setCriteria(new BaseCriteria[] { new LightCriteria(villagerToVindicator, AgeingConfig.SERVER.villagerToVindicatorMinLight.get(), AgeingConfig.SERVER.villagerToVindicatorMaxLight.get(), false, true)});
             INSTANCE.registerAgeing(villagerToVindicator);
-        } else if (nameList.contains("VillagerToVindicator")){
-            AgeingData villagerToVindicator = nameToAgeing.get("VillagerToVindicator");
+        } else if (!INSTANCE.isIDUnique(EntityType.VILLAGER.getRegistryName(), "VillagerToVindicator")){
+            AgeingData villagerToVindicator = INSTANCE.getByID(EntityType.VILLAGER.getRegistryName(), "VillagerToVindicator");
             boolean ageingChanged = false;
             boolean criteriaChanged = false;
             int ageingTime = AgeingConfig.SERVER.villagerToVindicatorAgeingTime.get();
@@ -148,12 +146,12 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("VindicatorToEvoker") && AgeingConfig.SERVER.vindicatorToEvokerAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.VINDICATOR.getRegistryName(), "VindicatorToEvoker") && AgeingConfig.SERVER.vindicatorToEvokerAgeing.get()) {
             AgeingData vindicatorToEvoker = new AgeingData("VindicatorToEvoker", EntityType.VINDICATOR, createNBTTag(""), EntityType.EVOKER, createNBTTag(""), AgeingConfig.SERVER.vindicatorToEvokerAgeingTime.get());
             vindicatorToEvoker.setCriteria(new BaseCriteria[] { new MagicCriteria(vindicatorToEvoker, 5)});
             INSTANCE.registerAgeing(vindicatorToEvoker);
-        } else if (nameList.contains("VindicatorToEvoker")){
-            AgeingData vindicatorToEvoker = nameToAgeing.get("VindicatorToEvoker");
+        } else if (!INSTANCE.isIDUnique(EntityType.VINDICATOR.getRegistryName(), "VindicatorToEvoker")){
+            AgeingData vindicatorToEvoker = INSTANCE.getByID(EntityType.VINDICATOR.getRegistryName(), "VindicatorToEvoker");
             int ageingTime = AgeingConfig.SERVER.vindicatorToEvokerAgeingTime.get();
             if(vindicatorToEvoker.getAgeingTme() != ageingTime) {
                 vindicatorToEvoker.setAgeingTme(ageingTime);
@@ -161,12 +159,12 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("GuardianToElder") && AgeingConfig.SERVER.guardianToElderAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.GUARDIAN.getRegistryName(), "GuardianToElder") && AgeingConfig.SERVER.guardianToElderAgeing.get()) {
             AgeingData guardianToElder = new AgeingData("GuardianToElder", EntityType.GUARDIAN, createNBTTag(""), EntityType.ELDER_GUARDIAN, createNBTTag(""), AgeingConfig.SERVER.guardianToElderAgeingTime.get());
             guardianToElder.setCriteria(new BaseCriteria[] { new BossCriteria(guardianToElder, AgeingConfig.SERVER.guardianToElderAgeingMax.get(), AgeingConfig.SERVER.guardianToElderRange.get())});
             INSTANCE.registerAgeing(guardianToElder);
-        } else if (nameList.contains("GuardianToElder")){
-            AgeingData guardianToElder = nameToAgeing.get("GuardianToElder");
+        } else if (!INSTANCE.isIDUnique(EntityType.GUARDIAN.getRegistryName(), "GuardianToElder")){
+            AgeingData guardianToElder = INSTANCE.getByID(EntityType.GUARDIAN.getRegistryName(), "GuardianToElder");
             boolean ageingChanged = false;
             boolean criteriaChanged = false;
             int ageingTime = AgeingConfig.SERVER.guardianToElderAgeingTime.get();
@@ -200,10 +198,10 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("BabyToZombie") && AgeingConfig.SERVER.babyToZombieAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.ZOMBIE.getRegistryName(), "BabyToZombie") && AgeingConfig.SERVER.babyToZombieAgeing.get()) {
             INSTANCE.registerAgeing(new AgeingData("BabyToZombie", EntityType.ZOMBIE, createNBTTag("{IsBaby:1b}"), EntityType.ZOMBIE, createNBTTag("{IsBaby:0b}"), AgeingConfig.SERVER.babyToZombieAgeingTime.get()));
-        } else if (nameList.contains("BabyToZombie")){
-            AgeingData babyToZombie = nameToAgeing.get("BabyToZombie");
+        } else if (!INSTANCE.isIDUnique(EntityType.ZOMBIE.getRegistryName(), "BabyToZombie")){
+            AgeingData babyToZombie = INSTANCE.getByID(EntityType.ZOMBIE.getRegistryName(), "BabyToZombie");
             int ageingTime = AgeingConfig.SERVER.babyToZombieAgeingTime.get();
             if(babyToZombie.getAgeingTme() != ageingTime) {
                 babyToZombie.setAgeingTme(ageingTime);
@@ -211,10 +209,10 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("BabyToHusk") && AgeingConfig.SERVER.babyToZombieAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.HUSK.getRegistryName(), "BabyToHusk") && AgeingConfig.SERVER.babyToZombieAgeing.get()) {
             INSTANCE.registerAgeing(new AgeingData("BabyToHusk", EntityType.HUSK, createNBTTag("{IsBaby:1b}"), EntityType.HUSK, createNBTTag("{IsBaby:0b}"), AgeingConfig.SERVER.babyToZombieAgeingTime.get()));
-        } else if (nameList.contains("BabyToHusk")){
-            AgeingData babyToHusk = nameToAgeing.get("BabyToHusk");
+        } else if (!INSTANCE.isIDUnique(EntityType.HUSK.getRegistryName(), "BabyToHusk")){
+            AgeingData babyToHusk = INSTANCE.getByID(EntityType.HUSK.getRegistryName(), "BabyToHusk");
             int ageingTime = AgeingConfig.SERVER.babyToZombieAgeingTime.get();
             if(babyToHusk.getAgeingTme() != ageingTime) {
                 babyToHusk.setAgeingTme(ageingTime);
@@ -223,15 +221,15 @@ public class AgeingRegistry {
         }
 
         //if(AgeingConfig.SERVER.endermiteToShulkerAgeing.get()) {
-            //TODO: addEndermite();
+        //TODO: addEndermite();
         //}
 
-        if(!nameList.contains("SkeletonToStray") && AgeingConfig.SERVER.skeletonToStrayAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.SKELETON.getRegistryName(), "SkeletonToStray") && AgeingConfig.SERVER.skeletonToStrayAgeing.get()) {
             AgeingData skeletonToStray = new AgeingData("SkeletonToStray", EntityType.SKELETON, createNBTTag(""), EntityType.STRAY, createNBTTag(""), AgeingConfig.SERVER.skeletonToStrayAgeingTime.get());
             skeletonToStray.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(skeletonToStray, BiomeDictionary.Type.COLD)});
             INSTANCE.registerAgeing(skeletonToStray);
-        } else if (nameList.contains("SkeletonToStray")){
-            AgeingData skeletonToStray = nameToAgeing.get("SkeletonToStray");
+        } else if (!INSTANCE.isIDUnique(EntityType.SKELETON.getRegistryName(), "SkeletonToStray")){
+            AgeingData skeletonToStray = INSTANCE.getByID(EntityType.SKELETON.getRegistryName(), "SkeletonToStray");
             int ageingTime = AgeingConfig.SERVER.skeletonToStrayAgeingTime.get();
             if(skeletonToStray.getAgeingTme() != ageingTime) {
                 skeletonToStray.setAgeingTme(ageingTime);
@@ -239,12 +237,12 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("StrayToSkeleton") && AgeingConfig.SERVER.strayToSkeletonAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.STRAY.getRegistryName(), "StrayToSkeleton") && AgeingConfig.SERVER.strayToSkeletonAgeing.get()) {
             AgeingData strayToSkeleton = new AgeingData("StrayToSkeleton", EntityType.STRAY, createNBTTag(""), EntityType.SKELETON, createNBTTag(""), AgeingConfig.SERVER.strayToSkeletonAgeingTime.get());
             strayToSkeleton.setCriteria(new BaseCriteria[] { new BiomeTypeCriteria(strayToSkeleton, BiomeDictionary.Type.HOT)});
             INSTANCE.registerAgeing(strayToSkeleton);
-        } else if (nameList.contains("StrayToSkeleton")){
-            AgeingData strayToSkeleton = nameToAgeing.get("StrayToSkeleton");
+        } else if (!INSTANCE.isIDUnique(EntityType.STRAY.getRegistryName(), "StrayToSkeleton")){
+            AgeingData strayToSkeleton = INSTANCE.getByID(EntityType.STRAY.getRegistryName(), "StrayToSkeleton");
             int ageingTime = AgeingConfig.SERVER.strayToSkeletonAgeingTime.get();
             if(strayToSkeleton.getAgeingTme() != ageingTime) {
                 strayToSkeleton.setAgeingTme(ageingTime);
@@ -252,12 +250,12 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("RabbitToKiller") && AgeingConfig.SERVER.rabbitToKillerAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.RABBIT.getRegistryName(), "RabbitToKiller") && AgeingConfig.SERVER.rabbitToKillerAgeing.get()) {
             AgeingData rabbitToKiller = new AgeingData("RabbitToKiller", EntityType.RABBIT, createNBTTag(""), EntityType.RABBIT, createNBTTag("{RabbitType:99}"), AgeingConfig.SERVER.rabbitToKillerAgeingTime.get());
             rabbitToKiller.setCriteria(new BaseCriteria[] { new LightCriteria(rabbitToKiller, AgeingConfig.SERVER.rabbitToKillerMinLight.get(), AgeingConfig.SERVER.rabbitToKillerMaxLight.get(), true, false)});
             INSTANCE.registerAgeing(rabbitToKiller);
-        } else if (nameList.contains("RabbitToKiller")){
-            AgeingData rabbitToKiller = nameToAgeing.get("RabbitToKiller");
+        } else if (!INSTANCE.isIDUnique(EntityType.RABBIT.getRegistryName(), "RabbitToKiller")){
+            AgeingData rabbitToKiller = INSTANCE.getByID(EntityType.RABBIT.getRegistryName(), "RabbitToKiller");
             boolean ageingChanged = false;
             boolean criteriaChanged = false;
             int ageingTime = AgeingConfig.SERVER.rabbitToKillerAgeingTime.get();
@@ -291,12 +289,12 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("CowToMooshroom") && AgeingConfig.SERVER.cowToMooshroomAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.COW.getRegistryName(), "CowToMooshroom") && AgeingConfig.SERVER.cowToMooshroomAgeing.get()) {
             AgeingData cowToMooshroom = new AgeingData("CowToMooshroom", EntityType.COW, createNBTTag(""), EntityType.MOOSHROOM, createNBTTag(""), AgeingConfig.SERVER.cowToMooshroomAgeingTime.get());
             cowToMooshroom.setCriteria(new BaseCriteria[] { new BlockBasedCriteria(cowToMooshroom, new Block[]{Blocks.MYCELIUM, Blocks.BROWN_MUSHROOM, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.RED_MUSHROOM, Blocks.RED_MUSHROOM_BLOCK}, false, AgeingConfig.SERVER.cowToMooshroomAgeingRadius.get())});
             INSTANCE.registerAgeing(cowToMooshroom);
-        } else if (nameList.contains("CowToMooshroom")){
-            AgeingData cowToMooshroom = nameToAgeing.get("CowToMooshroom");
+        } else if (!INSTANCE.isIDUnique(EntityType.COW.getRegistryName(), "CowToMooshroom")){
+            AgeingData cowToMooshroom = INSTANCE.getByID(EntityType.COW.getRegistryName(), "CowToMooshroom");
             boolean ageingChanged = false;
             boolean criteriaChanged = false;
             int ageingTime = AgeingConfig.SERVER.cowToMooshroomAgeingTime.get();
@@ -325,12 +323,12 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("SkeletonToWitherSkelly") && AgeingConfig.SERVER.skeletonToWitherSkeletonAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.SKELETON.getRegistryName(), "SkeletonToWitherSkelly") && AgeingConfig.SERVER.skeletonToWitherSkeletonAgeing.get()) {
             AgeingData skeletonToWitherSkelly = new AgeingData("SkeletonToWitherSkelly", EntityType.SKELETON, createNBTTag(""), EntityType.WITHER_SKELETON, createNBTTag(""), AgeingConfig.SERVER.skeletonToWitherSkeletonAgeingTime.get());
             skeletonToWitherSkelly.setCriteria(new BaseCriteria[] { new DimensionCriteria(skeletonToWitherSkelly, new Integer[]{-1})});
             INSTANCE.registerAgeing(skeletonToWitherSkelly);
-        } else if (nameList.contains("SkeletonToWitherSkelly")){
-            AgeingData skeletonToWitherSkelly = nameToAgeing.get("SkeletonToWitherSkelly");
+        } else if (!INSTANCE.isIDUnique(EntityType.SKELETON.getRegistryName(), "SkeletonToWitherSkelly")){
+            AgeingData skeletonToWitherSkelly = INSTANCE.getByID(EntityType.SKELETON.getRegistryName(), "SkeletonToWitherSkelly");
             int ageingTime = AgeingConfig.SERVER.skeletonToWitherSkeletonAgeingTime.get();
             if(skeletonToWitherSkelly.getAgeingTme() != ageingTime) {
                 skeletonToWitherSkelly.setAgeingTme(ageingTime);
@@ -338,12 +336,12 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("SlimeToMagmaCube") && AgeingConfig.SERVER.slimeToMagmaCubeAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.SLIME.getRegistryName(), "SlimeToMagmaCube") && AgeingConfig.SERVER.slimeToMagmaCubeAgeing.get()) {
             AgeingData slimeToMagmaCube = new AgeingData("SlimeToMagmaCube", EntityType.SLIME, createNBTTag(""), EntityType.MAGMA_CUBE, createNBTTag(""), AgeingConfig.SERVER.slimeToMagmaCubeAgeingTime.get());
             slimeToMagmaCube.setCriteria(new BaseCriteria[] { new DimensionCriteria(slimeToMagmaCube, new Integer[]{-1})});
             INSTANCE.registerAgeing(slimeToMagmaCube);
-        } else if (nameList.contains("SlimeToMagmaCube")){
-            AgeingData slimeToMagmaCube = nameToAgeing.get("SlimeToMagmaCube");
+        } else if (!INSTANCE.isIDUnique(EntityType.SLIME.getRegistryName(), "SlimeToMagmaCube")){
+            AgeingData slimeToMagmaCube = INSTANCE.getByID(EntityType.SLIME.getRegistryName(), "SlimeToMagmaCube");
             int ageingTime = AgeingConfig.SERVER.slimeToMagmaCubeAgeingTime.get();
             if(slimeToMagmaCube.getAgeingTme() != ageingTime) {
                 slimeToMagmaCube.setAgeingTme(ageingTime);
@@ -351,10 +349,10 @@ public class AgeingRegistry {
             }
         }
 
-        if(!nameList.contains("BatToVex") && AgeingConfig.SERVER.batToVexAgeing.get()) {
+        if(INSTANCE.isIDUnique(EntityType.BAT.getRegistryName(), "BatToVex") && AgeingConfig.SERVER.batToVexAgeing.get()) {
             INSTANCE.registerAgeing(new AgeingData("BatToVex", EntityType.BAT, createNBTTag(""), EntityType.VEX, createNBTTag(""), AgeingConfig.SERVER.batToVexAgeingTime.get()));
-        } else if (nameList.contains("BatToVex")){
-            AgeingData batToVex = nameToAgeing.get("BatToVex");
+        } else if (!INSTANCE.isIDUnique(EntityType.BAT.getRegistryName(), "BatToVex")){
+            AgeingData batToVex = INSTANCE.getByID(EntityType.BAT.getRegistryName(), "BatToVex");
             int ageingTime = AgeingConfig.SERVER.batToVexAgeingTime.get();
             if(batToVex.getAgeingTme() != ageingTime) {
                 batToVex.setAgeingTme(ageingTime);
@@ -363,66 +361,145 @@ public class AgeingRegistry {
         }
     }
 
-    public void registerAgeing(AgeingData ageing)
-    {
-        nameList.add(ageing.getName());
-        nameToAgeing.put(ageing.getName(), ageing);
-        sortList(ageing);
-    }
-
-    public void removeAgeing(AgeingData ageing)
-    {
-        nameList.remove(ageing.getName());
-        nameToAgeing.remove(ageing.getName(), ageing);
-        removeAndSort(ageing);
-    }
-
-    public void replaceAgeing(AgeingData ageing)
-    {
-        AgeingData oldAgeing = nameToAgeing.get(ageing.getName());
-        nameToAgeing.remove(oldAgeing.getName(), oldAgeing);
-        nameToAgeing.put(oldAgeing.getName(), ageing);
-        ageingList.remove(oldAgeing);
-        sortList(ageing);
-    }
-
-    public boolean isIDUnique(String ID) {
-        return !nameList.contains(ID);
-    }
-
-    private void sortList(@Nullable AgeingData ageing)
-    {
-        if(ageing != null)
-            ageingList.add(ageing);
-
-        ageingList.sort(Comparator.comparingInt(AgeingData::getAgeingTme));
-    }
-
-    private void removeAndSort(@Nullable AgeingData ageing) {
-        if(ageing != null)
-            ageingList.remove(ageing);
-
-        ageingList.sort(Comparator.comparingInt(AgeingData::getAgeingTme));
-    }
-
-    public static CompoundNBT createNBTTag(String nbtData)
-    {
-        CompoundNBT tag = new CompoundNBT();
-
-        try
-        {
-            if(nbtData.startsWith("{") && nbtData.endsWith("}"))
-            {
-                tag = JsonToNBT.getTagFromJson(nbtData);
+    public void registerAgeing(AgeingData ageing) {
+        ResourceLocation resourceLocation = ageing.getEntity().getRegistryName();
+        if(resourceLocation != null) {
+            if(ageingList.containsKey(resourceLocation)) {
+                List<AgeingData> dataList = new ArrayList<>(ageingList.get(resourceLocation));
+                dataList.add(ageing);
+                ageingList.put(resourceLocation, dataList);
+            } else {
+                ageingList.put(resourceLocation, Collections.singletonList(ageing));
             }
-            else
-            {
-                tag = JsonToNBT.getTagFromJson("{" + nbtData + "}");
+        } else {
+            AgeingMobs.LOGGER.error(String.format("Failed to add Ageing Data with ID %s because the entity's resourcelocation is null", ageing.getName()));
+        }
+    }
+
+    public void removeAgeing(AgeingData ageing) {
+        ResourceLocation resourceLocation = ageing.getEntity().getRegistryName();
+        if(resourceLocation != null) {
+            if(ageingList.containsKey(resourceLocation)) {
+                List<AgeingData> dataList = new ArrayList<>(ageingList.get(resourceLocation));
+                dataList.remove(ageing);
+                if(dataList.isEmpty()) {
+                    ageingList.remove(resourceLocation);
+                } else {
+                    ageingList.put(resourceLocation, dataList);
+                }
+            } else {
+                AgeingMobs.LOGGER.error(String.format("Tried to remove Ageing Data with id %s but it didn't exist", ageing.getName()));
+            }
+        } else {
+            AgeingMobs.LOGGER.error(String.format("Failed to remove Ageing Data with ID %s because the entity's resourcelocation is null", ageing.getName()));
+        }
+    }
+
+    public void replaceAgeing(AgeingData ageing) {
+        ResourceLocation resourceLocation = ageing.getEntity().getRegistryName();
+        String uniqueID = ageing.getName();
+        if(resourceLocation != null) {
+            if(ageingList.containsKey(resourceLocation)) {
+                List<AgeingData> dataList = ageingList.get(resourceLocation);
+                if(dataList == null) {
+                    dataList = Lists.newArrayList();
+                }
+
+                boolean found = false;
+                if(!dataList.isEmpty()) {
+                    ListIterator<AgeingData> iterator = dataList.listIterator();
+                    while (iterator.hasNext()) {
+                        AgeingData data = iterator.next();
+                        if(data.getName().equals(uniqueID)) {
+                            iterator.set(ageing);
+                            found = true;
+                        }
+                    }
+
+                    if(!found) {
+                        AgeingMobs.LOGGER.error(String.format("Tried to change Ageing Data with id %s but it didn't exist", ageing.getName()));
+                    }
+                }
+            }
+        } else {
+            AgeingMobs.LOGGER.error(String.format("Failed to remove Ageing Data with ID %s because the entity's resourcelocation is null", ageing.getName()));
+        }
+    }
+
+    public static List<AgeingData> getDataList(ResourceLocation resourceLocation) {
+        if(ageingList.containsKey(resourceLocation)) {
+            List<AgeingData> dataList = ageingList.get(resourceLocation);
+            if(dataList == null) {
+                return new ArrayList<>();
+            }
+            return dataList;
+        }
+        return new ArrayList<>();
+    }
+
+    public static boolean hasEntityAgeing(ResourceLocation resourceLocation) {
+        return ageingList.containsKey(resourceLocation);
+    }
+
+    public AgeingData getByID(ResourceLocation resourceLocation, String uniqueID) {
+        if(ageingList.containsKey(resourceLocation)) {
+            List<AgeingData> dataList = ageingList.get(resourceLocation);
+            if(dataList == null) {
+                dataList = Lists.newArrayList();
+            }
+            if(!dataList.isEmpty()) {
+                for(AgeingData data : dataList) {
+                    if(data.getName().equals(uniqueID)) {
+                        return data;
+                    }
+                }
             }
         }
-        catch (CommandSyntaxException nbtexception)
-        {
-            AgeingMobs.LOGGER.error("nope... " +  nbtexception);
+        return null;
+    }
+
+    public AgeingData getByID(String uniqueID) {
+        for (Map.Entry<ResourceLocation, List<AgeingData>> entry : ageingList.entrySet()) {
+            List<AgeingData> dataList = entry.getValue();
+            if (dataList != null && !dataList.isEmpty()) {
+                for (AgeingData data : dataList) {
+                    if (data.getName().equals(uniqueID)) {
+                        return data;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean isIDUnique(ResourceLocation resourceLocation, String uniqueID) {
+        if(ageingList.containsKey(resourceLocation)) {
+            List<AgeingData> dataList = ageingList.get(resourceLocation);
+            if(dataList == null) {
+                dataList = Lists.newArrayList();
+            }
+            if(!dataList.isEmpty()) {
+                for(AgeingData data : dataList) {
+                    if(data.getName().equals(uniqueID)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public static CompoundNBT createNBTTag(String nbtData) {
+        CompoundNBT tag = new CompoundNBT();
+
+        try {
+            if(nbtData.startsWith("{") && nbtData.endsWith("}")) {
+                tag = JsonToNBT.getTagFromJson(nbtData);
+            } else {
+                tag = JsonToNBT.getTagFromJson("{" + nbtData + "}");
+            }
+        } catch (CommandSyntaxException nbtexception) {
+            AgeingMobs.LOGGER.error("nope... " +  nbtexception.getMessage());
         }
 
         return tag;
@@ -460,10 +537,6 @@ public class AgeingRegistry {
 
     public List<Integer> getMoonDimensions() {
         return moonDimensions;
-    }
-
-    public Map<String, AgeingData> getNameToAgeing() {
-        return nameToAgeing;
     }
 
     public static CompoundNBT entityToNBT(Entity theEntity)

@@ -3,7 +3,6 @@ package com.shynieke.ageingmobs.registry.ageing.criteria;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 
 public class BiomeTypeCriteria extends BaseCriteria {
@@ -18,8 +17,8 @@ public class BiomeTypeCriteria extends BaseCriteria {
         return biomeType;
     }
 
-    public void setBiomeType(Biome biome) {
-        this.biomeType = biomeType;
+    public void setBiomeType(BiomeDictionary.Type biome) {
+        this.biomeType = biome;
     }
 
     @Override

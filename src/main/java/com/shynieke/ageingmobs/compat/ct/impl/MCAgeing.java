@@ -29,8 +29,8 @@ public class MCAgeing {
     public MCAgeing setCriteria(MCCriteria[] criteria) {
         if(criteria.length > 0) {
             List<BaseCriteria> baseList = Lists.newArrayList();
-            for(int i = 0; i < criteria.length; i++) {
-                BaseCriteria newInternal = criteria[i].getInternal();
+            for (MCCriteria criterion : criteria) {
+                BaseCriteria newInternal = criterion.getInternal();
                 baseList.add(newInternal);
             }
             BaseCriteria[] criteriaArray = new BaseCriteria[baseList.size()];

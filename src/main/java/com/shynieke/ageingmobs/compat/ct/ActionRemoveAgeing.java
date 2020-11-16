@@ -9,7 +9,7 @@ public class ActionRemoveAgeing implements IUndoableAction {
     public final AgeingData oldAgeingData;
 
     public ActionRemoveAgeing(String ageingID) {
-        this.ageingData = AgeingRegistry.INSTANCE.getNameToAgeing().get(ageingID);
+        this.ageingData = AgeingRegistry.INSTANCE.getByID(ageingID);
         this.oldAgeingData = ageingData;
     }
 
