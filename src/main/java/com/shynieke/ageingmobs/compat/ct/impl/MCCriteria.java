@@ -6,6 +6,7 @@ import com.blamejared.crafttweaker.impl.entity.MCEntityType;
 import com.blamejared.crafttweaker.impl.world.MCBiome;
 import com.google.common.collect.Lists;
 import com.shynieke.ageingmobs.AgeingMobs;
+import com.shynieke.ageingmobs.helper.BiomeHelper;
 import com.shynieke.ageingmobs.helper.NBTHelper;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BiomeCriteria;
@@ -50,7 +51,7 @@ public class MCCriteria {
 
     @ZenCodeType.Method
     public MCCriteria constructBiome(String biomeName) {
-        net.minecraft.world.biome.Biome biome = net.minecraft.world.biome.Biomes.THE_VOID;
+        net.minecraft.world.biome.Biome biome = BiomeHelper.getBiome(net.minecraft.world.biome.Biomes.THE_VOID);
         if(net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName)) != null) {
             biome = net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName));
         } else {

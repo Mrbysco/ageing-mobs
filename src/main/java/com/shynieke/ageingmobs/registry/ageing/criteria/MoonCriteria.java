@@ -29,10 +29,10 @@ public class MoonCriteria extends BaseCriteria {
     public boolean checkCriteria(World worldIn, Entity entityIn) {
         World entityWorld = entityIn.getEntityWorld();
         if(!entityWorld.isDaytime()) {
-            int moonPhase = entityWorld.func_230315_m_().func_236035_c_(entityWorld.getWorldInfo().getDayTime());
+            int moonPhase = entityWorld.getDimensionType().getMoonPhase(entityWorld.getWorldInfo().getDayTime());
             List<ResourceLocation> moonDimensions = AgeingRegistry.INSTANCE.getMoonDimensions();
 
-            if(!moonDimensions.isEmpty() && moonDimensions.contains(entityWorld.getDimensionKey().func_240901_a_())) {
+            if(!moonDimensions.isEmpty() && moonDimensions.contains(entityWorld.getDimensionKey().getLocation())) {
                 int wantedPhase = moonPhaseFromString(getMoonPhase());
 
                 return moonPhase == wantedPhase;
@@ -45,8 +45,7 @@ public class MoonCriteria extends BaseCriteria {
         }
     }
 
-    public int moonPhaseFromString(String moonPhase)
-    {
+    public int moonPhaseFromString(String moonPhase) {
         switch (moonPhase) {
             default:
                 return 0;

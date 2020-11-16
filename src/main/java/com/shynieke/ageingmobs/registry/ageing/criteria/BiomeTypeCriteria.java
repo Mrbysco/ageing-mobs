@@ -1,5 +1,6 @@
 package com.shynieke.ageingmobs.registry.ageing.criteria;
 
+import com.shynieke.ageingmobs.helper.BiomeHelper;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
@@ -23,6 +24,6 @@ public class BiomeTypeCriteria extends BaseCriteria {
 
     @Override
     public boolean checkCriteria(World worldIn, Entity entityIn) {
-        return BiomeDictionary.getTypes(worldIn.getBiome(entityIn.getPosition())).contains(getBiomeType());
+        return BiomeDictionary.getTypes(BiomeHelper.getOrCreateBiomeKey(worldIn.getBiome(entityIn.getPosition()))).contains(getBiomeType());
     }
 }
