@@ -41,7 +41,7 @@ public class MagicCriteria extends BaseCriteria {
                 BlockPos pos = posIterator.next();
                 Block foundState = worldIn.getBlockState(pos).getBlock();
                 if(magicMap.containsKey(foundState)) {
-                    double importanceFound = magicMap.getOrDefault(foundState, 0.0D).doubleValue();
+                    double importanceFound = magicMap.getOrDefault(foundState, 0.0D);
                     totalImportance = totalImportance + importanceFound;
                 }
             }

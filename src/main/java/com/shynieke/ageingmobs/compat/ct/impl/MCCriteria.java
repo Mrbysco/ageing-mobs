@@ -22,12 +22,11 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.MoonCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.TimeCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import org.openzen.zencode.java.ZenCodeType;
 
+import java.util.Arrays;
 import java.util.List;
 
 @ZenRegister
@@ -112,15 +111,12 @@ public class MCCriteria {
     }
 
     @ZenCodeType.Method
-    public MCCriteria constructDimension(String[] dimensions) {
+    public MCCriteria constructDimension(ResourceLocation[] dimensions) {
         if(dimensions.length > 0) {
-            List<ResourceLocation> dimensionList = Lists.newArrayList();
-            for (String s : dimensions) {
-                ResourceLocation dimension = new ResourceLocation(s);
-                dimensionList.add(dimension);
-            }
-            ResourceLocation[] dimensionArray = new ResourceLocation[dimensionList.size()];
-            dimensionArray = dimensionList.toArray(dimensionArray);
+            List<ResourceLocation> blockList = Lists.newArrayList();
+            blockList.addAll(Arrays.asList(dimensions));
+            ResourceLocation[] dimensionArray = new ResourceLocation[blockList.size()];
+            dimensionArray = blockList.toArray(dimensionArray);
             return new MCCriteria(new DimensionCriteria(this.internal.getAgeingData(), dimensionArray));
         }
         return this;
@@ -128,14 +124,7 @@ public class MCCriteria {
 
     @ZenCodeType.Method
     public MCCriteria constructEntity(MCEntityType nearbyEntity, String nearbyEntityData, int radius) {
-        EntityType<? extends Entity> nearbyEntityType = nearbyEntity.getInternal();
-        if(nearbyEntity == null || nearbyEntity.getInternal() == null) {
-            nearbyEntityType = EntityType.EGG;
-            AgeingMobs.LOGGER.error("Could not find supplied nearby Entity with name: '" + nearbyEntity.getName() + "', Replacing with 'minecraft:egg'");
-        }
-
-        return new MCCriteria(new EntityCriteria(this.internal.getAgeingData(), nearbyEntityType, NBTHelper.createNBTTag(nearbyEntityData), radius));
-
+        return new MCCriteria(new EntityCriteria(this.internal.getAgeingData(), nearbyEntity.getInternal(), NBTHelper.createNBTTag(nearbyEntityData), radius));
     }
 
     @ZenCodeType.Method

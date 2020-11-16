@@ -6,22 +6,18 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.JsonToNBT;
 
 public class NBTHelper {
-    public static CompoundNBT createNBTTag(String nbtData)
-    {
+    public static CompoundNBT createNBTTag(String nbtData) {
         CompoundNBT tag = new CompoundNBT();
 
         try {
-            String data = nbtData;
-            if(data.startsWith("{") && data.endsWith("}"))
-            {
-                tag = JsonToNBT.getTagFromJson(data);
+            if(nbtData.startsWith("{") && nbtData.endsWith("}")) {
+                tag = JsonToNBT.getTagFromJson(nbtData);
+            } else {
+                tag = JsonToNBT.getTagFromJson("{" + nbtData + "}");
             }
-            else
-            {
-                tag = JsonToNBT.getTagFromJson("{" + data + "}");
-            }
-        } catch (CommandSyntaxException nbtexception) {
-            AgeingMobs.LOGGER.error("nope... " +  nbtexception);
+        }
+        catch (CommandSyntaxException exception) {
+            AgeingMobs.LOGGER.error("nope... " +  exception);
         }
 
         return tag;

@@ -5,6 +5,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 
+import javax.annotation.Nonnull;
+
 public interface iAgeing {
 
     EntityType<? extends Entity> getEntity();
@@ -26,6 +28,7 @@ public interface iAgeing {
     /*
      * @return Unique name
      */
+    @Nonnull
     String getName();
 
     //Optional

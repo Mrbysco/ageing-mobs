@@ -9,7 +9,7 @@ public class ActionRemoveAgeing implements IUndoableAction {
     public final AgeingData oldAgeingData;
 
     public ActionRemoveAgeing(String ageingID) {
-        this.ageingData = AgeingRegistry.INSTANCE.getNameToAgeing().get(ageingID);
+        this.ageingData = AgeingRegistry.INSTANCE.getByID(ageingID);
         this.oldAgeingData = ageingData;
     }
 
@@ -23,10 +23,10 @@ public class ActionRemoveAgeing implements IUndoableAction {
     @Override
     public String describe() {
         if(ageingData.getEntity() == null) {
-            return String.format("Unknown entity inserted at ageing ID '%s'", ageingData.getName());
+            return "Unknown entity inserted at ageing ID '" + ageingData.getName() + "'";
         }
         if(ageingData.getTransformedEntity() == null) {
-            return String.format("Unknown transform entity inserted at ageing ID '%s'", ageingData.getName());
+            return "Unknown transform entity inserted at ageing ID '" + ageingData.getName() + "'";
         }
         return "Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> has been removed with unique ID: " + ageingData.getName();
     }

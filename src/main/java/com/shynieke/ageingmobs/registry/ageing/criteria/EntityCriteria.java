@@ -10,7 +10,6 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.FakePlayer;
 
 public class EntityCriteria extends BaseCriteria {
     private EntityType<? extends Entity> nearbyEntity;
@@ -57,22 +56,16 @@ public class EntityCriteria extends BaseCriteria {
                 .expand(-getRadius(), -getRadius(), -getRadius()).expand(getRadius(), getRadius(), getRadius());
         if(!worldIn.getEntitiesWithinAABB(Entity.class, areaHitbox).isEmpty()) {
             for(Entity foundEntity: worldIn.getEntitiesWithinAABB(Entity.class, areaHitbox)) {
-                if(!(foundEntity instanceof PlayerEntity) && !(foundEntity instanceof FakePlayer))
-                {
-                    if(foundEntity.getType().equals(getTransformedEntity()))
-                    {
-                        if(!getTransformedEntityData().isEmpty())
-                        {
+                if(!(foundEntity instanceof PlayerEntity)) {
+                    if(foundEntity.getType().equals(getTransformedEntity())) {
+                        if(!getTransformedEntityData().isEmpty()) {
                             CompoundNBT entityTag = AgeingRegistry.entityToNBT(foundEntity);
                             CompoundNBT entityTag2 = getNearbyEntityData();
 
-                            if(!NBTUtil.areNBTEquals(entityTag2, entityTag, true))
-                            {
+                            if(!NBTUtil.areNBTEquals(entityTag2, entityTag, true)) {
                                 nearbyEntityAmount++;
                             }
-                        }
-                        else
-                        {
+                        } else {
                             nearbyEntityAmount++;
                         }
                     }
