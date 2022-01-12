@@ -1,7 +1,6 @@
 package com.shynieke.ageingmobs.config;
 
 import com.shynieke.ageingmobs.AgeingMobs;
-import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
@@ -15,7 +14,7 @@ import java.util.List;
 
 public class AgeingConfig {
 
-    public static class Server {
+    public static class Common {
 
         //Conversion
         public final BooleanValue creeperAgeing;
@@ -75,7 +74,7 @@ public class AgeingConfig {
         public final ConfigValue<List<? extends String>> magical_blocks;
         public final ConfigValue<List<? extends String>> moon_dimensions;
 
-        Server(ForgeConfigSpec.Builder builder) {
+        Common(ForgeConfigSpec.Builder builder) {
             builder.comment("Creeper -> Charged Creeper")
                     .push("creeper_to_charged");
 
@@ -327,12 +326,12 @@ public class AgeingConfig {
         }
     }
 
-    public static final ForgeConfigSpec serverSpec;
-    public static final AgeingConfig.Server SERVER;
+    public static final ForgeConfigSpec commonSpec;
+    public static final Common COMMON;
     static {
-        final Pair<AgeingConfig.Server, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(AgeingConfig.Server::new);
-        serverSpec = specPair.getRight();
-        SERVER = specPair.getLeft();
+        final Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
+        commonSpec = specPair.getRight();
+        COMMON = specPair.getLeft();
     }
 
     @SubscribeEvent
@@ -343,9 +342,5 @@ public class AgeingConfig {
     @SubscribeEvent
     public static void onFileChange(final ModConfig.Reloading configEvent) {
         AgeingMobs.LOGGER.fatal("Ageing Mobs' config just got changed on the file system!");
-
-        AgeingRegistry.INSTANCE.initializeAgeing();
-        AgeingRegistry.INSTANCE.initializeMagicMap();
-        AgeingRegistry.INSTANCE.initializeMoonDimensions();
     }
 }

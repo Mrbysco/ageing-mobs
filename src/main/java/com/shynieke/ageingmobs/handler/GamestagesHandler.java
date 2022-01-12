@@ -11,8 +11,8 @@ import net.minecraft.world.World;
 public class GamestagesHandler {
     public static boolean gamestageChecks(AgeingData info, Entity entity, World world) {
         String gamestage = info.getGamestage();
-        if(net.darkhax.gamestages.GameStageHelper.isStageKnown(gamestage) && !world.isRemote) {
-            for (final PlayerEntity player : world.getPlayers()) {
+        if(net.darkhax.gamestages.GameStageHelper.isStageKnown(gamestage) && !world.isClientSide) {
+            for (final PlayerEntity player : world.players()) {
                 ServerPlayerEntity serverPlayer = (ServerPlayerEntity)player;
                 if (net.darkhax.gamestages.GameStageHelper.hasStage(serverPlayer, gamestage) && net.darkhax.bookshelf.util.EntityUtils.getDistanceFromEntity(player, entity) <= 32) {
                     return true;

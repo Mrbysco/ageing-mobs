@@ -58,14 +58,14 @@ public class LightCriteria extends BaseCriteria {
 
     @Override
     public boolean checkCriteria(World worldIn, Entity entityIn) {
-        BlockPos entityPos = entityIn.getPosition();
+        BlockPos entityPos = entityIn.blockPosition();
 
-        int entityLight = worldIn.getLight(entityPos);
+        int entityLight = worldIn.getMaxLocalRawBrightness(entityPos);
         if(entityLight >= getLightLevelMin() && entityLight <= getLightLevelMax()) {
             if(isAloneBased()) {
                 AxisAlignedBB areaHitbox = new AxisAlignedBB(entityPos.getX() - 0.5f, entityPos.getY() - 0.5f, entityPos.getZ() - 0.5f, entityPos.getX() + 0.5f, entityPos.getY() + 0.5f, entityPos.getZ() + 0.5f)
-                        .expand(-5, -5, -5).expand(5, 5, 5);
-                if(!worldIn.getEntitiesWithinAABB(entityIn.getClass(), areaHitbox).contains(getEntity().create(worldIn))) {
+                        .expandTowards(-5, -5, -5).expandTowards(5, 5, 5);
+                if(!worldIn.getEntitiesOfClass(entityIn.getClass(), areaHitbox).contains(getEntity().create(worldIn))) {
                     this.isReversing = false;
                     return true;
                 } else {

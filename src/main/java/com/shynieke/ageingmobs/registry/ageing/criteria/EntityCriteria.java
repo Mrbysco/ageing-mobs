@@ -49,20 +49,20 @@ public class EntityCriteria extends BaseCriteria {
 
     @Override
     public boolean checkCriteria(World worldIn, Entity entityIn) {
-        BlockPos entityPos = entityIn.getPosition();
+        BlockPos entityPos = entityIn.blockPosition();
         int nearbyEntityAmount = 0;
 
         AxisAlignedBB areaHitbox = new AxisAlignedBB(entityPos.getX() - 0.5f, entityPos.getY() - 0.5f, entityPos.getZ() - 0.5f, entityPos.getX() + 0.5f, entityPos.getY() + 0.5f, entityPos.getZ() + 0.5f)
-                .expand(-getRadius(), -getRadius(), -getRadius()).expand(getRadius(), getRadius(), getRadius());
-        if(!worldIn.getEntitiesWithinAABB(Entity.class, areaHitbox).isEmpty()) {
-            for(Entity foundEntity: worldIn.getEntitiesWithinAABB(Entity.class, areaHitbox)) {
+                .expandTowards(-getRadius(), -getRadius(), -getRadius()).expandTowards(getRadius(), getRadius(), getRadius());
+        if(!worldIn.getEntitiesOfClass(Entity.class, areaHitbox).isEmpty()) {
+            for(Entity foundEntity: worldIn.getEntitiesOfClass(Entity.class, areaHitbox)) {
                 if(!(foundEntity instanceof PlayerEntity)) {
                     if(foundEntity.getType().equals(getTransformedEntity())) {
                         if(!getTransformedEntityData().isEmpty()) {
                             CompoundNBT entityTag = AgeingRegistry.entityToNBT(foundEntity);
                             CompoundNBT entityTag2 = getNearbyEntityData();
 
-                            if(!NBTUtil.areNBTEquals(entityTag2, entityTag, true)) {
+                            if(!NBTUtil.compareNbt(entityTag2, entityTag, true)) {
                                 nearbyEntityAmount++;
                             }
                         } else {

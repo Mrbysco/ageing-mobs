@@ -41,16 +41,16 @@ public class BossCriteria extends BaseCriteria {
 
     @Override
     public boolean checkCriteria(World worldIn, Entity entityIn) {
-        BlockPos entityPos = entityIn.getPosition();
+        BlockPos entityPos = entityIn.blockPosition();
         if(getMaxInArea() != 0) {
             int checkRadius = getCheckRadius();
             int bossAmount = 0;
 
             AxisAlignedBB areaHitbox = new AxisAlignedBB(entityPos.getX() - 0.5f, entityPos.getY() - 0.5f, entityPos.getZ() - 0.5f, entityPos.getX() + 0.5f, entityPos.getY() + 0.5f, entityPos.getZ() + 0.5f)
-                    .expand(-checkRadius, -checkRadius, -checkRadius).expand(checkRadius, checkRadius, checkRadius);
+                    .expandTowards(-checkRadius, -checkRadius, -checkRadius).expandTowards(checkRadius, checkRadius, checkRadius);
 
-            if(!worldIn.getEntitiesWithinAABB(Entity.class, areaHitbox).isEmpty()) {
-                for(Entity foundEntity: worldIn.getEntitiesWithinAABB(Entity.class, areaHitbox)) {
+            if(!worldIn.getEntitiesOfClass(Entity.class, areaHitbox).isEmpty()) {
+                for(Entity foundEntity: worldIn.getEntitiesOfClass(Entity.class, areaHitbox)) {
                     if(!(foundEntity instanceof PlayerEntity)) {
                         if(foundEntity.getType().equals(getTransformedEntity())) {
                             if(!getTransformedEntityData().isEmpty())
@@ -58,7 +58,7 @@ public class BossCriteria extends BaseCriteria {
                                 CompoundNBT entityTag = AgeingRegistry.entityToNBT(foundEntity);
                                 CompoundNBT entityTag2 = getTransformedEntityData();
 
-                                if(!NBTUtil.areNBTEquals(entityTag2, entityTag, true)) {
+                                if(!NBTUtil.compareNbt(entityTag2, entityTag, true)) {
                                     bossAmount++;
                                 }
                             } else {

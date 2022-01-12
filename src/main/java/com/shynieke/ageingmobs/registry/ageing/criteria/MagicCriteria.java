@@ -29,14 +29,14 @@ public class MagicCriteria extends BaseCriteria {
 
     @Override
     public boolean checkCriteria(World worldIn, Entity entityIn) {
-        BlockPos entityPos = entityIn.getPosition();
+        BlockPos entityPos = entityIn.blockPosition();
         HashMap<Block, Double> magicMap = AgeingRegistry.INSTANCE.getMagicMap();
         if(!magicMap.isEmpty()) {
             double totalImportance = 0;
-            BlockPos downPos = new BlockPos(entityPos.add(-getRange(), -getRange(), -getRange()));
-            BlockPos upPos = new BlockPos(entityPos.add(getRange(), getRange(), getRange()));
+            BlockPos downPos = new BlockPos(entityPos.offset(-getRange(), -getRange(), -getRange()));
+            BlockPos upPos = new BlockPos(entityPos.offset(getRange(), getRange(), getRange()));
 
-            Iterator<BlockPos> posIterator = BlockPos.getAllInBox(downPos,upPos).iterator();
+            Iterator<BlockPos> posIterator = BlockPos.betweenClosedStream(downPos,upPos).iterator();
             while(posIterator.hasNext()) {
                 BlockPos pos = posIterator.next();
                 Block foundState = worldIn.getBlockState(pos).getBlock();

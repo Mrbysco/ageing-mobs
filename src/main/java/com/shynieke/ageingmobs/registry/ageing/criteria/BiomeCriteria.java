@@ -25,6 +25,6 @@ public class BiomeCriteria extends BaseCriteria {
 
     @Override
     public boolean checkCriteria(World worldIn, Entity entityIn) {
-        return worldIn.getBiome(entityIn.getPosition()).getRegistryName().equals(getBiome().getRegistryName());
+        return worldIn.getBiome(entityIn.blockPosition()).getRegistryName().equals(getBiome().getRegistryName());
     }
 }

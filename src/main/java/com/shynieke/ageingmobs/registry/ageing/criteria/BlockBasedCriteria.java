@@ -48,11 +48,11 @@ public class BlockBasedCriteria extends BaseCriteria {
 
     @Override
     public boolean checkCriteria(World worldIn, Entity entityIn) {
-        BlockPos entityPos = entityIn.getPosition();
+        BlockPos entityPos = entityIn.blockPosition();
         if(isNearBlock()) {
             int radius = getRadius();
 
-            Iterator<BlockPos> posIterator = BlockPos.getAllInBox(entityPos.add(-radius, -radius, -radius), entityPos.add(radius, radius, radius)).iterator();
+            Iterator<BlockPos> posIterator = BlockPos.betweenClosedStream(entityPos.offset(-radius, -radius, -radius), entityPos.offset(radius, radius, radius)).iterator();
             while(posIterator.hasNext()) {
                 BlockPos pos = posIterator.next();
                 if(getBlock().contains(worldIn.getBlockState(pos).getBlock())) {
@@ -61,7 +61,7 @@ public class BlockBasedCriteria extends BaseCriteria {
             }
             return false;
         } else {
-            return getBlock().contains(worldIn.getBlockState(entityPos.down()).getBlock());
+            return getBlock().contains(worldIn.getBlockState(entityPos.below()).getBlock());
         }
     }
 }

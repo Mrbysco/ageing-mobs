@@ -26,6 +26,6 @@ public class DimensionCriteria extends BaseCriteria {
 
     @Override
     public boolean checkCriteria(World worldIn, Entity entityIn) {
-        return getDimensionID().contains(entityIn.getEntityWorld().getDimensionKey().getLocation());
+        return getDimensionID().contains(entityIn.getCommandSenderWorld().dimension().location());
     }
 }

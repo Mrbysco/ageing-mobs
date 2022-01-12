@@ -1,9 +1,7 @@
 package com.shynieke.ageingmobs.compat.ct.impl;
 
 import com.blamejared.crafttweaker.api.annotations.ZenRegister;
-import com.blamejared.crafttweaker.impl.blocks.MCBlock;
 import com.blamejared.crafttweaker.impl.entity.MCEntityType;
-import com.blamejared.crafttweaker.impl.world.MCBiome;
 import com.google.common.collect.Lists;
 import com.shynieke.ageingmobs.AgeingMobs;
 import com.shynieke.ageingmobs.helper.BiomeHelper;
@@ -24,6 +22,7 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.TimeCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import org.openzen.zencode.java.ZenCodeType;
 
@@ -45,8 +44,8 @@ public class MCCriteria {
     }
 
     @ZenCodeType.Method
-    public MCCriteria constructBiome(MCBiome biome) {
-        return new MCCriteria(new BiomeCriteria(this.internal.getAgeingData(), biome.getInternal()));
+    public MCCriteria constructBiome(Biome biome) {
+        return new MCCriteria(new BiomeCriteria(this.internal.getAgeingData(), biome));
     }
 
     @ZenCodeType.Method
@@ -73,13 +72,9 @@ public class MCCriteria {
     }
 
     @ZenCodeType.Method
-    public MCCriteria constructBlockBased(MCBlock[] blocks, Boolean nearBlock, int radius) {
+    public MCCriteria constructBlockBased(Block[] blocks, Boolean nearBlock, int radius) {
         if(blocks.length > 0) {
-            List<Block> blockList = Lists.newArrayList();
-            for (MCBlock block : blocks) {
-                Block newInternal = block.getInternal();
-                blockList.add(newInternal);
-            }
+            List<Block> blockList = Lists.newArrayList(blocks);
             Block[] blockArray = new Block[blockList.size()];
             blockArray = blockList.toArray(blockArray);
             return new MCCriteria(new BlockBasedCriteria(this.internal.getAgeingData(), blockArray,nearBlock, radius));

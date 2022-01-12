@@ -70,7 +70,7 @@ public class AgeHandler {
                         CompoundNBT entityTag2 = info.getTransformedEntityData();
 
                         if(!entityTag2.isEmpty()) {
-                            if(!NBTUtil.areNBTEquals(entityTag2, entityTag, true)) {
+                            if(!NBTUtil.compareNbt(entityTag2, entityTag, true)) {
                                 extraChecks(info, entity, world);
                             }
                         }
@@ -84,7 +84,7 @@ public class AgeHandler {
                         CompoundNBT entityTag3 = info.getTransformedEntityData();
 
                         if(!entityTag2.isEmpty() && !entityTag3.isEmpty()) {
-                            if(NBTUtil.areNBTEquals(entityTag2, entityTag, true) && !NBTUtil.areNBTEquals(entityTag3, entityTag, true)) {
+                            if(NBTUtil.compareNbt(entityTag2, entityTag, true) && !NBTUtil.compareNbt(entityTag3, entityTag, true)) {
                                 extraChecks(info, entity, world);
                             }
                         }
@@ -93,7 +93,7 @@ public class AgeHandler {
                         CompoundNBT entityTag2 = info.getEntityData();
 
                         if(!entityTag2.isEmpty()) {
-                            if(NBTUtil.areNBTEquals(entityTag2, entityTag, true)) {
+                            if(NBTUtil.compareNbt(entityTag2, entityTag, true)) {
                                 extraChecks(info, entity, world);
                             }
                         }
@@ -107,7 +107,7 @@ public class AgeHandler {
                 CompoundNBT entityTag3 = info.getTransformedEntityData();
 
                 if(!entityTag2.isEmpty() && !entityTag3.isEmpty()) {
-                    if(NBTUtil.areNBTEquals(entityTag2, entityTag, true) && !NBTUtil.areNBTEquals(entityTag3, entityTag, true))
+                    if(NBTUtil.compareNbt(entityTag2, entityTag, true) && !NBTUtil.compareNbt(entityTag3, entityTag, true))
                     {
                         extraChecks(info, entity, world);
                     }
@@ -168,7 +168,7 @@ public class AgeHandler {
                 if(!info.getTransformedEntityData().isEmpty()) {
                     Entity agedEntity = info.getTransformedEntity().create(world);
                     if(agedEntity != null) {
-                        agedEntity.copyLocationAndAnglesFrom(entity);
+                        agedEntity.copyPosition(entity);
                         copyEquipment(entity, agedEntity);
 
                         CompoundNBT entityTag = AgeingRegistry.entityToNBT(entity);
@@ -177,11 +177,11 @@ public class AgeHandler {
 
                         if(!entityTag2.isEmpty()) {
                             entityTagCopy.merge(entityTag2);
-                            UUID uuid = agedEntity.getUniqueID();
-                            agedEntity.read(entityTagCopy);
-                            agedEntity.setUniqueId(uuid);
+                            UUID uuid = agedEntity.getUUID();
+                            agedEntity.load(entityTagCopy);
+                            agedEntity.setUUID(uuid);
                         }
-                        world.addEntity(agedEntity);
+                        world.addFreshEntity(agedEntity);
                     } else {
                         AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + info.getTransformedEntity().getRegistryName());
                     }
@@ -194,7 +194,7 @@ public class AgeHandler {
                 if(!info.getTransformedEntityData().isEmpty()) {
                     Entity agedEntity = info.getTransformedEntity().create(world);
                     if(agedEntity != null) {
-                        agedEntity.copyLocationAndAnglesFrom(entity);
+                        agedEntity.copyPosition(entity);
                         copyEquipment(entity, agedEntity);
 
                         CompoundNBT entityTag = AgeingRegistry.entityToNBT(entity);
@@ -202,12 +202,12 @@ public class AgeHandler {
                         CompoundNBT entityTag2 = info.getTransformedEntityData();
 
                         if(!entityTag2.isEmpty()) {
-                            UUID uuid = agedEntity.getUniqueID();
+                            UUID uuid = agedEntity.getUUID();
                             entityTagCopy.merge(entityTag2);
-                            agedEntity.read(entityTag);
-                            agedEntity.setUniqueId(uuid);
+                            agedEntity.load(entityTag);
+                            agedEntity.setUUID(uuid);
                         }
-                        world.addEntity(agedEntity);
+                        world.addFreshEntity(agedEntity);
                     } else {
                         AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + info.getTransformedEntity().getRegistryName());
                     }
@@ -218,9 +218,9 @@ public class AgeHandler {
                 } else {
                     Entity agedEntity = info.getTransformedEntity().create(world);
                     if(agedEntity != null) {
-                        agedEntity.copyLocationAndAnglesFrom(entity);
+                        agedEntity.copyPosition(entity);
                         copyEquipment(entity, agedEntity);
-                        world.addEntity(agedEntity);
+                        world.addFreshEntity(agedEntity);
                     } else {
                         AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + info.getTransformedEntity().getRegistryName());
                     }
@@ -256,12 +256,12 @@ public class AgeHandler {
         if(original instanceof MobEntity && changedEntity instanceof MobEntity) {
             MobEntity originalMob = (MobEntity)original;
             MobEntity changedMob = (MobEntity)changedEntity;
-            changedMob.setItemStackToSlot(EquipmentSlotType.MAINHAND, originalMob.getItemStackFromSlot(EquipmentSlotType.MAINHAND));
-            changedMob.setItemStackToSlot(EquipmentSlotType.OFFHAND, originalMob.getItemStackFromSlot(EquipmentSlotType.OFFHAND));
-            changedMob.setItemStackToSlot(EquipmentSlotType.HEAD, originalMob.getItemStackFromSlot(EquipmentSlotType.HEAD));
-            changedMob.setItemStackToSlot(EquipmentSlotType.CHEST, originalMob.getItemStackFromSlot(EquipmentSlotType.CHEST));
-            changedMob.setItemStackToSlot(EquipmentSlotType.LEGS, originalMob.getItemStackFromSlot(EquipmentSlotType.LEGS));
-            changedMob.setItemStackToSlot(EquipmentSlotType.FEET, originalMob.getItemStackFromSlot(EquipmentSlotType.FEET));
+            changedMob.setItemSlot(EquipmentSlotType.MAINHAND, originalMob.getItemBySlot(EquipmentSlotType.MAINHAND));
+            changedMob.setItemSlot(EquipmentSlotType.OFFHAND, originalMob.getItemBySlot(EquipmentSlotType.OFFHAND));
+            changedMob.setItemSlot(EquipmentSlotType.HEAD, originalMob.getItemBySlot(EquipmentSlotType.HEAD));
+            changedMob.setItemSlot(EquipmentSlotType.CHEST, originalMob.getItemBySlot(EquipmentSlotType.CHEST));
+            changedMob.setItemSlot(EquipmentSlotType.LEGS, originalMob.getItemBySlot(EquipmentSlotType.LEGS));
+            changedMob.setItemSlot(EquipmentSlotType.FEET, originalMob.getItemBySlot(EquipmentSlotType.FEET));
         }
     }
 }

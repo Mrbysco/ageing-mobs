@@ -11,9 +11,9 @@ public class NBTHelper {
 
         try {
             if(nbtData.startsWith("{") && nbtData.endsWith("}")) {
-                tag = JsonToNBT.getTagFromJson(nbtData);
+                tag = JsonToNBT.parseTag(nbtData);
             } else {
-                tag = JsonToNBT.getTagFromJson("{" + nbtData + "}");
+                tag = JsonToNBT.parseTag("{" + nbtData + "}");
             }
         }
         catch (CommandSyntaxException exception) {

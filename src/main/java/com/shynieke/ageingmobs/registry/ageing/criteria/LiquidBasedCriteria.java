@@ -37,9 +37,9 @@ public class LiquidBasedCriteria extends BaseCriteria {
 
     @Override
     public boolean checkCriteria(World worldIn, Entity entityIn) {
-        boolean inFluid = entityIn.isOffsetPositionInLiquid(entityIn.getPosX(), entityIn.getPosY()-1, entityIn.getPosZ());
+        boolean inFluid = entityIn.isFree(entityIn.getX(), entityIn.getY()-1, entityIn.getZ());
         if(inFluid) {
-            ResourceLocation fluidLoc = worldIn.getFluidState(entityIn.getPosition().add(0,-1,0)).getFluid().getRegistryName();
+            ResourceLocation fluidLoc = worldIn.getFluidState(entityIn.blockPosition().offset(0,-1,0)).getType().getRegistryName();
             if(fluidLoc != null && fluidLoc.equals(new ResourceLocation(getLiquid()))) {
                 this.isReversing = false;
                 return true;
