@@ -1,21 +1,21 @@
 package com.shynieke.ageingmobs.registry.ageing;
 
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.nbt.CompoundTag;
 
 public class AgeingData implements iAgeing {
     private final String uniqueID;
     private final EntityType<? extends Entity> entity;
-    private final CompoundNBT entityData;
+    private final CompoundTag entityData;
     private final EntityType<? extends Entity> evolvedEntity;
-    private final CompoundNBT evolvedEntityEntityData;
+    private final CompoundTag evolvedEntityEntityData;
     private int tickTime;
-    private String gamestage = "";
+//    private String gamestage = "";
     private BaseCriteria[] criteria = new BaseCriteria[]{};
 
-    public AgeingData(String uniqueID, EntityType<? extends Entity> entity, CompoundNBT entityData, EntityType<? extends Entity> transformedEntity, CompoundNBT evolvedEntityEntityData, int tickTime) {
+    public AgeingData(String uniqueID, EntityType<? extends Entity> entity, CompoundTag entityData, EntityType<? extends Entity> transformedEntity, CompoundTag evolvedEntityEntityData, int tickTime) {
         this.uniqueID = uniqueID;
         this.entity = entity;
         this.entityData = entityData;
@@ -30,7 +30,7 @@ public class AgeingData implements iAgeing {
     }
 
     @Override
-    public CompoundNBT getEntityData() {
+    public CompoundTag getEntityData() {
         return this.entityData;
     }
 
@@ -40,7 +40,7 @@ public class AgeingData implements iAgeing {
     }
 
     @Override
-    public CompoundNBT getTransformedEntityData() {
+    public CompoundTag getTransformedEntityData() {
         return this.evolvedEntityEntityData;
     }
 
@@ -60,15 +60,15 @@ public class AgeingData implements iAgeing {
     }
 
     //Optional
-    @Override
-    public String getGamestage() {
-        return this.gamestage;
-    }
+//    @Override
+//    public String getGamestage() {
+//        return this.gamestage;
+//    }
 
-    @Override
-    public void setGamestage(String gamestage) {
-        this.gamestage = gamestage;
-    }
+//    @Override
+//    public void setGamestage(String gamestage) {
+//        this.gamestage = gamestage;
+//    }
 
     @Override
     public void setCriteria(BaseCriteria[] criteria) {
@@ -87,7 +87,7 @@ public class AgeingData implements iAgeing {
 
     public AgeingData setAgeingCriteria(BaseCriteria[] ageingCriteria) {
         AgeingData ageingData = new AgeingData(this.uniqueID, this.entity, this.entityData, this.evolvedEntity, this.evolvedEntityEntityData, this.tickTime);
-        ageingData.setGamestage(this.gamestage);
+//        ageingData.setGamestage(this.gamestage);
         ageingData.setCriteria(ageingCriteria);
         return ageingData;
     }

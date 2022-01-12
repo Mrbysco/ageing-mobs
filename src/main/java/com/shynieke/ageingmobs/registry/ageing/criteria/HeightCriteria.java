@@ -1,8 +1,8 @@
 package com.shynieke.ageingmobs.registry.ageing.criteria;
 
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
-import net.minecraft.entity.Entity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 
 public class HeightCriteria extends BaseCriteria {
     private int minHeight;
@@ -31,7 +31,7 @@ public class HeightCriteria extends BaseCriteria {
     }
 
     @Override
-    public boolean checkCriteria(World worldIn, Entity entityIn) {
+    public boolean checkCriteria(Level worldIn, Entity entityIn) {
         int minHeight = getMinHeight();
         int maxHeight = getMaxHeight();
         int entityHeight = entityIn.blockPosition().getY();

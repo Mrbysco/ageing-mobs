@@ -3,10 +3,10 @@ package com.shynieke.ageingmobs.registry.ageing.criteria;
 import com.shynieke.ageingmobs.AgeingMobs;
 import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,7 +28,7 @@ public class MagicCriteria extends BaseCriteria {
     }
 
     @Override
-    public boolean checkCriteria(World worldIn, Entity entityIn) {
+    public boolean checkCriteria(Level worldIn, Entity entityIn) {
         BlockPos entityPos = entityIn.blockPosition();
         HashMap<Block, Double> magicMap = AgeingRegistry.INSTANCE.getMagicMap();
         if(!magicMap.isEmpty()) {

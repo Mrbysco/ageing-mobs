@@ -1,16 +1,16 @@
 package com.shynieke.ageingmobs.registry.ageing.criteria;
 
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 
 public class BaseCriteria implements iCriteria {
     private EntityType<? extends Entity> entity;
-    private CompoundNBT entityData;
+    private CompoundTag entityData;
     private EntityType<? extends Entity> evolvedEntity;
-    private CompoundNBT evolvedEntityEntityData;
+    private CompoundTag evolvedEntityEntityData;
     private String uniqueID;
 
     private iAgeing ageingData;
@@ -29,7 +29,7 @@ public class BaseCriteria implements iCriteria {
         return this.entity;
     }
 
-    public CompoundNBT getEntityData() {
+    public CompoundTag getEntityData() {
         return this.entityData;
     }
 
@@ -37,7 +37,7 @@ public class BaseCriteria implements iCriteria {
         return this.evolvedEntity;
     }
 
-    public CompoundNBT getTransformedEntityData() {
+    public CompoundTag getTransformedEntityData() {
         return this.evolvedEntityEntityData;
     }
 
@@ -50,7 +50,7 @@ public class BaseCriteria implements iCriteria {
     }
 
     @Override
-    public boolean checkCriteria(World worldIn, Entity entityIn) {
+    public boolean checkCriteria(Level worldIn, Entity entityIn) {
         return false;
     }
 }

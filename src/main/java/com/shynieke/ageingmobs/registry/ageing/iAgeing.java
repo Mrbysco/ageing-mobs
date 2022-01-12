@@ -1,19 +1,19 @@
 package com.shynieke.ageingmobs.registry.ageing;
 
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.nbt.CompoundTag;
 
 import javax.annotation.Nonnull;
 
 public interface iAgeing {
 
     EntityType<? extends Entity> getEntity();
-    CompoundNBT getEntityData();
+    CompoundTag getEntityData();
 
     EntityType<? extends Entity> getTransformedEntity();
-    CompoundNBT getTransformedEntityData();
+    CompoundTag getTransformedEntityData();
 
     /*
      * @return Returns the time (in ticks) it takes for a mob to age
@@ -36,12 +36,12 @@ public interface iAgeing {
     /*
      * @return Returns the gamestage required
      */
-    String getGamestage();
+//    String getGamestage();
 
     /*
      * @return Set the gamestage required
      */
-    void setGamestage(String gamestage);
+//    void setGamestage(String gamestage);
 
     void setCriteria(BaseCriteria[] criteria);
 

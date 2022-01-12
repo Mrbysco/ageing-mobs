@@ -3,9 +3,9 @@ package com.shynieke.ageingmobs.registry.ageing.criteria;
 import com.shynieke.ageingmobs.AgeingMobs;
 import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -26,8 +26,8 @@ public class MoonCriteria extends BaseCriteria {
     }
 
     @Override
-    public boolean checkCriteria(World worldIn, Entity entityIn) {
-        World entityWorld = entityIn.getCommandSenderWorld();
+    public boolean checkCriteria(Level worldIn, Entity entityIn) {
+        Level entityWorld = entityIn.getCommandSenderWorld();
         if(!entityWorld.isDay()) {
             int moonPhase = entityWorld.dimensionType().moonPhase(entityWorld.getLevelData().getDayTime());
             List<ResourceLocation> moonDimensions = AgeingRegistry.INSTANCE.getMoonDimensions();
@@ -46,23 +46,15 @@ public class MoonCriteria extends BaseCriteria {
     }
 
     public int moonPhaseFromString(String moonPhase) {
-        switch (moonPhase) {
-            default:
-                return 0;
-            case "Waning Gibbous":
-                return 1;
-            case "Last Quarter":
-                return 2;
-            case "Waning Crescent":
-                return 3;
-            case "New Moon":
-                return 4;
-            case "Waxing Crescent":
-                return 5;
-            case "First Quarter":
-                return 6;
-            case "Waxing Gibbous":
-                return 7;
-        }
+        return switch (moonPhase) {
+            default -> 0;
+            case "Waning Gibbous" -> 1;
+            case "Last Quarter" -> 2;
+            case "Waning Crescent" -> 3;
+            case "New Moon" -> 4;
+            case "Waxing Crescent" -> 5;
+            case "First Quarter" -> 6;
+            case "Waxing Gibbous" -> 7;
+        };
     }
 }

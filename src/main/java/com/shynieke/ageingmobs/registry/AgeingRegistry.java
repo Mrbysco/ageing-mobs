@@ -13,15 +13,15 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.DimensionCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.LightCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.MagicCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -123,8 +123,7 @@ public class AgeingRegistry {
             BaseCriteria[] criterias = villagerToVindicator.getCriteria();
             if(criterias.length > 0) {
                 for(BaseCriteria criteria : criterias) {
-                    if(criteria instanceof LightCriteria) {
-                        LightCriteria lightCriteria = (LightCriteria)criteria;
+                    if(criteria instanceof LightCriteria lightCriteria) {
                         int minLight = AgeingConfig.COMMON.villagerToVindicatorMinLight.get();
                         int maxLight = AgeingConfig.COMMON.villagerToVindicatorMaxLight.get();
                         if(lightCriteria.getLightLevelMin() != minLight) {
@@ -175,8 +174,7 @@ public class AgeingRegistry {
             BaseCriteria[] criterias = guardianToElder.getCriteria();
             if(criterias.length > 0) {
                 for(BaseCriteria criteria : criterias) {
-                    if(criteria instanceof BossCriteria) {
-                        BossCriteria bossCriteria = (BossCriteria)criteria;
+                    if(criteria instanceof BossCriteria bossCriteria) {
                         int ageingMax = AgeingConfig.COMMON.guardianToElderAgeingMax.get();
                         int range = AgeingConfig.COMMON.guardianToElderRange.get();
                         if(bossCriteria.getMaxInArea() != ageingMax) {
@@ -266,8 +264,7 @@ public class AgeingRegistry {
             BaseCriteria[] criterias = rabbitToKiller.getCriteria();
             if(criterias.length > 0) {
                 for(BaseCriteria criteria : criterias) {
-                    if(criteria instanceof LightCriteria) {
-                        LightCriteria lightCriteria = (LightCriteria)criteria;
+                    if(criteria instanceof LightCriteria lightCriteria) {
                         int minLight = AgeingConfig.COMMON.rabbitToKillerMinLight.get();
                         int maxLight = AgeingConfig.COMMON.rabbitToKillerMaxLight.get();
                         if(lightCriteria.getLightLevelMin() != minLight) {
@@ -305,8 +302,7 @@ public class AgeingRegistry {
             BaseCriteria[] criterias = cowToMooshroom.getCriteria();
             if(criterias.length > 0) {
                 for(BaseCriteria criteria : criterias) {
-                    if(criteria instanceof BlockBasedCriteria) {
-                        BlockBasedCriteria blockCriteria = (BlockBasedCriteria)criteria;
+                    if(criteria instanceof BlockBasedCriteria blockCriteria) {
                         int radius = AgeingConfig.COMMON.cowToMooshroomAgeingRadius.get();
                         if(blockCriteria.getRadius() != radius) {
                             blockCriteria.setRadius(radius);
@@ -490,14 +486,14 @@ public class AgeingRegistry {
         return true;
     }
 
-    public static CompoundNBT createNBTTag(String nbtData) {
-        CompoundNBT tag = new CompoundNBT();
+    public static CompoundTag createNBTTag(String nbtData) {
+        CompoundTag tag = new CompoundTag();
 
         try {
             if(nbtData.startsWith("{") && nbtData.endsWith("}")) {
-                tag = JsonToNBT.parseTag(nbtData);
+                tag = TagParser.parseTag(nbtData);
             } else {
-                tag = JsonToNBT.parseTag("{" + nbtData + "}");
+                tag = TagParser.parseTag("{" + nbtData + "}");
             }
         } catch (CommandSyntaxException nbtexception) {
             AgeingMobs.LOGGER.error("nope... " +  nbtexception.getMessage());
@@ -548,20 +544,17 @@ public class AgeingRegistry {
         return moonDimensions;
     }
 
-    public static CompoundNBT entityToNBT(Entity theEntity)
-    {
-        CompoundNBT nbttagcompound = theEntity.saveWithoutId(new CompoundNBT());
+    public static CompoundTag entityToNBT(Entity theEntity) {
+        CompoundTag compoundTag = theEntity.saveWithoutId(new CompoundTag());
 
-        if (theEntity instanceof PlayerEntity)
-        {
-            ItemStack itemstack = ((PlayerEntity)theEntity).inventory.getSelected();
+        if (theEntity instanceof Player) {
+            ItemStack itemstack = ((Player)theEntity).getInventory().getSelected();
 
-            if (!itemstack.isEmpty())
-            {
-                nbttagcompound.put("SelectedItem", itemstack.save(new CompoundNBT()));
+            if (!itemstack.isEmpty()) {
+                compoundTag.put("SelectedItem", itemstack.save(new CompoundTag()));
             }
         }
 
-        return nbttagcompound;
+        return compoundTag;
     }
 }

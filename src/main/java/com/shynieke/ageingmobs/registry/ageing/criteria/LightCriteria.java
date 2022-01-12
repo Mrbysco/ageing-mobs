@@ -1,10 +1,10 @@
 package com.shynieke.ageingmobs.registry.ageing.criteria;
 
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class LightCriteria extends BaseCriteria {
     private int lightLevelMin;
@@ -57,13 +57,13 @@ public class LightCriteria extends BaseCriteria {
     }
 
     @Override
-    public boolean checkCriteria(World worldIn, Entity entityIn) {
+    public boolean checkCriteria(Level worldIn, Entity entityIn) {
         BlockPos entityPos = entityIn.blockPosition();
 
         int entityLight = worldIn.getMaxLocalRawBrightness(entityPos);
         if(entityLight >= getLightLevelMin() && entityLight <= getLightLevelMax()) {
             if(isAloneBased()) {
-                AxisAlignedBB areaHitbox = new AxisAlignedBB(entityPos.getX() - 0.5f, entityPos.getY() - 0.5f, entityPos.getZ() - 0.5f, entityPos.getX() + 0.5f, entityPos.getY() + 0.5f, entityPos.getZ() + 0.5f)
+                AABB areaHitbox = new AABB(entityPos.getX() - 0.5f, entityPos.getY() - 0.5f, entityPos.getZ() - 0.5f, entityPos.getX() + 0.5f, entityPos.getY() + 0.5f, entityPos.getZ() + 0.5f)
                         .expandTowards(-5, -5, -5).expandTowards(5, 5, 5);
                 if(!worldIn.getEntitiesOfClass(entityIn.getClass(), areaHitbox).contains(getEntity().create(worldIn))) {
                     this.isReversing = false;

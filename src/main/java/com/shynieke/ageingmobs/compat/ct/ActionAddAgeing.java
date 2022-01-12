@@ -1,15 +1,15 @@
 package com.shynieke.ageingmobs.compat.ct;
 
-import com.blamejared.crafttweaker.api.actions.IUndoableAction;
-import com.shynieke.ageingmobs.compat.ct.impl.MCAgeing;
+import com.blamejared.crafttweaker.api.action.base.IUndoableAction;
+import com.shynieke.ageingmobs.compat.ct.impl.MCAgeingData;
 import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import com.shynieke.ageingmobs.registry.ageing.AgeingData;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class ActionAddAgeing implements IUndoableAction {
     public final AgeingData ageingData;
 
-    public ActionAddAgeing(MCAgeing data) {
+    public ActionAddAgeing(MCAgeingData data) {
         this.ageingData = data.getInternal();
     }
 

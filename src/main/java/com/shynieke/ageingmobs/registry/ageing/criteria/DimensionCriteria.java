@@ -2,9 +2,9 @@ package com.shynieke.ageingmobs.registry.ageing.criteria;
 
 import com.google.common.collect.Lists;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class DimensionCriteria extends BaseCriteria {
     }
 
     @Override
-    public boolean checkCriteria(World worldIn, Entity entityIn) {
+    public boolean checkCriteria(Level worldIn, Entity entityIn) {
         return getDimensionID().contains(entityIn.getCommandSenderWorld().dimension().location());
     }
 }
