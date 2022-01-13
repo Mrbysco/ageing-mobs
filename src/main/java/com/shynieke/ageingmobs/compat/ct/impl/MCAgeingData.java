@@ -6,7 +6,6 @@ import com.shynieke.ageingmobs.helper.NBTHelper;
 import com.shynieke.ageingmobs.registry.ageing.AgeingData;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
 import net.minecraft.world.entity.EntityType;
-import org.openzen.zencode.java.ZenCodeType.Constructor;
 import org.openzen.zencode.java.ZenCodeType.Method;
 import org.openzen.zencode.java.ZenCodeType.Name;
 
@@ -21,9 +20,9 @@ public class MCAgeingData {
         this.internal = data;
     }
 
-    @Constructor
-    public MCAgeingData(String uniqueID, EntityType entity, String entityData, EntityType transformedEntity, String evolvedEntityEntityData, int tickTime) {
-        this(new AgeingData(uniqueID, entity, NBTHelper.createNBTTag(entityData), transformedEntity, NBTHelper.createNBTTag(evolvedEntityEntityData), tickTime));
+    @Method
+    public static MCAgeingData of(String uniqueID, EntityType entity, String entityData, EntityType transformedEntity, String evolvedEntityEntityData, int tickTime) {
+        return new MCAgeingData(new AgeingData(uniqueID, entity, NBTHelper.createNBTTag(entityData), transformedEntity, NBTHelper.createNBTTag(evolvedEntityEntityData), tickTime));
     }
 
     @Method

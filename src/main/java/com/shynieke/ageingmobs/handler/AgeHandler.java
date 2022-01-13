@@ -29,21 +29,23 @@ public class AgeHandler {
             if (world.getGameTime() % 20 == 0) {
                 if(!AgeingRegistry.ageingList.isEmpty()) {
                     for (Entity entityIn : world.getEntities().getAll()) {
-                        ResourceLocation entityLocation = entityIn.getType().getRegistryName();
-                        if (entityLocation != null && AgeingRegistry.hasEntityAgeing(entityLocation)) {
-                            List<AgeingData> dataList = AgeingRegistry.getDataList(entityLocation);
-                            for (AgeingData info : dataList) {
-                                if (entityIn != null && !(entityIn instanceof Player) && entityIn.getType() != null && info.getEntity() != null) {
-                                    if (entityIn.getType().equals(info.getEntity())) {
-                                        if (info.getTransformedEntity() != null && info.getEntity().equals(info.getTransformedEntity())) {
-                                            if (!info.getTransformedEntityData().isEmpty()) {
-                                                CheckList(info, entityIn, world);
+                        if(entityIn != null) {
+                            ResourceLocation entityLocation = entityIn.getType().getRegistryName();
+                            if (entityLocation != null && AgeingRegistry.hasEntityAgeing(entityLocation)) {
+                                List<AgeingData> dataList = AgeingRegistry.getDataList(entityLocation);
+                                for (AgeingData info : dataList) {
+                                    if (entityIn != null && !(entityIn instanceof Player) && entityIn.getType() != null && info.getEntity() != null) {
+                                        if (entityIn.getType().equals(info.getEntity())) {
+                                            if (info.getTransformedEntity() != null && info.getEntity().equals(info.getTransformedEntity())) {
+                                                if (!info.getTransformedEntityData().isEmpty()) {
+                                                    CheckList(info, entityIn, world);
+                                                } else {
+                                                    AgeingMobs.LOGGER.error("An error has occured. A mob can not transform into itself. See id: " + info.getName());
+                                                    AgeingRegistry.INSTANCE.removeAgeing(info);
+                                                }
                                             } else {
-                                                AgeingMobs.LOGGER.error("An error has occured. A mob can not transform into itself. See id: " + info.getName());
-                                                AgeingRegistry.INSTANCE.removeAgeing(info);
+                                                CheckList(info, entityIn, world);
                                             }
-                                        } else {
-                                            CheckList(info, entityIn, world);
                                         }
                                     }
                                 }
