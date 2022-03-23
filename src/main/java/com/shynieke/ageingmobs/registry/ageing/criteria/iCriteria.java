@@ -4,9 +4,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
 public interface iCriteria {
-    boolean checkCriteria(Level worldIn, Entity entityIn);
+	boolean checkCriteria(Level worldIn, Entity entityIn);
 
-    default boolean isReversing() {
-        return false;
-    }
+	default boolean isReversing() {
+		return false;
+	}
 }

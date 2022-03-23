@@ -14,32 +14,32 @@ import java.util.List;
 @ZenRegister
 @Name("mods.ageingmobs.AgeingData")
 public class MCAgeingData {
-    private final AgeingData internal;
+	private final AgeingData internal;
 
-    public MCAgeingData(AgeingData data) {
-        this.internal = data;
-    }
+	public MCAgeingData(AgeingData data) {
+		this.internal = data;
+	}
 
-    @Method
-    public static MCAgeingData of(String uniqueID, EntityType entity, String entityData, EntityType transformedEntity, String evolvedEntityEntityData, int tickTime) {
-        return new MCAgeingData(new AgeingData(uniqueID, entity, NBTHelper.createNBTTag(entityData), transformedEntity, NBTHelper.createNBTTag(evolvedEntityEntityData), tickTime));
-    }
+	@Method
+	public static MCAgeingData of(String uniqueID, EntityType entity, String entityData, EntityType transformedEntity, String evolvedEntityEntityData, int tickTime) {
+		return new MCAgeingData(new AgeingData(uniqueID, entity, NBTHelper.createNBTTag(entityData), transformedEntity, NBTHelper.createNBTTag(evolvedEntityEntityData), tickTime));
+	}
 
-    @Method
-    public MCAgeingData setCriteria(MCAgeingCriteria[] criteria) {
-        if(criteria.length > 0) {
-            List<BaseCriteria> baseList = Lists.newArrayList();
-            for (MCAgeingCriteria criterion : criteria) {
-                BaseCriteria newInternal = criterion.getInternal();
-                baseList.add(newInternal);
-            }
-            BaseCriteria[] criteriaArray = new BaseCriteria[baseList.size()];
-            criteriaArray = baseList.toArray(criteriaArray);
-            return new MCAgeingData(this.internal.addCriteria(criteriaArray));
-        }
+	@Method
+	public MCAgeingData setCriteria(MCAgeingCriteria[] criteria) {
+		if (criteria.length > 0) {
+			List<BaseCriteria> baseList = Lists.newArrayList();
+			for (MCAgeingCriteria criterion : criteria) {
+				BaseCriteria newInternal = criterion.getInternal();
+				baseList.add(newInternal);
+			}
+			BaseCriteria[] criteriaArray = new BaseCriteria[baseList.size()];
+			criteriaArray = baseList.toArray(criteriaArray);
+			return new MCAgeingData(this.internal.addCriteria(criteriaArray));
+		}
 
-        return this;
-    }
+		return this;
+	}
 
 //    @Method
 //    public MCAgeing setGamestage(String gamestage) {
@@ -48,7 +48,7 @@ public class MCAgeingData {
 //        return new MCAgeing(internal);
 //    }
 
-    public AgeingData getInternal() {
-        return this.internal;
-    }
+	public AgeingData getInternal() {
+		return this.internal;
+	}
 }

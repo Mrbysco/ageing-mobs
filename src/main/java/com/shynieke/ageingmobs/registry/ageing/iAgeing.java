@@ -9,41 +9,43 @@ import javax.annotation.Nonnull;
 
 public interface iAgeing {
 
-    EntityType<? extends Entity> getEntity();
-    CompoundTag getEntityData();
+	EntityType<? extends Entity> getEntity();
 
-    EntityType<? extends Entity> getTransformedEntity();
-    CompoundTag getTransformedEntityData();
+	CompoundTag getEntityData();
 
-    /*
-     * @return Returns the time (in ticks) it takes for a mob to age
-     */
-    int getAgeingTme();
+	EntityType<? extends Entity> getTransformedEntity();
 
-    /*
-     * @return Set the time (in ticks) it takes for a mob to age
-     */
-    void setAgeingTme(int time);
+	CompoundTag getTransformedEntityData();
 
-    /*
-     * @return Unique name
-     */
-    @Nonnull
-    String getName();
+	/*
+	 * @return Returns the time (in ticks) it takes for a mob to age
+	 */
+	int getAgeingTme();
 
-    //Optional
+	/*
+	 * @return Set the time (in ticks) it takes for a mob to age
+	 */
+	void setAgeingTme(int time);
 
-    /*
-     * @return Returns the gamestage required
-     */
+	/*
+	 * @return Unique name
+	 */
+	@Nonnull
+	String getName();
+
+	//Optional
+
+	/*
+	 * @return Returns the gamestage required
+	 */
 //    String getGamestage();
 
-    /*
-     * @return Set the gamestage required
-     */
+	/*
+	 * @return Set the gamestage required
+	 */
 //    void setGamestage(String gamestage);
 
-    void setCriteria(BaseCriteria[] criteria);
+	void setCriteria(BaseCriteria[] criteria);
 
-    BaseCriteria[] getCriteria();
+	BaseCriteria[] getCriteria();
 }

@@ -8,23 +8,23 @@ import net.minecraft.world.level.biome.Biome;
 import javax.annotation.Nonnull;
 
 public class BiomeCriteria extends BaseCriteria {
-    private Biome biome;
+	private Biome biome;
 
-    public BiomeCriteria(iAgeing ageing, @Nonnull Biome biome) {
-        super(ageing);
-        this.biome = biome;
-    }
+	public BiomeCriteria(iAgeing ageing, @Nonnull Biome biome) {
+		super(ageing);
+		this.biome = biome;
+	}
 
-    public Biome getBiome() {
-        return biome;
-    }
+	public Biome getBiome() {
+		return biome;
+	}
 
-    public void setBiome(@Nonnull Biome biome) {
-        this.biome = biome;
-    }
+	public void setBiome(@Nonnull Biome biome) {
+		this.biome = biome;
+	}
 
-    @Override
-    public boolean checkCriteria(Level worldIn, Entity entityIn) {
-        return worldIn.getBiome(entityIn.blockPosition()).getRegistryName().equals(getBiome().getRegistryName());
-    }
+	@Override
+	public boolean checkCriteria(Level worldIn, Entity entityIn) {
+		return worldIn.getBiome(entityIn.blockPosition()).getRegistryName().equals(getBiome().getRegistryName());
+	}
 }

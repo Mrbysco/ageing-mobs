@@ -9,23 +9,23 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class DimensionCriteria extends BaseCriteria {
-    private List<ResourceLocation> dimensionID;
+	private List<ResourceLocation> dimensionID;
 
-    public DimensionCriteria(iAgeing ageing, ResourceLocation[] dimensionID) {
-        super(ageing);
-        this.dimensionID = Lists.newArrayList(dimensionID);
-    }
+	public DimensionCriteria(iAgeing ageing, ResourceLocation[] dimensionID) {
+		super(ageing);
+		this.dimensionID = Lists.newArrayList(dimensionID);
+	}
 
-    public List<ResourceLocation> getDimensionID() {
-        return dimensionID;
-    }
+	public List<ResourceLocation> getDimensionID() {
+		return dimensionID;
+	}
 
-    public void setDimensionID(List<ResourceLocation> dimensionID) {
-        this.dimensionID = dimensionID;
-    }
+	public void setDimensionID(List<ResourceLocation> dimensionID) {
+		this.dimensionID = dimensionID;
+	}
 
-    @Override
-    public boolean checkCriteria(Level worldIn, Entity entityIn) {
-        return getDimensionID().contains(entityIn.getCommandSenderWorld().dimension().location());
-    }
+	@Override
+	public boolean checkCriteria(Level worldIn, Entity entityIn) {
+		return getDimensionID().contains(entityIn.getCommandSenderWorld().dimension().location());
+	}
 }

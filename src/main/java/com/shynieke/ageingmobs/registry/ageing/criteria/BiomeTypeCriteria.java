@@ -7,23 +7,23 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.BiomeDictionary;
 
 public class BiomeTypeCriteria extends BaseCriteria {
-    private BiomeDictionary.Type biomeType;
+	private BiomeDictionary.Type biomeType;
 
-    public BiomeTypeCriteria(iAgeing ageing, BiomeDictionary.Type biomeType) {
-        super(ageing);
-        this.biomeType = biomeType;
-    }
+	public BiomeTypeCriteria(iAgeing ageing, BiomeDictionary.Type biomeType) {
+		super(ageing);
+		this.biomeType = biomeType;
+	}
 
-    public BiomeDictionary.Type getBiomeType() {
-        return biomeType;
-    }
+	public BiomeDictionary.Type getBiomeType() {
+		return biomeType;
+	}
 
-    public void setBiomeType(BiomeDictionary.Type biome) {
-        this.biomeType = biome;
-    }
+	public void setBiomeType(BiomeDictionary.Type biome) {
+		this.biomeType = biome;
+	}
 
-    @Override
-    public boolean checkCriteria(Level worldIn, Entity entityIn) {
-        return BiomeDictionary.getTypes(BiomeHelper.getOrCreateBiomeKey(worldIn.getBiome(entityIn.blockPosition()))).contains(getBiomeType());
-    }
+	@Override
+	public boolean checkCriteria(Level worldIn, Entity entityIn) {
+		return BiomeDictionary.getTypes(BiomeHelper.getOrCreateBiomeKey(worldIn.getBiome(entityIn.blockPosition()))).contains(getBiomeType());
+	}
 }

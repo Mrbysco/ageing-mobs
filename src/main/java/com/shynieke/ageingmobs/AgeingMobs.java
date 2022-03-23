@@ -13,13 +13,13 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(Reference.MOD_ID)
 public class AgeingMobs {
-    public static final Logger LOGGER = LogManager.getLogger();
+	public static final Logger LOGGER = LogManager.getLogger();
 
-    public AgeingMobs() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AgeingConfig.commonSpec);
-        FMLJavaModLoadingContext.get().getModEventBus().register(AgeingConfig.class);
+	public AgeingMobs() {
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AgeingConfig.commonSpec);
+		FMLJavaModLoadingContext.get().getModEventBus().register(AgeingConfig.class);
 
-        MinecraftForge.EVENT_BUS.register(new AgeingReloadManager());
-        MinecraftForge.EVENT_BUS.register(new AgeHandler());
-    }
+		MinecraftForge.EVENT_BUS.register(new AgeingReloadManager());
+		MinecraftForge.EVENT_BUS.register(new AgeHandler());
+	}
 }
