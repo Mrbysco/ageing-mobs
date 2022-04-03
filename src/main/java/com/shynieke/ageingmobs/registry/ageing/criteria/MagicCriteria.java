@@ -3,10 +3,10 @@ package com.shynieke.ageingmobs.registry.ageing.criteria;
 import com.shynieke.ageingmobs.AgeingMobs;
 import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 
 import java.util.HashMap;
 import java.util.Iterator;

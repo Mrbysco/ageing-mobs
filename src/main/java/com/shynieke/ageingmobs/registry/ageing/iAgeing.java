@@ -1,9 +1,9 @@
 package com.shynieke.ageingmobs.registry.ageing;
 
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.nbt.CompoundTag;
 
 import javax.annotation.Nonnull;
 

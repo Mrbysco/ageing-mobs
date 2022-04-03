@@ -1,9 +1,9 @@
 package com.shynieke.ageingmobs.registry.ageing.criteria;
 
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 
 public class BaseCriteria implements iCriteria {

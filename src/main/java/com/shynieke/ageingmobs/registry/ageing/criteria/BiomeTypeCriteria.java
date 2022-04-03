@@ -24,6 +24,6 @@ public class BiomeTypeCriteria extends BaseCriteria {
 
 	@Override
 	public boolean checkCriteria(Level worldIn, Entity entityIn) {
-		return BiomeDictionary.getTypes(BiomeHelper.getOrCreateBiomeKey(worldIn.getBiome(entityIn.blockPosition()))).contains(getBiomeType());
+		return BiomeDictionary.getTypes(BiomeHelper.getOrCreateBiomeKey(worldIn.getBiome(entityIn.blockPosition()).value())).contains(getBiomeType());
 	}
 }
