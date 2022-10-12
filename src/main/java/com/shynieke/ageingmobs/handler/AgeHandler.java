@@ -16,6 +16,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,14 +25,14 @@ import java.util.UUID;
 public class AgeHandler {
 
 	@SubscribeEvent
-	public void handleAgeing(TickEvent.WorldTickEvent event) {
+	public void handleAgeing(TickEvent.LevelTickEvent event) {
 		if (event.phase.equals(TickEvent.Phase.END) && event.side.isServer()) {
-			ServerLevel world = (ServerLevel) event.world;
-			if (world.getGameTime() % 20 == 0) {
+			ServerLevel serverLevel = (ServerLevel) event.level;
+			if (serverLevel.getGameTime() % 20 == 0) {
 				if (!AgeingRegistry.ageingList.isEmpty()) {
-					for (Entity entityIn : world.getEntities().getAll()) {
+					for (Entity entityIn : serverLevel.getEntities().getAll()) {
 						if (entityIn != null) {
-							ResourceLocation entityLocation = entityIn.getType().getRegistryName();
+							ResourceLocation entityLocation = ForgeRegistries.ENTITY_TYPES.getKey(entityIn.getType());
 							if (entityLocation != null && AgeingRegistry.hasEntityAgeing(entityLocation)) {
 								List<AgeingData> dataList = AgeingRegistry.getDataList(entityLocation);
 								for (AgeingData info : dataList) {
@@ -38,13 +40,13 @@ public class AgeHandler {
 										if (entityIn.getType().equals(info.getEntity())) {
 											if (info.getTransformedEntity() != null && info.getEntity().equals(info.getTransformedEntity())) {
 												if (!info.getTransformedEntityData().isEmpty()) {
-													CheckList(info, entityIn, world);
+													CheckList(info, entityIn, serverLevel);
 												} else {
 													AgeingMobs.LOGGER.error("An error has occured. A mob can not transform into itself. See id: " + info.getName());
 													AgeingRegistry.INSTANCE.removeAgeing(info);
 												}
 											} else {
-												CheckList(info, entityIn, world);
+												CheckList(info, entityIn, serverLevel);
 											}
 										}
 									}
@@ -57,7 +59,7 @@ public class AgeHandler {
 		}
 	}
 
-	public void CheckList(AgeingData info, Entity entity, Level world) {
+	public void CheckList(AgeingData info, Entity entity, Level level) {
 		if (info.getEntity().equals(info.getTransformedEntity())) {
 			if (info.getEntityData().equals(info.getTransformedEntityData())) {
 				AgeingMobs.LOGGER.error("Aged Entity nbt identical to the original: " + info.getName());
@@ -69,7 +71,7 @@ public class AgeHandler {
 
 						if (!entityTag2.isEmpty()) {
 							if (!NbtUtils.compareNbt(entityTag2, entityTag, true)) {
-								extraChecks(info, entity, world);
+								extraChecks(info, entity, level);
 							}
 						}
 					} else {
@@ -83,7 +85,7 @@ public class AgeHandler {
 
 						if (!entityTag2.isEmpty() && !entityTag3.isEmpty()) {
 							if (NbtUtils.compareNbt(entityTag2, entityTag, true) && !NbtUtils.compareNbt(entityTag3, entityTag, true)) {
-								extraChecks(info, entity, world);
+								extraChecks(info, entity, level);
 							}
 						}
 					} else {
@@ -92,7 +94,7 @@ public class AgeHandler {
 
 						if (!entityTag2.isEmpty()) {
 							if (NbtUtils.compareNbt(entityTag2, entityTag, true)) {
-								extraChecks(info, entity, world);
+								extraChecks(info, entity, level);
 							}
 						}
 					}
@@ -106,30 +108,30 @@ public class AgeHandler {
 
 				if (!entityTag2.isEmpty() && !entityTag3.isEmpty()) {
 					if (NbtUtils.compareNbt(entityTag2, entityTag, true) && !NbtUtils.compareNbt(entityTag3, entityTag, true)) {
-						extraChecks(info, entity, world);
+						extraChecks(info, entity, level);
 					}
 				}
 			} else {
-				extraChecks(info, entity, world);
+				extraChecks(info, entity, level);
 			}
 		}
 	}
 
-	public void extraChecks(AgeingData info, Entity entity, Level world) {
-//        if(ModList.get().isLoaded("gamestages")) {
-//            if(!info.getGamestage().isEmpty()) {
-//                if(GamestagesHandler.gamestageChecks(info, entity, world)) {
-//                    checkCriteria(info, entity, world);
-//                }
-//            } else {
-//                checkCriteria(info, entity, world);
-//            }
-//        } else {
-		checkCriteria(info, entity, world);
-//        }
+	public void extraChecks(AgeingData info, Entity entity, Level level) {
+		if (ModList.get().isLoaded("gamestages")) {
+			if (!info.getGamestage().isEmpty()) {
+				if (GamestagesHandler.gamestageChecks(info, entity, level)) {
+					checkCriteria(info, entity, level);
+				}
+			} else {
+				checkCriteria(info, entity, level);
+			}
+		} else {
+			checkCriteria(info, entity, level);
+		}
 	}
 
-	public void checkCriteria(AgeingData info, Entity entity, Level world) {
+	public void checkCriteria(AgeingData info, Entity entity, Level level) {
 		if (info.getCriteria().length > 0) {
 			boolean ableToAge = true;
 			for (int i = 0; i < info.getCriteria().length; i++) {
@@ -138,20 +140,20 @@ public class AgeHandler {
 					babifyTheMob(info, entity);
 				}
 
-				if (!criteria.checkCriteria(world, entity)) {
+				if (!criteria.checkCriteria(level, entity)) {
 					ableToAge = false;
 					break;
 				}
 			}
 			if (ableToAge) {
-				ageTheMob(info, entity, world);
+				ageTheMob(info, entity, level);
 			}
 		} else {
-			ageTheMob(info, entity, world);
+			ageTheMob(info, entity, level);
 		}
 	}
 
-	public void ageTheMob(AgeingData info, Entity entity, Level world) {
+	public void ageTheMob(AgeingData info, Entity entity, Level level) {
 		int maxTime = info.getAgeingTme();
 
 		String uniqueTag = Reference.MOD_PREFIX + info.getName();
@@ -163,7 +165,7 @@ public class AgeHandler {
 		if (tag.getInt(uniqueTag) >= maxTime) {
 			if (info.getEntity().equals(info.getTransformedEntity())) {
 				if (!info.getTransformedEntityData().isEmpty()) {
-					Entity agedEntity = info.getTransformedEntity().create(world);
+					Entity agedEntity = info.getTransformedEntity().create(level);
 					if (agedEntity != null) {
 						agedEntity.copyPosition(entity);
 						copyEquipment(entity, agedEntity);
@@ -178,9 +180,9 @@ public class AgeHandler {
 							agedEntity.load(entityTagCopy);
 							agedEntity.setUUID(uuid);
 						}
-						world.addFreshEntity(agedEntity);
+						level.addFreshEntity(agedEntity);
 					} else {
-						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + info.getTransformedEntity().getRegistryName());
+						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + ForgeRegistries.ENTITY_TYPES.getKey(info.getTransformedEntity()));
 					}
 
 					tag.remove(uniqueTag);
@@ -189,7 +191,7 @@ public class AgeHandler {
 				}
 			} else {
 				if (!info.getTransformedEntityData().isEmpty()) {
-					Entity agedEntity = info.getTransformedEntity().create(world);
+					Entity agedEntity = info.getTransformedEntity().create(level);
 					if (agedEntity != null) {
 						agedEntity.copyPosition(entity);
 						copyEquipment(entity, agedEntity);
@@ -204,22 +206,22 @@ public class AgeHandler {
 							agedEntity.load(entityTag);
 							agedEntity.setUUID(uuid);
 						}
-						world.addFreshEntity(agedEntity);
+						level.addFreshEntity(agedEntity);
 					} else {
-						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + info.getTransformedEntity().getRegistryName());
+						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + ForgeRegistries.ENTITY_TYPES.getKey(info.getTransformedEntity()));
 					}
 
 					tag.remove(uniqueTag);
 					entity.captureDrops(null);
 					entity.discard();
 				} else {
-					Entity agedEntity = info.getTransformedEntity().create(world);
+					Entity agedEntity = info.getTransformedEntity().create(level);
 					if (agedEntity != null) {
 						agedEntity.copyPosition(entity);
 						copyEquipment(entity, agedEntity);
-						world.addFreshEntity(agedEntity);
+						level.addFreshEntity(agedEntity);
 					} else {
-						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + info.getTransformedEntity().getRegistryName());
+						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: " + ForgeRegistries.ENTITY_TYPES.getKey(info.getTransformedEntity()));
 					}
 
 					tag.remove(uniqueTag);

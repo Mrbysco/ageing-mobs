@@ -31,10 +31,10 @@ public class TimeCriteria extends BaseCriteria {
 	}
 
 	@Override
-	public boolean checkCriteria(Level worldIn, Entity entityIn) {
+	public boolean checkCriteria(Level level, Entity entityIn) {
 		long minTime = (long) getMinTime();
 		long maxTime = (long) getMaxTime();
-		long worldTime = worldIn.getDayTime() % 24000;
+		long worldTime = level.getDayTime() % 24000;
 		return worldTime <= maxTime && worldTime >= minTime;
 	}
 }

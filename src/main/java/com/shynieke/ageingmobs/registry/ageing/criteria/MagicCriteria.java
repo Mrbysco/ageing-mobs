@@ -28,7 +28,7 @@ public class MagicCriteria extends BaseCriteria {
 	}
 
 	@Override
-	public boolean checkCriteria(Level worldIn, Entity entityIn) {
+	public boolean checkCriteria(Level level, Entity entityIn) {
 		BlockPos entityPos = entityIn.blockPosition();
 		HashMap<Block, Double> magicMap = AgeingRegistry.INSTANCE.getMagicMap();
 		if (!magicMap.isEmpty()) {
@@ -39,7 +39,7 @@ public class MagicCriteria extends BaseCriteria {
 			Iterator<BlockPos> posIterator = BlockPos.betweenClosedStream(downPos, upPos).iterator();
 			while (posIterator.hasNext()) {
 				BlockPos pos = posIterator.next();
-				Block foundState = worldIn.getBlockState(pos).getBlock();
+				Block foundState = level.getBlockState(pos).getBlock();
 				if (magicMap.containsKey(foundState)) {
 					double importanceFound = magicMap.getOrDefault(foundState, 0.0D);
 					totalImportance = totalImportance + importanceFound;

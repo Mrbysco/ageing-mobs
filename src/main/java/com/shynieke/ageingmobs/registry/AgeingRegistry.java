@@ -22,7 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
@@ -42,12 +42,12 @@ public class AgeingRegistry {
 	private static List<ResourceLocation> moonDimensions = Lists.newArrayList();
 
 	public void initializeAgeing() {
-		if (INSTANCE.isIDUnique(EntityType.CREEPER.getRegistryName(), "CreeperToCharged") && AgeingConfig.COMMON.creeperAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.CREEPER), "CreeperToCharged") && AgeingConfig.COMMON.creeperAgeing.get()) {
 			AgeingData creeperToCharged = new AgeingData("CreeperToCharged", EntityType.CREEPER, createNBTTag(""), EntityType.CREEPER, createNBTTag("{powered:1b}"), AgeingConfig.COMMON.creeperAgeingTime.get());
 			creeperToCharged.setCriteria(new BaseCriteria[]{new WeatherCriteria(creeperToCharged, "thunder")});
 			INSTANCE.registerAgeing(creeperToCharged);
-		} else if (!INSTANCE.isIDUnique(EntityType.CREEPER.getRegistryName(), "CreeperToCharged")) {
-			AgeingData creeperToCharged = INSTANCE.getByID(EntityType.CREEPER.getRegistryName(), "CreeperToCharged");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.CREEPER), "CreeperToCharged")) {
+			AgeingData creeperToCharged = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.CREEPER), "CreeperToCharged");
 			int ageingTime = AgeingConfig.COMMON.creeperAgeingTime.get();
 			if (creeperToCharged.getAgeingTme() != ageingTime) {
 				creeperToCharged.setAgeingTme(ageingTime);
@@ -55,12 +55,12 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.ZOMBIE.getRegistryName(), "ZombieToHusk") && AgeingConfig.COMMON.zombieToHuskAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.ZOMBIE), "ZombieToHusk") && AgeingConfig.COMMON.zombieToHuskAgeing.get()) {
 			AgeingData zombieToHusk = new AgeingData("ZombieToHusk", EntityType.ZOMBIE, createNBTTag(""), EntityType.HUSK, createNBTTag(""), AgeingConfig.COMMON.zombieToHuskAgeingTime.get());
-			zombieToHusk.setCriteria(new BaseCriteria[]{new BiomeTypeCriteria(zombieToHusk, BiomeDictionary.Type.HOT)});
+			zombieToHusk.setCriteria(new BaseCriteria[]{new BiomeTypeCriteria(zombieToHusk, Tags.Biomes.IS_HOT)});
 			INSTANCE.registerAgeing(zombieToHusk);
-		} else if (!INSTANCE.isIDUnique(EntityType.ZOMBIE.getRegistryName(), "ZombieToHusk")) {
-			AgeingData zombieToHusk = INSTANCE.getByID(EntityType.ZOMBIE.getRegistryName(), "ZombieToHusk");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.ZOMBIE), "ZombieToHusk")) {
+			AgeingData zombieToHusk = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.ZOMBIE), "ZombieToHusk");
 			int ageingTime = AgeingConfig.COMMON.zombieToHuskAgeingTime.get();
 			if (zombieToHusk.getAgeingTme() != ageingTime) {
 				zombieToHusk.setAgeingTme(ageingTime);
@@ -68,12 +68,12 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.ZOMBIE.getRegistryName(), "BabyZombieToBabyHusk") && AgeingConfig.COMMON.zombieToHuskAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.ZOMBIE), "BabyZombieToBabyHusk") && AgeingConfig.COMMON.zombieToHuskAgeing.get()) {
 			AgeingData babyZombieToBabyHusk = new AgeingData("BabyZombieToBabyHusk", EntityType.ZOMBIE, createNBTTag("{IsBaby:1b}"), EntityType.HUSK, createNBTTag("{IsBaby:1b}"), AgeingConfig.COMMON.zombieToHuskAgeingTime.get());
-			babyZombieToBabyHusk.setCriteria(new BaseCriteria[]{new BiomeTypeCriteria(babyZombieToBabyHusk, BiomeDictionary.Type.HOT)});
+			babyZombieToBabyHusk.setCriteria(new BaseCriteria[]{new BiomeTypeCriteria(babyZombieToBabyHusk, Tags.Biomes.IS_HOT)});
 			INSTANCE.registerAgeing(babyZombieToBabyHusk);
-		} else if (!INSTANCE.isIDUnique(EntityType.ZOMBIE.getRegistryName(), "BabyZombieToBabyHusk")) {
-			AgeingData babyZombieToBabyHusk = INSTANCE.getByID(EntityType.ZOMBIE.getRegistryName(), "BabyZombieToBabyHusk");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.ZOMBIE), "BabyZombieToBabyHusk")) {
+			AgeingData babyZombieToBabyHusk = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.ZOMBIE), "BabyZombieToBabyHusk");
 			int ageingTime = AgeingConfig.COMMON.zombieToHuskAgeingTime.get();
 			if (babyZombieToBabyHusk.getAgeingTme() != ageingTime) {
 				babyZombieToBabyHusk.setAgeingTme(ageingTime);
@@ -81,12 +81,12 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.HUSK.getRegistryName(), "HuskToZombie") && AgeingConfig.COMMON.huskToZombieAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.HUSK), "HuskToZombie") && AgeingConfig.COMMON.huskToZombieAgeing.get()) {
 			AgeingData huskToZombie = new AgeingData("HuskToZombie", EntityType.HUSK, createNBTTag(""), EntityType.ZOMBIE, createNBTTag(""), AgeingConfig.COMMON.huskToZombieAgeingTime.get());
-			huskToZombie.setCriteria(new BaseCriteria[]{new BiomeTypeCriteria(huskToZombie, BiomeDictionary.Type.COLD)});
+			huskToZombie.setCriteria(new BaseCriteria[]{new BiomeTypeCriteria(huskToZombie, Tags.Biomes.IS_COLD)});
 			INSTANCE.registerAgeing(huskToZombie);
-		} else if (!INSTANCE.isIDUnique(EntityType.HUSK.getRegistryName(), "HuskToZombie")) {
-			AgeingData huskToZombie = INSTANCE.getByID(EntityType.HUSK.getRegistryName(), "HuskToZombie");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.HUSK), "HuskToZombie")) {
+			AgeingData huskToZombie = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.HUSK), "HuskToZombie");
 			int ageingTime = AgeingConfig.COMMON.huskToZombieAgeingTime.get();
 			if (huskToZombie.getAgeingTme() != ageingTime) {
 				huskToZombie.setAgeingTme(ageingTime);
@@ -94,12 +94,12 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.HUSK.getRegistryName(), "BabyHuskToBabyZombie") && AgeingConfig.COMMON.huskToZombieAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.HUSK), "BabyHuskToBabyZombie") && AgeingConfig.COMMON.huskToZombieAgeing.get()) {
 			AgeingData babyHuskToBabyZombie = new AgeingData("BabyHuskToBabyZombie", EntityType.HUSK, createNBTTag("{IsBaby:1b}"), EntityType.ZOMBIE, createNBTTag("{IsBaby:1b}"), AgeingConfig.COMMON.huskToZombieAgeingTime.get());
-			babyHuskToBabyZombie.setCriteria(new BaseCriteria[]{new BiomeTypeCriteria(babyHuskToBabyZombie, BiomeDictionary.Type.COLD)});
+			babyHuskToBabyZombie.setCriteria(new BaseCriteria[]{new BiomeTypeCriteria(babyHuskToBabyZombie, Tags.Biomes.IS_COLD)});
 			INSTANCE.registerAgeing(babyHuskToBabyZombie);
-		} else if (!INSTANCE.isIDUnique(EntityType.HUSK.getRegistryName(), "BabyHuskToBabyZombie")) {
-			AgeingData babyHuskToBabyZombie = INSTANCE.getByID(EntityType.HUSK.getRegistryName(), "BabyHuskToBabyZombie");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.HUSK), "BabyHuskToBabyZombie")) {
+			AgeingData babyHuskToBabyZombie = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.HUSK), "BabyHuskToBabyZombie");
 			int ageingTime = AgeingConfig.COMMON.huskToZombieAgeingTime.get();
 			if (babyHuskToBabyZombie.getAgeingTme() != ageingTime) {
 				babyHuskToBabyZombie.setAgeingTme(ageingTime);
@@ -107,12 +107,12 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.VILLAGER.getRegistryName(), "VillagerToVindicator") && AgeingConfig.COMMON.villagerToVindicatorAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.VILLAGER), "VillagerToVindicator") && AgeingConfig.COMMON.villagerToVindicatorAgeing.get()) {
 			AgeingData villagerToVindicator = new AgeingData("VillagerToVindicator", EntityType.VILLAGER, createNBTTag(""), EntityType.VINDICATOR, createNBTTag(""), AgeingConfig.COMMON.villagerToVindicatorAgeingTime.get());
 			villagerToVindicator.setCriteria(new BaseCriteria[]{new LightCriteria(villagerToVindicator, AgeingConfig.COMMON.villagerToVindicatorMinLight.get(), AgeingConfig.COMMON.villagerToVindicatorMaxLight.get(), false, true)});
 			INSTANCE.registerAgeing(villagerToVindicator);
-		} else if (!INSTANCE.isIDUnique(EntityType.VILLAGER.getRegistryName(), "VillagerToVindicator")) {
-			AgeingData villagerToVindicator = INSTANCE.getByID(EntityType.VILLAGER.getRegistryName(), "VillagerToVindicator");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.VILLAGER), "VillagerToVindicator")) {
+			AgeingData villagerToVindicator = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.VILLAGER), "VillagerToVindicator");
 			boolean ageingChanged = false;
 			boolean criteriaChanged = false;
 			int ageingTime = AgeingConfig.COMMON.villagerToVindicatorAgeingTime.get();
@@ -145,12 +145,12 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.VINDICATOR.getRegistryName(), "VindicatorToEvoker") && AgeingConfig.COMMON.vindicatorToEvokerAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.VINDICATOR), "VindicatorToEvoker") && AgeingConfig.COMMON.vindicatorToEvokerAgeing.get()) {
 			AgeingData vindicatorToEvoker = new AgeingData("VindicatorToEvoker", EntityType.VINDICATOR, createNBTTag(""), EntityType.EVOKER, createNBTTag(""), AgeingConfig.COMMON.vindicatorToEvokerAgeingTime.get());
 			vindicatorToEvoker.setCriteria(new BaseCriteria[]{new MagicCriteria(vindicatorToEvoker, 5)});
 			INSTANCE.registerAgeing(vindicatorToEvoker);
-		} else if (!INSTANCE.isIDUnique(EntityType.VINDICATOR.getRegistryName(), "VindicatorToEvoker")) {
-			AgeingData vindicatorToEvoker = INSTANCE.getByID(EntityType.VINDICATOR.getRegistryName(), "VindicatorToEvoker");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.VINDICATOR), "VindicatorToEvoker")) {
+			AgeingData vindicatorToEvoker = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.VINDICATOR), "VindicatorToEvoker");
 			int ageingTime = AgeingConfig.COMMON.vindicatorToEvokerAgeingTime.get();
 			if (vindicatorToEvoker.getAgeingTme() != ageingTime) {
 				vindicatorToEvoker.setAgeingTme(ageingTime);
@@ -158,12 +158,12 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.GUARDIAN.getRegistryName(), "GuardianToElder") && AgeingConfig.COMMON.guardianToElderAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.GUARDIAN), "GuardianToElder") && AgeingConfig.COMMON.guardianToElderAgeing.get()) {
 			AgeingData guardianToElder = new AgeingData("GuardianToElder", EntityType.GUARDIAN, createNBTTag(""), EntityType.ELDER_GUARDIAN, createNBTTag(""), AgeingConfig.COMMON.guardianToElderAgeingTime.get());
 			guardianToElder.setCriteria(new BaseCriteria[]{new BossCriteria(guardianToElder, AgeingConfig.COMMON.guardianToElderAgeingMax.get(), AgeingConfig.COMMON.guardianToElderRange.get())});
 			INSTANCE.registerAgeing(guardianToElder);
-		} else if (!INSTANCE.isIDUnique(EntityType.GUARDIAN.getRegistryName(), "GuardianToElder")) {
-			AgeingData guardianToElder = INSTANCE.getByID(EntityType.GUARDIAN.getRegistryName(), "GuardianToElder");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.GUARDIAN), "GuardianToElder")) {
+			AgeingData guardianToElder = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.GUARDIAN), "GuardianToElder");
 			boolean ageingChanged = false;
 			boolean criteriaChanged = false;
 			int ageingTime = AgeingConfig.COMMON.guardianToElderAgeingTime.get();
@@ -196,10 +196,10 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.ZOMBIE.getRegistryName(), "BabyToZombie") && AgeingConfig.COMMON.babyToZombieAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.ZOMBIE), "BabyToZombie") && AgeingConfig.COMMON.babyToZombieAgeing.get()) {
 			INSTANCE.registerAgeing(new AgeingData("BabyToZombie", EntityType.ZOMBIE, createNBTTag("{IsBaby:1b}"), EntityType.ZOMBIE, createNBTTag("{IsBaby:0b}"), AgeingConfig.COMMON.babyToZombieAgeingTime.get()));
-		} else if (!INSTANCE.isIDUnique(EntityType.ZOMBIE.getRegistryName(), "BabyToZombie")) {
-			AgeingData babyToZombie = INSTANCE.getByID(EntityType.ZOMBIE.getRegistryName(), "BabyToZombie");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.ZOMBIE), "BabyToZombie")) {
+			AgeingData babyToZombie = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.ZOMBIE), "BabyToZombie");
 			int ageingTime = AgeingConfig.COMMON.babyToZombieAgeingTime.get();
 			if (babyToZombie.getAgeingTme() != ageingTime) {
 				babyToZombie.setAgeingTme(ageingTime);
@@ -207,10 +207,10 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.HUSK.getRegistryName(), "BabyToHusk") && AgeingConfig.COMMON.babyToZombieAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.HUSK), "BabyToHusk") && AgeingConfig.COMMON.babyToZombieAgeing.get()) {
 			INSTANCE.registerAgeing(new AgeingData("BabyToHusk", EntityType.HUSK, createNBTTag("{IsBaby:1b}"), EntityType.HUSK, createNBTTag("{IsBaby:0b}"), AgeingConfig.COMMON.babyToZombieAgeingTime.get()));
-		} else if (!INSTANCE.isIDUnique(EntityType.HUSK.getRegistryName(), "BabyToHusk")) {
-			AgeingData babyToHusk = INSTANCE.getByID(EntityType.HUSK.getRegistryName(), "BabyToHusk");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.HUSK), "BabyToHusk")) {
+			AgeingData babyToHusk = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.HUSK), "BabyToHusk");
 			int ageingTime = AgeingConfig.COMMON.babyToZombieAgeingTime.get();
 			if (babyToHusk.getAgeingTme() != ageingTime) {
 				babyToHusk.setAgeingTme(ageingTime);
@@ -222,12 +222,12 @@ public class AgeingRegistry {
 		//TODO: addEndermite();
 		//}
 
-		if (INSTANCE.isIDUnique(EntityType.SKELETON.getRegistryName(), "SkeletonToStray") && AgeingConfig.COMMON.skeletonToStrayAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.SKELETON), "SkeletonToStray") && AgeingConfig.COMMON.skeletonToStrayAgeing.get()) {
 			AgeingData skeletonToStray = new AgeingData("SkeletonToStray", EntityType.SKELETON, createNBTTag(""), EntityType.STRAY, createNBTTag(""), AgeingConfig.COMMON.skeletonToStrayAgeingTime.get());
-			skeletonToStray.setCriteria(new BaseCriteria[]{new BiomeTypeCriteria(skeletonToStray, BiomeDictionary.Type.COLD)});
+			skeletonToStray.setCriteria(new BaseCriteria[]{new BiomeTypeCriteria(skeletonToStray, Tags.Biomes.IS_COLD)});
 			INSTANCE.registerAgeing(skeletonToStray);
-		} else if (!INSTANCE.isIDUnique(EntityType.SKELETON.getRegistryName(), "SkeletonToStray")) {
-			AgeingData skeletonToStray = INSTANCE.getByID(EntityType.SKELETON.getRegistryName(), "SkeletonToStray");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.SKELETON), "SkeletonToStray")) {
+			AgeingData skeletonToStray = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.SKELETON), "SkeletonToStray");
 			int ageingTime = AgeingConfig.COMMON.skeletonToStrayAgeingTime.get();
 			if (skeletonToStray.getAgeingTme() != ageingTime) {
 				skeletonToStray.setAgeingTme(ageingTime);
@@ -235,12 +235,12 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.STRAY.getRegistryName(), "StrayToSkeleton") && AgeingConfig.COMMON.strayToSkeletonAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.STRAY), "StrayToSkeleton") && AgeingConfig.COMMON.strayToSkeletonAgeing.get()) {
 			AgeingData strayToSkeleton = new AgeingData("StrayToSkeleton", EntityType.STRAY, createNBTTag(""), EntityType.SKELETON, createNBTTag(""), AgeingConfig.COMMON.strayToSkeletonAgeingTime.get());
-			strayToSkeleton.setCriteria(new BaseCriteria[]{new BiomeTypeCriteria(strayToSkeleton, BiomeDictionary.Type.HOT)});
+			strayToSkeleton.setCriteria(new BaseCriteria[]{new BiomeTypeCriteria(strayToSkeleton, Tags.Biomes.IS_HOT)});
 			INSTANCE.registerAgeing(strayToSkeleton);
-		} else if (!INSTANCE.isIDUnique(EntityType.STRAY.getRegistryName(), "StrayToSkeleton")) {
-			AgeingData strayToSkeleton = INSTANCE.getByID(EntityType.STRAY.getRegistryName(), "StrayToSkeleton");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.STRAY), "StrayToSkeleton")) {
+			AgeingData strayToSkeleton = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.STRAY), "StrayToSkeleton");
 			int ageingTime = AgeingConfig.COMMON.strayToSkeletonAgeingTime.get();
 			if (strayToSkeleton.getAgeingTme() != ageingTime) {
 				strayToSkeleton.setAgeingTme(ageingTime);
@@ -248,12 +248,12 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.RABBIT.getRegistryName(), "RabbitToKiller") && AgeingConfig.COMMON.rabbitToKillerAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.RABBIT), "RabbitToKiller") && AgeingConfig.COMMON.rabbitToKillerAgeing.get()) {
 			AgeingData rabbitToKiller = new AgeingData("RabbitToKiller", EntityType.RABBIT, createNBTTag(""), EntityType.RABBIT, createNBTTag("{RabbitType:99}"), AgeingConfig.COMMON.rabbitToKillerAgeingTime.get());
 			rabbitToKiller.setCriteria(new BaseCriteria[]{new LightCriteria(rabbitToKiller, AgeingConfig.COMMON.rabbitToKillerMinLight.get(), AgeingConfig.COMMON.rabbitToKillerMaxLight.get(), true, false)});
 			INSTANCE.registerAgeing(rabbitToKiller);
-		} else if (!INSTANCE.isIDUnique(EntityType.RABBIT.getRegistryName(), "RabbitToKiller")) {
-			AgeingData rabbitToKiller = INSTANCE.getByID(EntityType.RABBIT.getRegistryName(), "RabbitToKiller");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.RABBIT), "RabbitToKiller")) {
+			AgeingData rabbitToKiller = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.RABBIT), "RabbitToKiller");
 			boolean ageingChanged = false;
 			boolean criteriaChanged = false;
 			int ageingTime = AgeingConfig.COMMON.rabbitToKillerAgeingTime.get();
@@ -286,12 +286,12 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.COW.getRegistryName(), "CowToMooshroom") && AgeingConfig.COMMON.cowToMooshroomAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.COW), "CowToMooshroom") && AgeingConfig.COMMON.cowToMooshroomAgeing.get()) {
 			AgeingData cowToMooshroom = new AgeingData("CowToMooshroom", EntityType.COW, createNBTTag(""), EntityType.MOOSHROOM, createNBTTag(""), AgeingConfig.COMMON.cowToMooshroomAgeingTime.get());
 			cowToMooshroom.setCriteria(new BaseCriteria[]{new BlockBasedCriteria(cowToMooshroom, new Block[]{Blocks.MYCELIUM, Blocks.BROWN_MUSHROOM, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.RED_MUSHROOM, Blocks.RED_MUSHROOM_BLOCK}, false, AgeingConfig.COMMON.cowToMooshroomAgeingRadius.get())});
 			INSTANCE.registerAgeing(cowToMooshroom);
-		} else if (!INSTANCE.isIDUnique(EntityType.COW.getRegistryName(), "CowToMooshroom")) {
-			AgeingData cowToMooshroom = INSTANCE.getByID(EntityType.COW.getRegistryName(), "CowToMooshroom");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.COW), "CowToMooshroom")) {
+			AgeingData cowToMooshroom = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.COW), "CowToMooshroom");
 			boolean ageingChanged = false;
 			boolean criteriaChanged = false;
 			int ageingTime = AgeingConfig.COMMON.cowToMooshroomAgeingTime.get();
@@ -319,13 +319,13 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.SKELETON.getRegistryName(), "SkeletonToWitherSkelly") && AgeingConfig.COMMON.skeletonToWitherSkeletonAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.SKELETON), "SkeletonToWitherSkelly") && AgeingConfig.COMMON.skeletonToWitherSkeletonAgeing.get()) {
 			AgeingData skeletonToWitherSkelly = new AgeingData("SkeletonToWitherSkelly", EntityType.SKELETON, createNBTTag(""), EntityType.WITHER_SKELETON, createNBTTag(""), AgeingConfig.COMMON.skeletonToWitherSkeletonAgeingTime.get());
 			skeletonToWitherSkelly.setCriteria(new BaseCriteria[]{new DimensionCriteria(skeletonToWitherSkelly, new ResourceLocation[]{new ResourceLocation("the_nether")})});
 
 			INSTANCE.registerAgeing(skeletonToWitherSkelly);
-		} else if (!INSTANCE.isIDUnique(EntityType.SKELETON.getRegistryName(), "SkeletonToWitherSkelly")) {
-			AgeingData skeletonToWitherSkelly = INSTANCE.getByID(EntityType.SKELETON.getRegistryName(), "SkeletonToWitherSkelly");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.SKELETON), "SkeletonToWitherSkelly")) {
+			AgeingData skeletonToWitherSkelly = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.SKELETON), "SkeletonToWitherSkelly");
 			int ageingTime = AgeingConfig.COMMON.skeletonToWitherSkeletonAgeingTime.get();
 			if (skeletonToWitherSkelly.getAgeingTme() != ageingTime) {
 				skeletonToWitherSkelly.setAgeingTme(ageingTime);
@@ -333,12 +333,12 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.SLIME.getRegistryName(), "SlimeToMagmaCube") && AgeingConfig.COMMON.slimeToMagmaCubeAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.SLIME), "SlimeToMagmaCube") && AgeingConfig.COMMON.slimeToMagmaCubeAgeing.get()) {
 			AgeingData slimeToMagmaCube = new AgeingData("SlimeToMagmaCube", EntityType.SLIME, createNBTTag(""), EntityType.MAGMA_CUBE, createNBTTag(""), AgeingConfig.COMMON.slimeToMagmaCubeAgeingTime.get());
 			slimeToMagmaCube.setCriteria(new BaseCriteria[]{new DimensionCriteria(slimeToMagmaCube, new ResourceLocation[]{new ResourceLocation("the_nether")})});
 			INSTANCE.registerAgeing(slimeToMagmaCube);
-		} else if (!INSTANCE.isIDUnique(EntityType.SLIME.getRegistryName(), "SlimeToMagmaCube")) {
-			AgeingData slimeToMagmaCube = INSTANCE.getByID(EntityType.SLIME.getRegistryName(), "SlimeToMagmaCube");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.SLIME), "SlimeToMagmaCube")) {
+			AgeingData slimeToMagmaCube = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.SLIME), "SlimeToMagmaCube");
 			int ageingTime = AgeingConfig.COMMON.slimeToMagmaCubeAgeingTime.get();
 			if (slimeToMagmaCube.getAgeingTme() != ageingTime) {
 				slimeToMagmaCube.setAgeingTme(ageingTime);
@@ -346,10 +346,10 @@ public class AgeingRegistry {
 			}
 		}
 
-		if (INSTANCE.isIDUnique(EntityType.BAT.getRegistryName(), "BatToVex") && AgeingConfig.COMMON.batToVexAgeing.get()) {
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.BAT), "BatToVex") && AgeingConfig.COMMON.batToVexAgeing.get()) {
 			INSTANCE.registerAgeing(new AgeingData("BatToVex", EntityType.BAT, createNBTTag(""), EntityType.VEX, createNBTTag(""), AgeingConfig.COMMON.batToVexAgeingTime.get()));
-		} else if (!INSTANCE.isIDUnique(EntityType.BAT.getRegistryName(), "BatToVex")) {
-			AgeingData batToVex = INSTANCE.getByID(EntityType.BAT.getRegistryName(), "BatToVex");
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.BAT), "BatToVex")) {
+			AgeingData batToVex = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.BAT), "BatToVex");
 			int ageingTime = AgeingConfig.COMMON.batToVexAgeingTime.get();
 			if (batToVex.getAgeingTme() != ageingTime) {
 				batToVex.setAgeingTme(ageingTime);
@@ -359,7 +359,7 @@ public class AgeingRegistry {
 	}
 
 	public void registerAgeing(AgeingData ageing) {
-		ResourceLocation resourceLocation = ageing.getEntity().getRegistryName();
+		ResourceLocation resourceLocation = ForgeRegistries.ENTITY_TYPES.getKey(ageing.getEntity());
 		if (resourceLocation != null) {
 			if (ageingList.containsKey(resourceLocation)) {
 				List<AgeingData> dataList = new ArrayList<>(ageingList.get(resourceLocation));
@@ -374,7 +374,7 @@ public class AgeingRegistry {
 	}
 
 	public void removeAgeing(AgeingData ageing) {
-		ResourceLocation resourceLocation = ageing.getEntity().getRegistryName();
+		ResourceLocation resourceLocation = ForgeRegistries.ENTITY_TYPES.getKey(ageing.getEntity());
 		if (resourceLocation != null) {
 			if (ageingList.containsKey(resourceLocation)) {
 				List<AgeingData> dataList = new ArrayList<>(ageingList.get(resourceLocation));
@@ -393,7 +393,7 @@ public class AgeingRegistry {
 	}
 
 	public void replaceAgeing(AgeingData ageing) {
-		ResourceLocation resourceLocation = ageing.getEntity().getRegistryName();
+		ResourceLocation resourceLocation = ForgeRegistries.ENTITY_TYPES.getKey(ageing.getEntity());
 		String uniqueID = ageing.getName();
 		if (resourceLocation != null) {
 			if (ageingList.containsKey(resourceLocation)) {

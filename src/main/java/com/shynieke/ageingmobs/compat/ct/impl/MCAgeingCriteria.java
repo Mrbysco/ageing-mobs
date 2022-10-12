@@ -22,7 +22,6 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.BiomeDictionary;
 import org.openzen.zencode.java.ZenCodeType.Constructor;
 import org.openzen.zencode.java.ZenCodeType.Method;
 import org.openzen.zencode.java.ZenCodeType.Name;
@@ -45,10 +44,10 @@ public class MCAgeingCriteria {
 	}
 
 	@Method
-	public MCAgeingCriteria constructBiome(String biomeName) {
+	public MCAgeingCriteria constructBiome(ResourceLocation biomeName) {
 		net.minecraft.world.level.biome.Biome biome = BiomeHelper.getBiome(net.minecraft.world.level.biome.Biomes.THE_VOID);
-		if (net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName)) != null) {
-			biome = net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName));
+		if (net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(biomeName) != null) {
+			biome = net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(biomeName);
 		} else {
 			AgeingMobs.LOGGER.error("Could not find biome with ID: " + biomeName);
 		}
@@ -56,15 +55,8 @@ public class MCAgeingCriteria {
 	}
 
 	@Method
-	public MCAgeingCriteria constructBiomeType(String biomeType) {
-		BiomeDictionary.Type returnType = BiomeDictionary.Type.WATER;
-		for (BiomeDictionary.Type type : BiomeDictionary.Type.getAll()) {
-			if (type.getName().equals(biomeType)) {
-				returnType = type;
-				break;
-			}
-		}
-		return new MCAgeingCriteria(new BiomeTypeCriteria(this.internal.getAgeingData(), returnType));
+	public MCAgeingCriteria constructBiomeTag(ResourceLocation biomeTag) {
+		return new MCAgeingCriteria(new BiomeTypeCriteria(this.internal.getAgeingData(), biomeTag));
 	}
 
 	@Method

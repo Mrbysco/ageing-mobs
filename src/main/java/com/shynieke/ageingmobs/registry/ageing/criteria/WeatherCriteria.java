@@ -22,15 +22,15 @@ public class WeatherCriteria extends BaseCriteria {
 	}
 
 	@Override
-	public boolean checkCriteria(Level worldIn, Entity entityIn) {
+	public boolean checkCriteria(Level level, Entity entityIn) {
 		int wantedWeather = weatherPhaseFromString(getWeather());
 
 		if (wantedWeather == 0) {
-			return !worldIn.isRaining();
+			return !level.isRaining();
 		} else if (wantedWeather == 1) {
-			return worldIn.isRaining() && !worldIn.isThundering();
+			return level.isRaining() && !level.isThundering();
 		} else if (wantedWeather == 2) {
-			return worldIn.isThundering();
+			return level.isThundering();
 		} else {
 			AgeingMobs.LOGGER.error("An error has occured. Criteria for ageing ID: {} is using the wrong syntax.", getUniqueID());
 			return false;

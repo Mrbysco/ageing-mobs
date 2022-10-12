@@ -5,6 +5,7 @@ import com.shynieke.ageingmobs.compat.ct.impl.MCAgeingData;
 import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import com.shynieke.ageingmobs.registry.ageing.AgeingData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ActionReplaceAgeing implements IUndoableAction {
 	public final AgeingData ageingData;
@@ -17,7 +18,7 @@ public class ActionReplaceAgeing implements IUndoableAction {
 
 	@Override
 	public void apply() {
-		ResourceLocation resourceLocation = ageingData.getEntity().getRegistryName();
+		ResourceLocation resourceLocation = ForgeRegistries.ENTITY_TYPES.getKey(ageingData.getEntity());
 		if (resourceLocation != null && !AgeingRegistry.INSTANCE.isIDUnique(resourceLocation, ageingData.getName())) {
 			AgeingRegistry.INSTANCE.replaceAgeing(ageingData);
 		}
@@ -32,12 +33,12 @@ public class ActionReplaceAgeing implements IUndoableAction {
 			return "Unknown transform entity inserted at ageing ID '" + ageingData.getName() + "'";
 		}
 
-		ResourceLocation resourceLocation = ageingData.getEntity().getRegistryName();
+		ResourceLocation resourceLocation = ForgeRegistries.ENTITY_TYPES.getKey(ageingData.getEntity());
 		if (resourceLocation != null) {
 			if (AgeingRegistry.INSTANCE.isIDUnique(resourceLocation, ageingData.getName())) {
-				return "Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> has been changed";
+				return "Ageing from <" + ForgeRegistries.ENTITY_TYPES.getKey(ageingData.getEntity()) + "> to <" + ForgeRegistries.ENTITY_TYPES.getKey(ageingData.getTransformedEntity()) + "> has been changed";
 			} else {
-				return "Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> could not be changed";
+				return "Ageing from <" + ForgeRegistries.ENTITY_TYPES.getKey(ageingData.getEntity()) + "> to <" + ForgeRegistries.ENTITY_TYPES.getKey(ageingData.getTransformedEntity()) + "> could not be changed";
 			}
 		} else {
 			return "Could not replace ageing of %s as the resource location of the given entity is invalid, please check if your MCEntityType is correct";
@@ -51,6 +52,6 @@ public class ActionReplaceAgeing implements IUndoableAction {
 
 	@Override
 	public String describeUndo() {
-		return "Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> has been changed back";
+		return "Ageing from <" + ForgeRegistries.ENTITY_TYPES.getKey(ageingData.getEntity()) + "> to <" + ForgeRegistries.ENTITY_TYPES.getKey(ageingData.getTransformedEntity()) + "> has been changed back";
 	}
 }

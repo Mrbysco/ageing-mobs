@@ -1,29 +1,36 @@
 package com.shynieke.ageingmobs.registry.ageing.criteria;
 
-import com.shynieke.ageingmobs.helper.BiomeHelper;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.BiomeDictionary;
+import net.minecraft.world.level.biome.Biome;
 
 public class BiomeTypeCriteria extends BaseCriteria {
-	private BiomeDictionary.Type biomeType;
+	private ResourceLocation biomeTag;
 
-	public BiomeTypeCriteria(iAgeing ageing, BiomeDictionary.Type biomeType) {
+	public BiomeTypeCriteria(iAgeing ageing, ResourceLocation biomeTag) {
 		super(ageing);
-		this.biomeType = biomeType;
+		this.biomeTag = biomeTag;
 	}
 
-	public BiomeDictionary.Type getBiomeType() {
-		return biomeType;
+	public BiomeTypeCriteria(iAgeing ageing, TagKey<Biome> biomeTag) {
+		super(ageing);
+		this.biomeTag = biomeTag.location();
 	}
 
-	public void setBiomeType(BiomeDictionary.Type biome) {
-		this.biomeType = biome;
+	public ResourceLocation getBiomeType() {
+		return biomeTag;
+	}
+
+	public void setBiomeTag(ResourceLocation biome) {
+		this.biomeTag = biome;
 	}
 
 	@Override
-	public boolean checkCriteria(Level worldIn, Entity entityIn) {
-		return BiomeDictionary.getTypes(BiomeHelper.getOrCreateBiomeKey(worldIn.getBiome(entityIn.blockPosition()).value())).contains(getBiomeType());
+	public boolean checkCriteria(Level level, Entity entityIn) {
+		return level.getBiome(entityIn.blockPosition()).is(TagKey.create(Registry.BIOME_REGISTRY, biomeTag));
 	}
 }

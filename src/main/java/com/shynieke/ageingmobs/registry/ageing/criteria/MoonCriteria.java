@@ -26,13 +26,13 @@ public class MoonCriteria extends BaseCriteria {
 	}
 
 	@Override
-	public boolean checkCriteria(Level worldIn, Entity entityIn) {
-		Level entityWorld = entityIn.getCommandSenderWorld();
-		if (!entityWorld.isDay()) {
-			int moonPhase = entityWorld.dimensionType().moonPhase(entityWorld.getLevelData().getDayTime());
+	public boolean checkCriteria(Level level, Entity entityIn) {
+		Level entityLevel = entityIn.getCommandSenderWorld();
+		if (!entityLevel.isDay()) {
+			int moonPhase = entityLevel.dimensionType().moonPhase(entityLevel.getLevelData().getDayTime());
 			List<ResourceLocation> moonDimensions = AgeingRegistry.INSTANCE.getMoonDimensions();
 
-			if (!moonDimensions.isEmpty() && moonDimensions.contains(entityWorld.dimension().location())) {
+			if (!moonDimensions.isEmpty() && moonDimensions.contains(entityLevel.dimension().location())) {
 				int wantedPhase = moonPhaseFromString(getMoonPhase());
 
 				return moonPhase == wantedPhase;

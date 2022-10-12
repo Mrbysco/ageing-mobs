@@ -41,12 +41,12 @@ public class MCAgeingData {
 		return this;
 	}
 
-//    @Method
-//    public MCAgeing setGamestage(String gamestage) {
-//        AgeingData internal = this.internal;
-//        internal.setGamestage(gamestage);
-//        return new MCAgeing(internal);
-//    }
+	@Method
+	public MCAgeingData setGamestage(String gamestage) {
+		AgeingData internal = this.internal;
+		internal.setGamestage(gamestage);
+		return new MCAgeingData(internal);
+	}
 
 	public AgeingData getInternal() {
 		return this.internal;

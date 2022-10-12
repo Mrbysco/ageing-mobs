@@ -3,6 +3,7 @@ package com.shynieke.ageingmobs.compat.ct;
 import com.blamejared.crafttweaker.api.action.base.IUndoableAction;
 import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import com.shynieke.ageingmobs.registry.ageing.AgeingData;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ActionRemoveAgeing implements IUndoableAction {
 	public final AgeingData ageingData;
@@ -28,7 +29,7 @@ public class ActionRemoveAgeing implements IUndoableAction {
 		if (ageingData.getTransformedEntity() == null) {
 			return "Unknown transform entity inserted at ageing ID '" + ageingData.getName() + "'";
 		}
-		return "Ageing from <" + ageingData.getEntity().getRegistryName() + "> to <" + ageingData.getTransformedEntity().getRegistryName() + "> has been removed with unique ID: " + ageingData.getName();
+		return "Ageing from <" + ForgeRegistries.ENTITY_TYPES.getKey(ageingData.getEntity()) + "> to <" + ForgeRegistries.ENTITY_TYPES.getKey(ageingData.getTransformedEntity()) + "> has been removed with unique ID: " + ageingData.getName();
 	}
 
 	@Override
@@ -40,6 +41,6 @@ public class ActionRemoveAgeing implements IUndoableAction {
 
 	@Override
 	public String describeUndo() {
-		return "Ageing from <" + oldAgeingData.getEntity().getRegistryName() + "> to <" + oldAgeingData.getTransformedEntity().getRegistryName() + "> has been re-added, unique ID: " + oldAgeingData.getName();
+		return "Ageing from <" + ForgeRegistries.ENTITY_TYPES.getKey(oldAgeingData.getEntity()) + "> to <" + ForgeRegistries.ENTITY_TYPES.getKey(oldAgeingData.getTransformedEntity()) + "> has been re-added, unique ID: " + oldAgeingData.getName();
 	}
 }

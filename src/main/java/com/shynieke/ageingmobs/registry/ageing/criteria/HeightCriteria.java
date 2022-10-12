@@ -31,7 +31,7 @@ public class HeightCriteria extends BaseCriteria {
 	}
 
 	@Override
-	public boolean checkCriteria(Level worldIn, Entity entityIn) {
+	public boolean checkCriteria(Level level, Entity entityIn) {
 		int minHeight = getMinHeight();
 		int maxHeight = getMaxHeight();
 		int entityHeight = entityIn.blockPosition().getY();

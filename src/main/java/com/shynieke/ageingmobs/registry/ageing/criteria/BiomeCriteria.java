@@ -4,6 +4,7 @@ import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 
@@ -24,7 +25,7 @@ public class BiomeCriteria extends BaseCriteria {
 	}
 
 	@Override
-	public boolean checkCriteria(Level worldIn, Entity entityIn) {
-		return worldIn.getBiome(entityIn.blockPosition()).value().getRegistryName().equals(getBiome().getRegistryName());
+	public boolean checkCriteria(Level level, Entity entityIn) {
+		return ForgeRegistries.BIOMES.getKey(level.getBiome(entityIn.blockPosition()).value()).equals(ForgeRegistries.BIOMES.getKey(getBiome()));
 	}
 }

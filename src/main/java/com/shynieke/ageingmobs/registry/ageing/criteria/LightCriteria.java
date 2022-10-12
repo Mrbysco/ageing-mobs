@@ -57,15 +57,15 @@ public class LightCriteria extends BaseCriteria {
 	}
 
 	@Override
-	public boolean checkCriteria(Level worldIn, Entity entityIn) {
+	public boolean checkCriteria(Level level, Entity entityIn) {
 		BlockPos entityPos = entityIn.blockPosition();
 
-		int entityLight = worldIn.getMaxLocalRawBrightness(entityPos);
+		int entityLight = level.getMaxLocalRawBrightness(entityPos);
 		if (entityLight >= getLightLevelMin() && entityLight <= getLightLevelMax()) {
 			if (isAloneBased()) {
 				AABB areaHitbox = new AABB(entityPos.getX() - 0.5f, entityPos.getY() - 0.5f, entityPos.getZ() - 0.5f, entityPos.getX() + 0.5f, entityPos.getY() + 0.5f, entityPos.getZ() + 0.5f)
 						.expandTowards(-5, -5, -5).expandTowards(5, 5, 5);
-				if (!worldIn.getEntitiesOfClass(entityIn.getClass(), areaHitbox).contains(getEntity().create(worldIn))) {
+				if (!level.getEntitiesOfClass(entityIn.getClass(), areaHitbox).contains(getEntity().create(level))) {
 					this.isReversing = false;
 					return true;
 				} else {

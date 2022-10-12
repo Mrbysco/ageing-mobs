@@ -48,14 +48,14 @@ public class EntityCriteria extends BaseCriteria {
 	}
 
 	@Override
-	public boolean checkCriteria(Level worldIn, Entity entityIn) {
+	public boolean checkCriteria(Level level, Entity entityIn) {
 		BlockPos entityPos = entityIn.blockPosition();
 		int nearbyEntityAmount = 0;
 
 		AABB areaHitbox = new AABB(entityPos.getX() - 0.5f, entityPos.getY() - 0.5f, entityPos.getZ() - 0.5f, entityPos.getX() + 0.5f, entityPos.getY() + 0.5f, entityPos.getZ() + 0.5f)
 				.expandTowards(-getRadius(), -getRadius(), -getRadius()).expandTowards(getRadius(), getRadius(), getRadius());
-		if (!worldIn.getEntitiesOfClass(Entity.class, areaHitbox).isEmpty()) {
-			for (Entity foundEntity : worldIn.getEntitiesOfClass(Entity.class, areaHitbox)) {
+		if (!level.getEntitiesOfClass(Entity.class, areaHitbox).isEmpty()) {
+			for (Entity foundEntity : level.getEntitiesOfClass(Entity.class, areaHitbox)) {
 				if (!(foundEntity instanceof Player)) {
 					if (foundEntity.getType().equals(getTransformedEntity())) {
 						if (!getTransformedEntityData().isEmpty()) {

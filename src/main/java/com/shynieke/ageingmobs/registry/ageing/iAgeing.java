@@ -38,12 +38,12 @@ public interface iAgeing {
 	/*
 	 * @return Returns the gamestage required
 	 */
-//    String getGamestage();
+	String getGamestage();
 
 	/*
 	 * @return Set the gamestage required
 	 */
-//    void setGamestage(String gamestage);
+	void setGamestage(String gamestage);
 
 	void setCriteria(BaseCriteria[] criteria);
 
