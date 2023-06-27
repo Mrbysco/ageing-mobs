@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.shynieke.ageingmobs.helper.NBTHelper;
 import com.shynieke.ageingmobs.registry.ageing.AgeingData;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import org.openzen.zencode.java.ZenCodeType.Method;
 import org.openzen.zencode.java.ZenCodeType.Name;
@@ -21,8 +22,8 @@ public class MCAgeingData {
 	}
 
 	@Method
-	public static MCAgeingData of(String uniqueID, EntityType entity, String entityData, EntityType transformedEntity, String evolvedEntityEntityData, int tickTime) {
-		return new MCAgeingData(new AgeingData(uniqueID, entity, NBTHelper.createNBTTag(entityData), transformedEntity, NBTHelper.createNBTTag(evolvedEntityEntityData), tickTime));
+	public static MCAgeingData of(String uniqueID, EntityType<Entity> entity, String entityData, EntityType<Entity> transformedEntity, String evolvedEntityEntityData, int seconds) {
+		return new MCAgeingData(new AgeingData(uniqueID, entity, NBTHelper.createNBTTag(entityData), transformedEntity, NBTHelper.createNBTTag(evolvedEntityEntityData), seconds));
 	}
 
 	@Method
@@ -41,12 +42,12 @@ public class MCAgeingData {
 		return this;
 	}
 
-	@Method
-	public MCAgeingData setGamestage(String gamestage) {
-		AgeingData internal = this.internal;
-		internal.setGamestage(gamestage);
-		return new MCAgeingData(internal);
-	}
+//	@Method
+//	public MCAgeingData setGamestage(String gamestage) {
+//		AgeingData internal = this.internal;
+//		internal.setGamestage(gamestage);
+//		return new MCAgeingData(internal);
+//	}
 
 	public AgeingData getInternal() {
 		return this.internal;

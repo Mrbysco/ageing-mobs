@@ -28,7 +28,7 @@ public class AgeHandler {
 	public void handleAgeing(TickEvent.LevelTickEvent event) {
 		if (event.phase.equals(TickEvent.Phase.END) && event.side.isServer()) {
 			ServerLevel serverLevel = (ServerLevel) event.level;
-			if (serverLevel.getGameTime() % 20 == 0) {
+			if (serverLevel.dimension() == Level.OVERWORLD && serverLevel.getGameTime() % 20 == 0) {
 				if (!AgeingRegistry.ageingList.isEmpty()) {
 					for (Entity entityIn : serverLevel.getEntities().getAll()) {
 						if (entityIn != null) {

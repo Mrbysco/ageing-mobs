@@ -11,17 +11,17 @@ public class AgeingData implements iAgeing {
 	private final CompoundTag entityData;
 	private final EntityType<? extends Entity> evolvedEntity;
 	private final CompoundTag evolvedEntityEntityData;
-	private int tickTime;
+	private int seconds;
 	private String gamestage = "";
 	private BaseCriteria[] criteria = new BaseCriteria[]{};
 
-	public AgeingData(String uniqueID, EntityType<? extends Entity> entity, CompoundTag entityData, EntityType<? extends Entity> transformedEntity, CompoundTag evolvedEntityEntityData, int tickTime) {
+	public AgeingData(String uniqueID, EntityType<? extends Entity> entity, CompoundTag entityData, EntityType<? extends Entity> transformedEntity, CompoundTag evolvedEntityEntityData, int seconds) {
 		this.uniqueID = uniqueID;
 		this.entity = entity;
 		this.entityData = entityData;
 		this.evolvedEntity = transformedEntity;
 		this.evolvedEntityEntityData = evolvedEntityEntityData;
-		this.tickTime = tickTime;
+		this.seconds = seconds;
 	}
 
 	@Override
@@ -46,12 +46,12 @@ public class AgeingData implements iAgeing {
 
 	@Override
 	public int getAgeingTme() {
-		return this.tickTime;
+		return this.seconds;
 	}
 
 	@Override
-	public void setAgeingTme(int time) {
-		this.tickTime = time;
+	public void setAgeingTme(int seconds) {
+		this.seconds = seconds;
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class AgeingData implements iAgeing {
 	}
 
 	public AgeingData setAgeingCriteria(BaseCriteria[] ageingCriteria) {
-		AgeingData ageingData = new AgeingData(this.uniqueID, this.entity, this.entityData, this.evolvedEntity, this.evolvedEntityEntityData, this.tickTime);
+		AgeingData ageingData = new AgeingData(this.uniqueID, this.entity, this.entityData, this.evolvedEntity, this.evolvedEntityEntityData, this.seconds);
 		ageingData.setGamestage(this.gamestage);
 		ageingData.setCriteria(ageingCriteria);
 		return ageingData;

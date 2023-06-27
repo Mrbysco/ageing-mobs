@@ -43,4 +43,9 @@ public class ActionRemoveAgeing implements IUndoableAction {
 	public String describeUndo() {
 		return "Ageing from <" + ForgeRegistries.ENTITY_TYPES.getKey(oldAgeingData.getEntity()) + "> to <" + ForgeRegistries.ENTITY_TYPES.getKey(oldAgeingData.getTransformedEntity()) + "> has been re-added, unique ID: " + oldAgeingData.getName();
 	}
+
+	@Override
+	public String systemName() {
+		return "Ageing Mobs";
+	}
 }

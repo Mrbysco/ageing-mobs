@@ -20,6 +20,7 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.MoonCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.TimeCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import org.openzen.zencode.java.ZenCodeType.Constructor;
@@ -107,7 +108,7 @@ public class MCAgeingCriteria {
 	}
 
 	@Method
-	public MCAgeingCriteria constructEntity(EntityType nearbyEntity, String nearbyEntityData, int radius) {
+	public MCAgeingCriteria constructEntity(EntityType<Entity> nearbyEntity, String nearbyEntityData, int radius) {
 		return new MCAgeingCriteria(new EntityCriteria(this.internal.getAgeingData(), nearbyEntity, NBTHelper.createNBTTag(nearbyEntityData), radius));
 	}
 

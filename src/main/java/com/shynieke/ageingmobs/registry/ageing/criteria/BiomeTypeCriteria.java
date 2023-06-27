@@ -1,7 +1,7 @@
 package com.shynieke.ageingmobs.registry.ageing.criteria;
 
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -31,6 +31,6 @@ public class BiomeTypeCriteria extends BaseCriteria {
 
 	@Override
 	public boolean checkCriteria(Level level, Entity entityIn) {
-		return level.getBiome(entityIn.blockPosition()).is(TagKey.create(Registry.BIOME_REGISTRY, biomeTag));
+		return level.getBiome(entityIn.blockPosition()).is(TagKey.create(Registries.BIOME, biomeTag));
 	}
 }
