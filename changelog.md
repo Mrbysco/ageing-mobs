@@ -1,0 +1,1 @@
+* Fixes the timer running faster than it should
