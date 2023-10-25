@@ -10,6 +10,7 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.BiomeTypeCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BlockBasedCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BossCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.DimensionCriteria;
+import com.shynieke.ageingmobs.registry.ageing.criteria.EntityStateCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.LightCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.MagicCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
@@ -18,7 +19,9 @@ import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -104,6 +107,19 @@ public class AgeingRegistry {
 			if (babyHuskToBabyZombie.getAgeingTme() != ageingTime) {
 				babyHuskToBabyZombie.setAgeingTme(ageingTime);
 				INSTANCE.replaceAgeing(babyHuskToBabyZombie);
+			}
+		}
+
+		if (INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.PILLAGER), "PassivePillagerToVillager") && AgeingConfig.COMMON.passivePillagerToVillagerAgeing.get()) {
+			AgeingData passivePillagerToVillager = new AgeingData("PassivePillagerToVillager", EntityType.PILLAGER, createNBTTag(""), EntityType.VILLAGER, createNBTTag(""), AgeingConfig.COMMON.passivePillagerToVillagerAgeingTime.get());
+			passivePillagerToVillager.setCriteria(new BaseCriteria[]{new EntityStateCriteria(passivePillagerToVillager, entity -> entity instanceof LivingEntity living && !living.isHolding(stack -> stack.getItem() instanceof CrossbowItem))});
+			INSTANCE.registerAgeing(passivePillagerToVillager);
+		} else if (!INSTANCE.isIDUnique(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.PILLAGER), "PassivePillagerToVillager")) {
+			AgeingData passivePillagerToVillager = INSTANCE.getByID(ForgeRegistries.ENTITY_TYPES.getKey(EntityType.PILLAGER), "PassivePillagerToVillager");
+			int ageingTime = AgeingConfig.COMMON.passivePillagerToVillagerAgeingTime.get();
+			if (passivePillagerToVillager.getAgeingTme() != ageingTime) {
+				passivePillagerToVillager.setAgeingTme(ageingTime);
+				INSTANCE.registerAgeing(passivePillagerToVillager);
 			}
 		}
 

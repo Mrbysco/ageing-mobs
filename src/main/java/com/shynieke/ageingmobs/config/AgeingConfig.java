@@ -25,6 +25,8 @@ public class AgeingConfig {
 
 		public final BooleanValue huskToZombieAgeing;
 		public final IntValue huskToZombieAgeingTime;
+		public final BooleanValue passivePillagerToVillagerAgeing;
+		public final IntValue passivePillagerToVillagerAgeingTime;
 
 		public final BooleanValue villagerToVindicatorAgeing;
 		public final IntValue villagerToVindicatorAgeingTime;
@@ -111,6 +113,19 @@ public class AgeingConfig {
 			huskToZombieAgeingTime = builder
 					.comment("This specifies the time in second(s) which dictates how long a mob needs to age (Default: 30)")
 					.defineInRange("huskToZombieAgeingTime", 30, 1, Integer.MAX_VALUE);
+
+			builder.pop();
+
+			builder.comment("Passive Pillager -> Villager")
+					.push("passive_pillager_to_villager");
+
+			passivePillagerToVillagerAgeing = builder
+					.comment("Setting this to false disables the pillager -> villager ageing if the pillager is not holding a bow-like item (Default: true)")
+					.define("passivePillagerToVillagerAgeing", true);
+
+			passivePillagerToVillagerAgeingTime = builder
+					.comment("This specifies the time in second(s) which dictates how long a mob needs to age (Default: 300)")
+					.defineInRange("passivePillagerToVillagerAgeingTime", 300, 1, Integer.MAX_VALUE);
 
 			builder.pop();
 
