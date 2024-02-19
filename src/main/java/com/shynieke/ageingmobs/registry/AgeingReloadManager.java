@@ -2,13 +2,14 @@ package com.shynieke.ageingmobs.registry;
 
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class AgeingReloadManager implements ResourceManagerReloadListener {
 	@Override
-	public void onResourceManagerReload(ResourceManager resourceManager) {
+	public void onResourceManagerReload(@NotNull ResourceManager resourceManager) {
 		AgeingRegistry.INSTANCE.initializeAgeing();
 		AgeingRegistry.INSTANCE.initializeMagicMap();
 		AgeingRegistry.INSTANCE.initializeMoonDimensions();

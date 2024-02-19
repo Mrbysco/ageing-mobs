@@ -1,31 +1,31 @@
 package com.shynieke.ageingmobs.registry.ageing.criteria;
 
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import javax.annotation.Nonnull;
+import org.jetbrains.annotations.NotNull;
 
 public class BiomeCriteria extends BaseCriteria {
-	private Biome biome;
+	private ResourceKey<Biome> biome;
 
-	public BiomeCriteria(iAgeing ageing, @Nonnull Biome biome) {
+	public BiomeCriteria(iAgeing ageing, @NotNull ResourceKey<Biome> biome) {
 		super(ageing);
 		this.biome = biome;
 	}
 
-	public Biome getBiome() {
+	public ResourceKey<Biome> getBiome() {
 		return biome;
 	}
 
-	public void setBiome(@Nonnull Biome biome) {
+	public void setBiome(@NotNull ResourceKey<Biome> biome) {
 		this.biome = biome;
 	}
 
 	@Override
 	public boolean checkCriteria(Level level, Entity entityIn) {
-		return ForgeRegistries.BIOMES.getKey(level.getBiome(entityIn.blockPosition()).value()).equals(ForgeRegistries.BIOMES.getKey(getBiome()));
+		var biomeKey = level.getBiome(entityIn.blockPosition()).unwrapKey();
+		return biomeKey.map(biomeResourceKey -> biomeResourceKey.equals(getBiome())).orElse(false);
 	}
 }

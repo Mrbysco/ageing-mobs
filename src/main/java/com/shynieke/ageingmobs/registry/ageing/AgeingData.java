@@ -4,6 +4,7 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 
 public class AgeingData implements iAgeing {
 	private final String uniqueID;
@@ -55,7 +56,8 @@ public class AgeingData implements iAgeing {
 	}
 
 	@Override
-	public String getName() {
+	@NotNull
+	public @NotNull String getName() {
 		return this.uniqueID;
 	}
 

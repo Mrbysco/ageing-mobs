@@ -3,7 +3,6 @@ package com.shynieke.ageingmobs.compat.ct.impl;
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.google.common.collect.Lists;
 import com.shynieke.ageingmobs.AgeingMobs;
-import com.shynieke.ageingmobs.helper.BiomeHelper;
 import com.shynieke.ageingmobs.helper.NBTHelper;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BiomeCriteria;
@@ -19,6 +18,9 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.MagicCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.MoonCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.TimeCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -29,6 +31,7 @@ import org.openzen.zencode.java.ZenCodeType.Name;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @ZenRegister
 @Name("mods.ageingmobs.AgeingCriteria")
@@ -46,13 +49,7 @@ public class MCAgeingCriteria {
 
 	@Method
 	public MCAgeingCriteria constructBiome(ResourceLocation biomeName) {
-		net.minecraft.world.level.biome.Biome biome = BiomeHelper.getBiome(net.minecraft.world.level.biome.Biomes.THE_VOID);
-		if (net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(biomeName) != null) {
-			biome = net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(biomeName);
-		} else {
-			AgeingMobs.LOGGER.error("Could not find biome with ID: " + biomeName);
-		}
-		return new MCAgeingCriteria(new BiomeCriteria(this.internal.getAgeingData(), biome));
+		return new MCAgeingCriteria(new BiomeCriteria(this.internal.getAgeingData(), ResourceKey.create(Registries.BIOME, biomeName)));
 	}
 
 	@Method
@@ -76,9 +73,9 @@ public class MCAgeingCriteria {
 		if (blocks.length > 0) {
 			List<Block> blockList = Lists.newArrayList();
 			for (String blockName : blocks) {
-				Block block = net.minecraftforge.registries.ForgeRegistries.BLOCKS.getValue(new ResourceLocation(blockName));
-				if (block != null) {
-					blockList.add(block);
+				Optional<Block> optionalBlock = BuiltInRegistries.BLOCK.getOptional(new ResourceLocation(blockName));
+				if (optionalBlock.isPresent()) {
+					blockList.add(optionalBlock.get());
 				} else {
 					AgeingMobs.LOGGER.error("Could not resolve block: " + blockName);
 				}

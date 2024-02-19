@@ -3,11 +3,11 @@ package com.shynieke.ageingmobs;
 import com.shynieke.ageingmobs.config.AgeingConfig;
 import com.shynieke.ageingmobs.handler.AgeHandler;
 import com.shynieke.ageingmobs.registry.AgeingReloadManager;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.NeoForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,11 +15,11 @@ import org.apache.logging.log4j.Logger;
 public class AgeingMobs {
 	public static final Logger LOGGER = LogManager.getLogger();
 
-	public AgeingMobs() {
+	public AgeingMobs(IEventBus eventBus) {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, AgeingConfig.commonSpec);
-		FMLJavaModLoadingContext.get().getModEventBus().register(AgeingConfig.class);
+		eventBus.register(AgeingConfig.class);
 
-		MinecraftForge.EVENT_BUS.register(new AgeingReloadManager());
-		MinecraftForge.EVENT_BUS.register(new AgeHandler());
+		NeoForge.EVENT_BUS.register(new AgeingReloadManager());
+		NeoForge.EVENT_BUS.register(new AgeHandler());
 	}
 }
