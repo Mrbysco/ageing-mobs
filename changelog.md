@@ -1,1 +1,1 @@
-* Fixes the timer running faster than it should
+* Fire LivingConversionEvent Pre- and Post-event when converting a mob
