@@ -10,10 +10,13 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -167,6 +170,12 @@ public class AgeHandler {
 				if (!info.getTransformedEntityData().isEmpty()) {
 					Entity agedEntity = info.getTransformedEntity().create(level);
 					if (agedEntity != null) {
+						if (!canConvert(entity, agedEntity)) {
+							tag.remove(uniqueTag);
+							return;
+						}
+						callConversionEvent(entity, agedEntity);
+
 						agedEntity.copyPosition(entity);
 						copyEquipment(entity, agedEntity);
 
@@ -193,6 +202,12 @@ public class AgeHandler {
 				if (!info.getTransformedEntityData().isEmpty()) {
 					Entity agedEntity = info.getTransformedEntity().create(level);
 					if (agedEntity != null) {
+						if (!canConvert(entity, agedEntity)) {
+							tag.remove(uniqueTag);
+							return;
+						}
+						callConversionEvent(entity, agedEntity);
+
 						agedEntity.copyPosition(entity);
 						copyEquipment(entity, agedEntity);
 
@@ -217,6 +232,12 @@ public class AgeHandler {
 				} else {
 					Entity agedEntity = info.getTransformedEntity().create(level);
 					if (agedEntity != null) {
+						if (!canConvert(entity, agedEntity)) {
+							tag.remove(uniqueTag);
+							return;
+						}
+						callConversionEvent(entity, agedEntity);
+
 						agedEntity.copyPosition(entity);
 						copyEquipment(entity, agedEntity);
 						level.addFreshEntity(agedEntity);
@@ -234,6 +255,34 @@ public class AgeHandler {
 			currentAge++;
 			tag.putInt(uniqueTag, currentAge);
 			//System.out.println(info.getName() + " " + currentAge + " / " + maxTime);
+		}
+	}
+
+	/**
+	 * Fire the LivingConversionEvent.Pre to check if the entity can be converted
+	 *
+	 * @param entity     the entity to be converted
+	 * @param agedEntity the entity to be converted to
+	 * @return if the entity can be converted
+	 */
+	private boolean canConvert(Entity entity, Entity agedEntity) {
+		if (entity instanceof LivingEntity livingEntity && agedEntity instanceof LivingEntity) {
+			return ForgeEventFactory.canLivingConvert(livingEntity, (EntityType<? extends LivingEntity>) agedEntity.getType(), (timer) -> {
+			});
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Fire the LivingConversionEvent.Post to notify that the entity has been converted
+	 *
+	 * @param entity     the entity that was converted
+	 * @param agedEntity the entity that was converted to
+	 */
+	private void callConversionEvent(Entity entity, Entity agedEntity) {
+		if (entity instanceof LivingEntity livingEntity && agedEntity instanceof LivingEntity outcome) {
+			ForgeEventFactory.onLivingConvert(livingEntity, outcome);
 		}
 	}
 
