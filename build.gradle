@@ -121,6 +121,7 @@ if (System.getenv().CURSEFORGE_KEY) {
         mainFile.addGameVersion "NeoForge"
         mainFile.addGameVersion "${mc_version}"
         mainFile.addGameVersion "Java 17"
+        mainFile.addGameVersion('Server', 'Client')
 
         mainFile.changelog = file("$project.rootDir/changelog.md")
         mainFile.changelogType = 'markdown'
