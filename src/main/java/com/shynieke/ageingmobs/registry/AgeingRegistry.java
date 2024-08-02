@@ -338,7 +338,11 @@ public class AgeingRegistry {
 
 		if (INSTANCE.isIDUnique(BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.SKELETON), "SkeletonToWitherSkelly") && AgeingConfig.COMMON.skeletonToWitherSkeletonAgeing.get()) {
 			AgeingData skeletonToWitherSkelly = new AgeingData("SkeletonToWitherSkelly", EntityType.SKELETON, createNBTTag(""), EntityType.WITHER_SKELETON, createNBTTag(""), AgeingConfig.COMMON.skeletonToWitherSkeletonAgeingTime.get());
-			skeletonToWitherSkelly.setCriteria(new BaseCriteria[]{new DimensionCriteria(skeletonToWitherSkelly, new ResourceLocation[]{new ResourceLocation("the_nether")})});
+			skeletonToWitherSkelly.setCriteria(new BaseCriteria[]{
+					new DimensionCriteria(skeletonToWitherSkelly, new ResourceLocation[]{
+							ResourceLocation.withDefaultNamespace("the_nether")
+					})
+			});
 
 			INSTANCE.registerAgeing(skeletonToWitherSkelly);
 		} else if (!INSTANCE.isIDUnique(BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.SKELETON), "SkeletonToWitherSkelly")) {
@@ -352,7 +356,11 @@ public class AgeingRegistry {
 
 		if (INSTANCE.isIDUnique(BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.SLIME), "SlimeToMagmaCube") && AgeingConfig.COMMON.slimeToMagmaCubeAgeing.get()) {
 			AgeingData slimeToMagmaCube = new AgeingData("SlimeToMagmaCube", EntityType.SLIME, createNBTTag(""), EntityType.MAGMA_CUBE, createNBTTag(""), AgeingConfig.COMMON.slimeToMagmaCubeAgeingTime.get());
-			slimeToMagmaCube.setCriteria(new BaseCriteria[]{new DimensionCriteria(slimeToMagmaCube, new ResourceLocation[]{new ResourceLocation("the_nether")})});
+			slimeToMagmaCube.setCriteria(new BaseCriteria[]{
+					new DimensionCriteria(slimeToMagmaCube, new ResourceLocation[]{
+							ResourceLocation.withDefaultNamespace("the_nether")
+					})
+			});
 			INSTANCE.registerAgeing(slimeToMagmaCube);
 		} else if (!INSTANCE.isIDUnique(BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.SLIME), "SlimeToMagmaCube")) {
 			AgeingData slimeToMagmaCube = INSTANCE.getByID(BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.SLIME), "SlimeToMagmaCube");
@@ -513,7 +521,7 @@ public class AgeingRegistry {
 				tag = TagParser.parseTag("{" + nbtData + "}");
 			}
 		} catch (CommandSyntaxException nbtexception) {
-			AgeingMobs.LOGGER.error("nope... " + nbtexception.getMessage());
+			AgeingMobs.LOGGER.error("nope... {}", nbtexception.getMessage());
 		}
 
 		return tag;
@@ -527,11 +535,11 @@ public class AgeingRegistry {
 			for (String blockData : magicalBlocks) {
 				String[] blockInfo = blockData.split(";");
 				if (blockInfo.length > 2) {
-					AgeingMobs.LOGGER.error("An error has occured. " + blockData + " is using the wrong syntax.");
+					AgeingMobs.LOGGER.error("An error has occured. {} is using the wrong syntax.", blockData);
 				} else if (blockInfo.length == 2) {
 					String blockName = blockInfo[0];
 					double importance = Double.parseDouble(blockInfo[1]);
-					Optional<Block> blockHolder = BuiltInRegistries.BLOCK.getOptional(new ResourceLocation(blockName));
+					Optional<Block> blockHolder = BuiltInRegistries.BLOCK.getOptional(ResourceLocation.tryParse(blockName));
 
 					if (blockHolder.isPresent() && !importanceList.containsKey(blockHolder.get())) {
 						importanceList.put(blockHolder.get(), importance);
@@ -549,7 +557,7 @@ public class AgeingRegistry {
 		List<? extends String> dimensions = AgeingConfig.COMMON.moon_dimensions.get();
 		List<ResourceLocation> dimensionList = new ArrayList<>();
 		for (String string : dimensions) {
-			ResourceLocation dim = new ResourceLocation(string);
+			ResourceLocation dim = ResourceLocation.tryParse(string);
 			if (!dimensionList.contains(dim)) {
 				dimensionList.add(dim);
 			}
@@ -568,7 +576,7 @@ public class AgeingRegistry {
 			ItemStack itemstack = ((Player) theEntity).getInventory().getSelected();
 
 			if (!itemstack.isEmpty()) {
-				compoundTag.put("SelectedItem", itemstack.save(new CompoundTag()));
+				compoundTag.put("SelectedItem", itemstack.save(theEntity.registryAccess(), new CompoundTag()));
 			}
 		}
 

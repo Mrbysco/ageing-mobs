@@ -16,7 +16,7 @@ public class NBTHelper {
 				tag = TagParser.parseTag("{" + nbtData + "}");
 			}
 		} catch (CommandSyntaxException exception) {
-			AgeingMobs.LOGGER.error("nope... " + exception);
+			AgeingMobs.LOGGER.error("nope... {}", exception.getMessage());
 		}
 
 		return tag;

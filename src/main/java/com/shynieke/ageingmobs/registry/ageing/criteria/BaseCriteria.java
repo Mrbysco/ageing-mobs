@@ -7,13 +7,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
 public class BaseCriteria implements iCriteria {
-	private EntityType<? extends Entity> entity;
-	private CompoundTag entityData;
-	private EntityType<? extends Entity> evolvedEntity;
-	private CompoundTag evolvedEntityEntityData;
-	private String uniqueID;
+	private final EntityType<? extends Entity> entity;
+	private final CompoundTag entityData;
+	private final EntityType<? extends Entity> evolvedEntity;
+	private final CompoundTag evolvedEntityEntityData;
+	private final String uniqueID;
 
-	private iAgeing ageingData;
+	private final iAgeing ageingData;
 
 	public BaseCriteria(iAgeing ageing) {
 		this.entity = ageing.getEntity();

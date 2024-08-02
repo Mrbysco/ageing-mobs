@@ -73,11 +73,11 @@ public class MCAgeingCriteria {
 		if (blocks.length > 0) {
 			List<Block> blockList = Lists.newArrayList();
 			for (String blockName : blocks) {
-				Optional<Block> optionalBlock = BuiltInRegistries.BLOCK.getOptional(new ResourceLocation(blockName));
+				Optional<Block> optionalBlock = BuiltInRegistries.BLOCK.getOptional(ResourceLocation.tryParse(blockName));
 				if (optionalBlock.isPresent()) {
 					blockList.add(optionalBlock.get());
 				} else {
-					AgeingMobs.LOGGER.error("Could not resolve block: " + blockName);
+					AgeingMobs.LOGGER.error("Could not resolve block: {}", blockName);
 				}
 			}
 			Block[] blockArray = new Block[blockList.size()];
