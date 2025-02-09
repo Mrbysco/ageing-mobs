@@ -11,6 +11,7 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.BiomeTypeCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BlockBasedCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BossCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.DimensionCriteria;
+import com.shynieke.ageingmobs.registry.ageing.criteria.EffectCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.EntityCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.HeightCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.LightCriteria;
@@ -18,8 +19,10 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.LiquidBasedCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.MagicCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.MoonCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.TimeCriteria;
+import com.shynieke.ageingmobs.registry.ageing.criteria.VillageCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
@@ -145,6 +148,16 @@ public class MCAgeingCriteria {
 	@Method
 	public MCAgeingCriteria constructWeather(String weather) {
 		return new MCAgeingCriteria(new WeatherCriteria(this.internal.getAgeingData(), weather));
+	}
+
+	@Method
+	public MCAgeingCriteria constructVillage() {
+		return new MCAgeingCriteria(new VillageCriteria(this.internal.getAgeingData()));
+	}
+
+	@Method
+	public MCAgeingCriteria constructEffect(MobEffect mobEffect) {
+		return new MCAgeingCriteria(new EffectCriteria(this.internal.getAgeingData(), mobEffect));
 	}
 
 	public BaseCriteria getInternal() {
