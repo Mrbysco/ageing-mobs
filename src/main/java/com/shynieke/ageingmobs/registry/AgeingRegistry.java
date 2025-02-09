@@ -385,7 +385,7 @@ public class AgeingRegistry {
 				ageingList.put(resourceLocation, Collections.singletonList(ageing));
 			}
 		} else {
-			AgeingMobs.LOGGER.error(String.format("Failed to add Ageing Data with ID %s because the entity's resourcelocation is null", ageing.getName()));
+			AgeingMobs.LOGGER.error("Failed to add Ageing Data with ID {} because the entity's resourcelocation is null", ageing.getName());
 		}
 	}
 
@@ -401,10 +401,10 @@ public class AgeingRegistry {
 					ageingList.put(resourceLocation, dataList);
 				}
 			} else {
-				AgeingMobs.LOGGER.error(String.format("Tried to remove Ageing Data with id %s but it didn't exist", ageing.getName()));
+				AgeingMobs.LOGGER.error("Tried to remove Ageing Data with id {} but it didn't exist", ageing.getName());
 			}
 		} else {
-			AgeingMobs.LOGGER.error(String.format("Failed to remove Ageing Data with ID %s because the entity's resourcelocation is null", ageing.getName()));
+			AgeingMobs.LOGGER.error("Failed to remove Ageing Data with ID {} because the entity's resourcelocation is null", ageing.getName());
 		}
 	}
 
@@ -430,12 +430,12 @@ public class AgeingRegistry {
 					}
 
 					if (!found) {
-						AgeingMobs.LOGGER.error(String.format("Tried to change Ageing Data with id %s but it didn't exist", ageing.getName()));
+						AgeingMobs.LOGGER.error("Tried to change Ageing Data with id {} but it didn't exist", ageing.getName());
 					}
 				}
 			}
 		} else {
-			AgeingMobs.LOGGER.error(String.format("Failed to remove Ageing Data with ID %s because the entity's resourcelocation is null", ageing.getName()));
+			AgeingMobs.LOGGER.error("Failed to remove Ageing Data with ID {} because the entity's resourcelocation is null", ageing.getName());
 		}
 	}
 
