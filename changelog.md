@@ -1,1 +1,2 @@
-* Fire LivingConversionEvent Pre- and Post-event when converting a mob
+* Add Village criteria (For checking if the mob is in a village)
+* Add Mob effect criteria (For checking if the mob has a specific effect)
