@@ -329,12 +329,12 @@ public class AgeingConfig {
 
 			magical_blocks = builder
 					.comment("Blocks that are seen as magical, by removing the blocks they won't be seen as magical by the mod. syntax: modid:block;effectiveness")
-					.defineList("magical_blocks", Arrays.asList(magicalList), o -> (o instanceof String));
+					.defineListAllowEmpty("magical_blocks", Arrays.asList(magicalList), String::new, o -> (o instanceof String));
 
 			String[] dimensionList = new String[]{"minecraft:overworld"};
 			moon_dimensions = builder
 					.comment("Dimensions that the mod recognizes having a moon. By default only has the overworld")
-					.defineList("moon_dimensions", Arrays.asList(dimensionList), o -> (o instanceof String));
+					.defineListAllowEmpty("moon_dimensions", Arrays.asList(dimensionList), String::new, o -> (o instanceof String));
 
 			builder.pop();
 
