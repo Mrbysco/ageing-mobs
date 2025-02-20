@@ -32,6 +32,7 @@ import org.openzen.zencode.java.ZenCodeType.Constructor;
 import org.openzen.zencode.java.ZenCodeType.Method;
 import org.openzen.zencode.java.ZenCodeType.Name;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -51,13 +52,23 @@ public class MCAgeingCriteria {
 	}
 
 	@Method
-	public MCAgeingCriteria constructBiome(ResourceLocation biomeName) {
-		return new MCAgeingCriteria(new BiomeCriteria(this.internal.getAgeingData(), ResourceKey.create(Registries.BIOME, biomeName)));
+	public MCAgeingCriteria constructBiome(String biomeName) {
+		ResourceLocation biomeLocation = ResourceLocation.tryParse(biomeName);
+		if (biomeLocation == null) {
+			AgeingMobs.LOGGER.error("Could not resolve biome: {}", biomeName);
+			return this;
+		}
+		return new MCAgeingCriteria(new BiomeCriteria(this.internal.getAgeingData(), ResourceKey.create(Registries.BIOME, biomeLocation)));
 	}
 
 	@Method
-	public MCAgeingCriteria constructBiomeTag(ResourceLocation biomeTag) {
-		return new MCAgeingCriteria(new BiomeTypeCriteria(this.internal.getAgeingData(), biomeTag));
+	public MCAgeingCriteria constructBiomeTag(String biomeTag) {
+		ResourceLocation biomeLocation = ResourceLocation.tryParse(biomeTag);
+		if (biomeLocation == null) {
+			AgeingMobs.LOGGER.error("Could not resolve biome tag: {}", biomeTag);
+			return this;
+		}
+		return new MCAgeingCriteria(new BiomeTypeCriteria(this.internal.getAgeingData(), biomeLocation));
 	}
 
 	@Method
@@ -96,10 +107,9 @@ public class MCAgeingCriteria {
 	}
 
 	@Method
-	public MCAgeingCriteria constructDimension(ResourceLocation[] dimensions) {
+	public MCAgeingCriteria constructDimension(String[] dimensions) {
 		if (dimensions.length > 0) {
-			List<ResourceLocation> blockList = Lists.newArrayList();
-			blockList.addAll(Arrays.asList(dimensions));
+			List<ResourceLocation> blockList = new ArrayList<>(Arrays.stream(dimensions).map(ResourceLocation::parse).toList());
 			ResourceLocation[] dimensionArray = new ResourceLocation[blockList.size()];
 			dimensionArray = blockList.toArray(dimensionArray);
 			return new MCAgeingCriteria(new DimensionCriteria(this.internal.getAgeingData(), dimensionArray));
