@@ -1,9 +1,13 @@
 {
-    "forge_marker": 1,
-    "variants": {
-		"normal": { "model": "purpur_block" },
-    "inventory": [{
+  "forge_marker": 1,
+  "variants": {
+    "normal": {
+      "model": "purpur_block"
+    },
+    "inventory": [
+      {
         "model": "purpur_block"
-    }]
+      }
+    ]
   }
 }
