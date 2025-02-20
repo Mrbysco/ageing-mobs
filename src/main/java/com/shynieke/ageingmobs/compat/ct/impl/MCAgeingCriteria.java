@@ -25,11 +25,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import org.openzen.zencode.java.ZenCodeType.Constructor;
 import org.openzen.zencode.java.ZenCodeType.Method;
 import org.openzen.zencode.java.ZenCodeType.Name;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,10 +50,17 @@ public class MCAgeingCriteria {
 	}
 
 	@Method
-	public MCAgeingCriteria constructBiome(ResourceLocation biomeName) {
-		net.minecraft.world.level.biome.Biome biome = BiomeHelper.getBiome(net.minecraft.world.level.biome.Biomes.THE_VOID);
-		if (net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(biomeName) != null) {
-			biome = net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(biomeName);
+	public MCAgeingCriteria constructBiome(String biomeName) {
+		ResourceLocation biomeLocation = ResourceLocation.tryParse(biomeName);
+		if (biomeLocation == null) {
+			AgeingMobs.LOGGER.error("Could not resolve biome: {}", biomeName);
+			return this;
+		}
+
+		Biome biome = BiomeHelper.getBiome(net.minecraft.world.level.biome.Biomes.THE_VOID);
+		Biome biome1 = net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(biomeLocation);
+		if (biome1 != null) {
+			biome = biome1;
 		} else {
 			AgeingMobs.LOGGER.error("Could not find biome with ID: " + biomeName);
 		}
@@ -59,8 +68,13 @@ public class MCAgeingCriteria {
 	}
 
 	@Method
-	public MCAgeingCriteria constructBiomeTag(ResourceLocation biomeTag) {
-		return new MCAgeingCriteria(new BiomeTypeCriteria(this.internal.getAgeingData(), biomeTag));
+	public MCAgeingCriteria constructBiomeTag(String biomeTag) {
+		ResourceLocation biomeLocation = ResourceLocation.tryParse(biomeTag);
+		if (biomeLocation == null) {
+			AgeingMobs.LOGGER.error("Could not resolve biome tag: {}", biomeTag);
+			return this;
+		}
+		return new MCAgeingCriteria(new BiomeTypeCriteria(this.internal.getAgeingData(), biomeLocation));
 	}
 
 	@Method
@@ -99,10 +113,9 @@ public class MCAgeingCriteria {
 	}
 
 	@Method
-	public MCAgeingCriteria constructDimension(ResourceLocation[] dimensions) {
+	public MCAgeingCriteria constructDimension(String[] dimensions) {
 		if (dimensions.length > 0) {
-			List<ResourceLocation> blockList = Lists.newArrayList();
-			blockList.addAll(Arrays.asList(dimensions));
+			List<ResourceLocation> blockList = new ArrayList<>(Arrays.stream(dimensions).map(ResourceLocation::new).toList());
 			ResourceLocation[] dimensionArray = new ResourceLocation[blockList.size()];
 			dimensionArray = blockList.toArray(dimensionArray);
 			return new MCAgeingCriteria(new DimensionCriteria(this.internal.getAgeingData(), dimensionArray));
