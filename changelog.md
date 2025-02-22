@@ -1,2 +1,1 @@
-* Add Village criteria (For checking if the mob is in a village)
-* Add Mob effect criteria (For checking if the mob has a specific effect)
+* Fix the `constructBiome`, `constructBiomeTag` and `constructDimension` method being impossible to use due to using ResourceLocation in their parameters instead of String (CraftTweaker Support)
