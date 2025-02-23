@@ -5,9 +5,9 @@ import com.shynieke.ageingmobs.Reference;
 import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import com.shynieke.ageingmobs.registry.ageing.AgeingData;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -16,10 +16,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModList;
-import net.neoforged.neoforge.event.EventHooks;
-import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,27 +28,28 @@ import java.util.UUID;
 public class AgeHandler {
 
 	@SubscribeEvent
-	public void handleAgeing(LevelTickEvent.Post event) {
-		if (event.getLevel() instanceof ServerLevel serverLevel) {
+	public void handleAgeing(TickEvent.LevelTickEvent event) {
+		if (event.phase.equals(TickEvent.Phase.END) && event.side.isServer()) {
+			ServerLevel serverLevel = (ServerLevel) event.level;
 			if (serverLevel.dimension() == Level.OVERWORLD && serverLevel.getGameTime() % 20 == 0) {
 				if (!AgeingRegistry.ageingList.isEmpty()) {
 					for (Entity entityIn : serverLevel.getEntities().getAll()) {
 						if (entityIn != null) {
-							var entityResourceKey = BuiltInRegistries.ENTITY_TYPE.getResourceKey(entityIn.getType());
-							if (entityResourceKey.isPresent() && AgeingRegistry.hasEntityAgeing(entityResourceKey.get().location())) {
-								List<AgeingData> dataList = AgeingRegistry.getDataList(entityResourceKey.get().location());
+							ResourceLocation entityLocation = ForgeRegistries.ENTITY_TYPES.getKey(entityIn.getType());
+							if (entityLocation != null && AgeingRegistry.hasEntityAgeing(entityLocation)) {
+								List<AgeingData> dataList = AgeingRegistry.getDataList(entityLocation);
 								for (AgeingData info : dataList) {
-									if (!(entityIn instanceof Player) && info.getEntity() != null) {
+									if (entityIn != null && !(entityIn instanceof Player) && entityIn.getType() != null && info.getEntity() != null) {
 										if (entityIn.getType().equals(info.getEntity())) {
 											if (info.getTransformedEntity() != null && info.getEntity().equals(info.getTransformedEntity())) {
 												if (!info.getTransformedEntityData().isEmpty()) {
-													CheckList(info, entityIn, serverLevel);
+													checkList(info, entityIn, serverLevel);
 												} else {
 													AgeingMobs.LOGGER.error("An error has occured. A mob can not transform into itself. See id: {}", info.getName());
 													AgeingRegistry.INSTANCE.removeAgeing(info);
 												}
 											} else {
-												CheckList(info, entityIn, serverLevel);
+												checkList(info, entityIn, serverLevel);
 											}
 										}
 									}
@@ -60,59 +62,47 @@ public class AgeHandler {
 		}
 	}
 
-	public void CheckList(AgeingData info, Entity entity, Level level) {
-		if (info.getEntity().equals(info.getTransformedEntity())) {
-			if (info.getEntityData().equals(info.getTransformedEntityData())) {
-				AgeingMobs.LOGGER.error("Aged Entity nbt identical to the original: {}", info.getName());
-			} else {
-				if (info.getEntityData().isEmpty()) {
-					if (!info.getTransformedEntityData().isEmpty()) {
-						CompoundTag entityTag = AgeingRegistry.entityToNBT(entity);
-						CompoundTag entityTag2 = info.getTransformedEntityData();
+	/**
+	 * Checks if the entity meets the requirements to be aged.
+	 *
+	 * This method:
+	 * - Determines whether the entity has the required NBT data for ageing.
+	 * - If the transformed entity type is the same, it also compares with the transformed NBT data.
+	 * - Logs an error if the transformation results in an identical entity.
+	 * - Calls extraChecks() when the entity meets the ageing criteria.
+	 *
+	 * @param info   The ageing data containing transformation details.
+	 * @param entity The entity being checked.
+	 * @param level  The level in which the entity exists.
+	 */
+	public void checkList(AgeingData info, Entity entity, Level level) {
+		// Convert the current entity into NBT data
+		CompoundTag entityTag = AgeingRegistry.entityToNBT(entity);
 
-						if (!entityTag2.isEmpty()) {
-							if (!NbtUtils.compareNbt(entityTag2, entityTag, true)) {
-								extraChecks(info, entity, level);
-							}
-						}
-					} else {
-						AgeingMobs.LOGGER.error("Aged Entity identical to the original: {}", info.getName());
-					}
-				} else {
-					if (!info.getTransformedEntityData().isEmpty()) {
-						CompoundTag entityTag = AgeingRegistry.entityToNBT(entity);
-						CompoundTag entityTag2 = info.getEntityData();
-						CompoundTag entityTag3 = info.getTransformedEntityData();
+		// Retrieve stored original and transformed entity NBT data
+		CompoundTag originalData = info.getEntityData();
+		CompoundTag transformedData = info.getTransformedEntityData();
 
-						if (!entityTag2.isEmpty() && !entityTag3.isEmpty()) {
-							if (NbtUtils.compareNbt(entityTag2, entityTag, true) && !NbtUtils.compareNbt(entityTag3, entityTag, true)) {
-								extraChecks(info, entity, level);
-							}
-						}
-					} else {
-						CompoundTag entityTag = AgeingRegistry.entityToNBT(entity);
-						CompoundTag entityTag2 = info.getEntityData();
+		// Check if the transformed entity is the same type as the original
+		boolean sameEntityType = info.getEntity().equals(info.getTransformedEntity());
 
-						if (!entityTag2.isEmpty()) {
-							if (NbtUtils.compareNbt(entityTag2, entityTag, true)) {
-								extraChecks(info, entity, level);
-							}
-						}
-					}
-				}
-			}
-		} else {
-			if (!info.getEntityData().isEmpty()) {
-				CompoundTag entityTag = AgeingRegistry.entityToNBT(entity);
-				CompoundTag entityTag2 = info.getEntityData();
-				CompoundTag entityTag3 = info.getTransformedEntityData();
+		// If both entity type and NBT data are identical, log an error
+		if (sameEntityType && originalData.equals(transformedData)) {
+			AgeingMobs.LOGGER.error("Aged Entity NBT identical to the original: {}", info.getName());
+			return;
+		}
 
-				if (!entityTag2.isEmpty() && !entityTag3.isEmpty()) {
-					if (NbtUtils.compareNbt(entityTag2, entityTag, true) && !NbtUtils.compareNbt(entityTag3, entityTag, true)) {
-						extraChecks(info, entity, level);
-					}
+		// Check if the entity matches the original NBT data (or if no NBT is required)
+		boolean matchesOriginalData = originalData.isEmpty() || NbtUtils.compareNbt(originalData, entityTag, true);
+
+		if (matchesOriginalData) {
+			if (sameEntityType) {
+				// If the transformed entity is the same type, ensure it doesn't match transformed data before running extraChecks
+				if (transformedData.isEmpty() || !NbtUtils.compareNbt(transformedData, entityTag, true)) {
+					extraChecks(info, entity, level);
 				}
 			} else {
+				// If the entity type is different, proceed without checking transformed data
 				extraChecks(info, entity, level);
 			}
 		}
@@ -168,8 +158,8 @@ public class AgeHandler {
 				if (!info.getTransformedEntityData().isEmpty()) {
 					Entity agedEntity = info.getTransformedEntity().create(level);
 					if (agedEntity != null) {
+						tag.remove(uniqueTag);
 						if (!canConvert(entity, agedEntity)) {
-							tag.remove(uniqueTag);
 							return;
 						}
 						callConversionEvent(entity, agedEntity);
@@ -189,10 +179,9 @@ public class AgeHandler {
 						}
 						level.addFreshEntity(agedEntity);
 					} else {
-						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: {}", BuiltInRegistries.ENTITY_TYPE.getKey(info.getTransformedEntity()));
+						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: {}", ForgeRegistries.ENTITY_TYPES.getKey(info.getTransformedEntity()));
 					}
 
-					tag.remove(uniqueTag);
 					entity.captureDrops(null);
 					entity.discard();
 				}
@@ -200,8 +189,8 @@ public class AgeHandler {
 				if (!info.getTransformedEntityData().isEmpty()) {
 					Entity agedEntity = info.getTransformedEntity().create(level);
 					if (agedEntity != null) {
+						tag.remove(uniqueTag);
 						if (!canConvert(entity, agedEntity)) {
-							tag.remove(uniqueTag);
 							return;
 						}
 						callConversionEvent(entity, agedEntity);
@@ -221,17 +210,16 @@ public class AgeHandler {
 						}
 						level.addFreshEntity(agedEntity);
 					} else {
-						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: {}", BuiltInRegistries.ENTITY_TYPE.getKey(info.getTransformedEntity()));
+						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: {}", ForgeRegistries.ENTITY_TYPES.getKey(info.getTransformedEntity()));
 					}
 
-					tag.remove(uniqueTag);
 					entity.captureDrops(null);
 					entity.discard();
 				} else {
 					Entity agedEntity = info.getTransformedEntity().create(level);
 					if (agedEntity != null) {
+						tag.remove(uniqueTag);
 						if (!canConvert(entity, agedEntity)) {
-							tag.remove(uniqueTag);
 							return;
 						}
 						callConversionEvent(entity, agedEntity);
@@ -240,10 +228,9 @@ public class AgeHandler {
 						copyEquipment(entity, agedEntity);
 						level.addFreshEntity(agedEntity);
 					} else {
-						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: {}", BuiltInRegistries.ENTITY_TYPE.getKey(info.getTransformedEntity()));
+						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: {}", ForgeRegistries.ENTITY_TYPES.getKey(info.getTransformedEntity()));
 					}
 
-					tag.remove(uniqueTag);
 					entity.captureDrops(null);
 					entity.discard();
 				}
@@ -263,9 +250,10 @@ public class AgeHandler {
 	 * @param agedEntity the entity to be converted to
 	 * @return if the entity can be converted
 	 */
+	@SuppressWarnings("unchecked")
 	private boolean canConvert(Entity entity, Entity agedEntity) {
 		if (entity instanceof LivingEntity livingEntity && agedEntity instanceof LivingEntity) {
-			return EventHooks.canLivingConvert(livingEntity, (EntityType<? extends LivingEntity>) agedEntity.getType(), (timer) -> {
+			return ForgeEventFactory.canLivingConvert(livingEntity, (EntityType<? extends LivingEntity>) agedEntity.getType(), (timer) -> {
 			});
 		} else {
 			return true;
@@ -280,7 +268,7 @@ public class AgeHandler {
 	 */
 	private void callConversionEvent(Entity entity, Entity agedEntity) {
 		if (entity instanceof LivingEntity livingEntity && agedEntity instanceof LivingEntity outcome) {
-			net.neoforged.neoforge.event.EventHooks.onLivingConvert(livingEntity, outcome);
+			ForgeEventFactory.onLivingConvert(livingEntity, outcome);
 		}
 	}
 
