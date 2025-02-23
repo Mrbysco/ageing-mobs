@@ -3,7 +3,6 @@ package com.shynieke.ageingmobs.compat.ct.impl;
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.google.common.collect.Lists;
 import com.shynieke.ageingmobs.AgeingMobs;
-import com.shynieke.ageingmobs.helper.BiomeHelper;
 import com.shynieke.ageingmobs.helper.NBTHelper;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BiomeCriteria;
@@ -25,7 +24,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import org.openzen.zencode.java.ZenCodeType.Constructor;
 import org.openzen.zencode.java.ZenCodeType.Method;
@@ -57,14 +55,7 @@ public class MCAgeingCriteria {
 			return this;
 		}
 
-		Biome biome = BiomeHelper.getBiome(net.minecraft.world.level.biome.Biomes.THE_VOID);
-		Biome biome1 = net.minecraftforge.registries.ForgeRegistries.BIOMES.getValue(biomeLocation);
-		if (biome1 != null) {
-			biome = biome1;
-		} else {
-			AgeingMobs.LOGGER.error("Could not find biome with ID: " + biomeName);
-		}
-		return new MCAgeingCriteria(new BiomeCriteria(this.internal.getAgeingData(), biome));
+		return new MCAgeingCriteria(new BiomeCriteria(this.internal.getAgeingData(), biomeLocation));
 	}
 
 	@Method
