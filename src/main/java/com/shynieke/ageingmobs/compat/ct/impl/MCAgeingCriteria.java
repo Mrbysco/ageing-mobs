@@ -20,9 +20,6 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.MoonCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.TimeCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.VillageCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
@@ -35,7 +32,6 @@ import org.openzen.zencode.java.ZenCodeType.Name;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @ZenRegister
 @Name("mods.ageingmobs.AgeingCriteria")
@@ -58,7 +54,8 @@ public class MCAgeingCriteria {
 			AgeingMobs.LOGGER.error("Could not resolve biome: {}", biomeName);
 			return this;
 		}
-		return new MCAgeingCriteria(new BiomeCriteria(this.internal.getAgeingData(), ResourceKey.create(Registries.BIOME, biomeLocation)));
+
+		return new MCAgeingCriteria(new BiomeCriteria(this.internal.getAgeingData(), biomeLocation));
 	}
 
 	@Method
@@ -87,11 +84,11 @@ public class MCAgeingCriteria {
 		if (blocks.length > 0) {
 			List<Block> blockList = Lists.newArrayList();
 			for (String blockName : blocks) {
-				Optional<Block> optionalBlock = BuiltInRegistries.BLOCK.getOptional(ResourceLocation.tryParse(blockName));
-				if (optionalBlock.isPresent()) {
-					blockList.add(optionalBlock.get());
+				Block block = net.minecraftforge.registries.ForgeRegistries.BLOCKS.getValue(new ResourceLocation(blockName));
+				if (block != null) {
+					blockList.add(block);
 				} else {
-					AgeingMobs.LOGGER.error("Could not resolve block: {}", blockName);
+					AgeingMobs.LOGGER.error("Could not resolve block: " + blockName);
 				}
 			}
 			Block[] blockArray = new Block[blockList.size()];
@@ -109,7 +106,7 @@ public class MCAgeingCriteria {
 	@Method
 	public MCAgeingCriteria constructDimension(String[] dimensions) {
 		if (dimensions.length > 0) {
-			List<ResourceLocation> blockList = new ArrayList<>(Arrays.stream(dimensions).map(ResourceLocation::parse).toList());
+			List<ResourceLocation> blockList = new ArrayList<>(Arrays.stream(dimensions).map(ResourceLocation::new).toList());
 			ResourceLocation[] dimensionArray = new ResourceLocation[blockList.size()];
 			dimensionArray = blockList.toArray(dimensionArray);
 			return new MCAgeingCriteria(new DimensionCriteria(this.internal.getAgeingData(), dimensionArray));
