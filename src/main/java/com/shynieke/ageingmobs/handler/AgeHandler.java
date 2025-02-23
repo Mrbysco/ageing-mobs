@@ -109,12 +109,8 @@ public class AgeHandler {
 	}
 
 	public void extraChecks(AgeingData info, Entity entity, Level level) {
-		if (ModList.get().isLoaded("gamestages")) {
-			if (!info.getGamestage().isEmpty()) {
-				if (GamestagesHandler.gamestageChecks(info, entity, level)) {
-					checkCriteria(info, entity, level);
-				}
-			} else {
+		if (ModList.get().isLoaded("gamestages") && !info.getGamestage().isEmpty()) {
+			if (GamestagesHandler.gamestageChecks(info, entity, level)) {
 				checkCriteria(info, entity, level);
 			}
 		} else {
@@ -123,23 +119,18 @@ public class AgeHandler {
 	}
 
 	public void checkCriteria(AgeingData info, Entity entity, Level level) {
-		if (info.getCriteria().length > 0) {
-			boolean ableToAge = true;
-			for (int i = 0; i < info.getCriteria().length; i++) {
-				BaseCriteria criteria = info.getCriteria()[i];
-				if (criteria.isReversing()) {
-					babifyTheMob(info, entity);
-				}
+		boolean ableToAge = true;
+		for (BaseCriteria criteria : info.getCriteria()) {
+			if (criteria.isReversing()) {
+				babifyTheMob(info, entity);
+			}
 
-				if (!criteria.checkCriteria(level, entity)) {
-					ableToAge = false;
-					break;
-				}
+			if (!criteria.checkCriteria(level, entity)) {
+				ableToAge = false;
+				break;
 			}
-			if (ableToAge) {
-				ageTheMob(info, entity, level);
-			}
-		} else {
+		}
+		if (ableToAge) {
 			ageTheMob(info, entity, level);
 		}
 	}
@@ -276,8 +267,8 @@ public class AgeHandler {
 		String uniqueTag = Reference.MOD_PREFIX + info.getName();
 		CompoundTag tag = entity.getPersistentData();
 		if (tag.contains(uniqueTag)) {
-			if (tag.getInt(uniqueTag) >= 0) {
-				int currentAge = tag.getInt(uniqueTag);
+			int currentAge = tag.getInt(uniqueTag);
+			if (currentAge >= 0) {
 				currentAge--;
 				tag.putInt(uniqueTag, currentAge);
 			} else {
