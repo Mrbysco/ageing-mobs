@@ -6,21 +6,40 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.List;
 
+/**
+ * Criteria that checks if the entity is in any of the specified biomes.
+ */
 public class BiomeCriteria extends BaseCriteria {
-	private ResourceLocation biome;
+	@Nonnull
+	private List<ResourceLocation> biomes;
 
 	public BiomeCriteria(iAgeing ageing, @Nonnull ResourceLocation biome) {
 		super(ageing);
-		this.biome = biome;
+		this.biomes = Collections.singletonList(biome);
 	}
 
-	public ResourceLocation getBiome() {
-		return biome;
+	public BiomeCriteria(iAgeing ageing, @Nonnull List<ResourceLocation> biomes) {
+		super(ageing);
+		this.biomes = List.copyOf(biomes);
 	}
 
-	public void setBiome(@Nonnull ResourceLocation biome) {
-		this.biome = biome;
+	public ResourceLocation getBiome(int index) {
+		return biomes.get(index);
+	}
+
+	public void setBiome(int index, @Nonnull ResourceLocation biome) {
+		this.biomes.set(index, biome);
+	}
+
+	public List<ResourceLocation> getBiomes() {
+		return biomes;
+	}
+
+	public void setBiomes(List<ResourceLocation> biomes) {
+		this.biomes = biomes;
 	}
 
 	@Override
@@ -29,6 +48,6 @@ public class BiomeCriteria extends BaseCriteria {
 		if (biomeKey == null) {
 			return false;
 		}
-		return biomeKey.location().equals(this.biome);
+		return this.biomes.contains(biomeKey.location());
 	}
 }

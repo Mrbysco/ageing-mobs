@@ -48,14 +48,33 @@ public class MCAgeingCriteria {
 	}
 
 	@Method
-	public MCAgeingCriteria constructBiome(String biomeName) {
-		ResourceLocation biomeLocation = ResourceLocation.tryParse(biomeName);
+	public MCAgeingCriteria constructBiome(String biomeId) {
+		ResourceLocation biomeLocation = ResourceLocation.tryParse(biomeId);
 		if (biomeLocation == null) {
-			AgeingMobs.LOGGER.error("Could not resolve biome: {}", biomeName);
+			AgeingMobs.LOGGER.error("Could not resolve biome: {}", biomeId);
 			return this;
 		}
 
 		return new MCAgeingCriteria(new BiomeCriteria(this.internal.getAgeingData(), biomeLocation));
+	}
+
+	@Method
+	public MCAgeingCriteria constructAnyBiome(String[] biomeIds) {
+		List<ResourceLocation> biomes = new ArrayList<>();
+		for (String id : biomeIds) {
+			ResourceLocation biomeLocation = ResourceLocation.tryParse(id);
+			if (biomeLocation != null) {
+				biomes.add(biomeLocation);
+			} else {
+				AgeingMobs.LOGGER.error("Could not resolve biome: {}", id);
+			}
+		}
+		if (biomes.isEmpty()) {
+			AgeingMobs.LOGGER.error("Could not construct biome criteria. List of biomes is empty");
+			return this;
+		}
+
+		return new MCAgeingCriteria(new BiomeCriteria(this.internal.getAgeingData(), biomes));
 	}
 
 	@Method
