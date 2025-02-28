@@ -4,6 +4,7 @@ import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.google.common.collect.Lists;
 import com.shynieke.ageingmobs.AgeingMobs;
 import com.shynieke.ageingmobs.helper.NBTHelper;
+import com.shynieke.ageingmobs.registry.ageing.criteria.BabyCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BiomeCriteria;
 import com.shynieke.ageingmobs.registry.ageing.criteria.BiomeTypeCriteria;
@@ -181,6 +182,16 @@ public class MCAgeingCriteria {
 	@Method
 	public MCAgeingCriteria constructEffect(MobEffect mobEffect) {
 		return new MCAgeingCriteria(new EffectCriteria(this.internal.getAgeingData(), mobEffect));
+	}
+
+	@Method
+	public MCAgeingCriteria constructBaby() {
+		return new MCAgeingCriteria(new BabyCriteria(this.internal.getAgeingData()));
+	}
+
+	@Method
+	public MCAgeingCriteria constructAdult() {
+		return new MCAgeingCriteria(new BabyCriteria(this.internal.getAgeingData(), true));
 	}
 
 	public BaseCriteria getInternal() {
