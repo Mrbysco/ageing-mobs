@@ -1,1 +1,1 @@
-* Hopefully fix crash on world creation
+* Add baby criteria `constructBaby` and the inverted variant `constructAdult` (CraftTweaker support)
