@@ -1,2 +1,1 @@
-* Add missing lang keys for built-in config screen
-* Fix the `constructBiome`, `constructBiomeTag` and `constructDimension` method being impossible to use due to using ResourceLocation in their parameters instead of String (CraftTweaker Support)
+* Add baby criteria `constructBaby` and the inverted variant `constructAdult` (CraftTweaker support)
