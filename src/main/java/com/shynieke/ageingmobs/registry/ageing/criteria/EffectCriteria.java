@@ -21,7 +21,7 @@ public class EffectCriteria extends BaseCriteria {
 		super(ageing);
 		ResourceLocation effectLocation = BuiltInRegistries.MOB_EFFECT.getKey(mobEffect);
 		if (effectLocation != null) {
-			var optionalHolder = BuiltInRegistries.MOB_EFFECT.getHolder(effectLocation);
+			var optionalHolder = BuiltInRegistries.MOB_EFFECT.get(effectLocation);
 			if (optionalHolder.isPresent()) {
 				this.mobEffect = optionalHolder.get();
 			} else {

@@ -18,6 +18,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,6 +27,7 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.neoforged.neoforge.common.Tags;
 
 import java.util.ArrayList;
@@ -516,9 +518,9 @@ public class AgeingRegistry {
 
 		try {
 			if (nbtData.startsWith("{") && nbtData.endsWith("}")) {
-				tag = TagParser.parseTag(nbtData);
+				tag = TagParser.parseCompoundFully(nbtData);
 			} else {
-				tag = TagParser.parseTag("{" + nbtData + "}");
+				tag = TagParser.parseCompoundFully("{" + nbtData + "}");
 			}
 		} catch (CommandSyntaxException nbtexception) {
 			AgeingMobs.LOGGER.error("nope... {}", nbtexception.getMessage());
@@ -570,16 +572,19 @@ public class AgeingRegistry {
 	}
 
 	public static CompoundTag entityToNBT(Entity theEntity) {
-		CompoundTag compoundTag = theEntity.saveWithoutId(new CompoundTag());
+		try (ProblemReporter.ScopedCollector problemreporter$scopedcollector = new ProblemReporter.ScopedCollector(AgeingMobs.LOGGER)) {
+			TagValueOutput output = TagValueOutput.createWithContext(problemreporter$scopedcollector, theEntity.registryAccess());
+			theEntity.saveWithoutId(output);
 
-		if (theEntity instanceof Player) {
-			ItemStack itemstack = ((Player) theEntity).getInventory().getSelected();
+			if (theEntity instanceof Player player) {
+				ItemStack itemstack = player.getInventory().getSelectedItem();
 
-			if (!itemstack.isEmpty()) {
-				compoundTag.put("SelectedItem", itemstack.save(theEntity.registryAccess(), new CompoundTag()));
+				if (!itemstack.isEmpty()) {
+					output.store("SelectedItem", ItemStack.OPTIONAL_CODEC, itemstack);
+				}
 			}
-		}
 
-		return compoundTag;
+			return output.buildResult();
+		}
 	}
 }

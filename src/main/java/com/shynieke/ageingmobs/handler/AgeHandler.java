@@ -10,13 +10,17 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.event.EventHooks;
@@ -143,10 +147,10 @@ public class AgeHandler {
 			tag.putInt(uniqueTag, 0);
 		}
 
-		if (tag.getInt(uniqueTag) >= maxTime) {
+		if (tag.getIntOr(uniqueTag, 0) >= maxTime) {
 			if (info.getEntity().equals(info.getTransformedEntity())) {
 				if (!info.getTransformedEntityData().isEmpty()) {
-					Entity agedEntity = info.getTransformedEntity().create(level);
+					Entity agedEntity = info.getTransformedEntity().create(level, EntitySpawnReason.CONVERSION);
 					if (agedEntity != null) {
 						tag.remove(uniqueTag);
 						if (!canConvert(entity, agedEntity)) {
@@ -164,7 +168,12 @@ public class AgeHandler {
 						if (!entityTag2.isEmpty()) {
 							entityTagCopy.merge(entityTag2);
 							UUID uuid = agedEntity.getUUID();
-							agedEntity.load(entityTagCopy);
+							try (ProblemReporter.ScopedCollector problemreporter$scopedcollector = new ProblemReporter.ScopedCollector(AgeingMobs.LOGGER)) {
+								TagValueOutput output = TagValueOutput.createWithContext(problemreporter$scopedcollector, agedEntity.registryAccess());
+								CompoundTag outputCompound = output.buildResult();
+								outputCompound.merge(entityTagCopy);
+								agedEntity.load(TagValueInput.create(ProblemReporter.DISCARDING, agedEntity.registryAccess(), outputCompound));
+							}
 							agedEntity.setUUID(uuid);
 						}
 						level.addFreshEntity(agedEntity);
@@ -177,7 +186,7 @@ public class AgeHandler {
 				}
 			} else {
 				if (!info.getTransformedEntityData().isEmpty()) {
-					Entity agedEntity = info.getTransformedEntity().create(level);
+					Entity agedEntity = info.getTransformedEntity().create(level, EntitySpawnReason.CONVERSION);
 					if (agedEntity != null) {
 						tag.remove(uniqueTag);
 						if (!canConvert(entity, agedEntity)) {
@@ -195,7 +204,12 @@ public class AgeHandler {
 						if (!entityTag2.isEmpty()) {
 							UUID uuid = agedEntity.getUUID();
 							entityTagCopy.merge(entityTag2);
-							agedEntity.load(entityTag);
+							try (ProblemReporter.ScopedCollector problemreporter$scopedcollector = new ProblemReporter.ScopedCollector(AgeingMobs.LOGGER)) {
+								TagValueOutput output = TagValueOutput.createWithContext(problemreporter$scopedcollector, agedEntity.registryAccess());
+								CompoundTag outputCompound = output.buildResult();
+								outputCompound.merge(entityTag);
+								agedEntity.load(TagValueInput.create(ProblemReporter.DISCARDING, agedEntity.registryAccess(), outputCompound));
+							}
 							agedEntity.setUUID(uuid);
 						}
 						level.addFreshEntity(agedEntity);
@@ -206,7 +220,7 @@ public class AgeHandler {
 					entity.captureDrops(null);
 					entity.discard();
 				} else {
-					Entity agedEntity = info.getTransformedEntity().create(level);
+					Entity agedEntity = info.getTransformedEntity().create(level, EntitySpawnReason.CONVERSION);
 					if (agedEntity != null) {
 						tag.remove(uniqueTag);
 						if (!canConvert(entity, agedEntity)) {
@@ -226,7 +240,7 @@ public class AgeHandler {
 				}
 			}
 		} else {
-			int currentAge = tag.getInt(uniqueTag);
+			int currentAge = tag.getIntOr(uniqueTag, 0);
 			currentAge++;
 			tag.putInt(uniqueTag, currentAge);
 			//System.out.println(info.getName() + " " + currentAge + " / " + maxTime);
@@ -266,7 +280,7 @@ public class AgeHandler {
 		String uniqueTag = Reference.MOD_PREFIX + info.getName();
 		CompoundTag tag = entity.getPersistentData();
 		if (tag.contains(uniqueTag)) {
-			int currentAge = tag.getInt(uniqueTag);
+			int currentAge = tag.getIntOr(uniqueTag, 0);
 			if (currentAge >= 0) {
 				currentAge--;
 				tag.putInt(uniqueTag, currentAge);

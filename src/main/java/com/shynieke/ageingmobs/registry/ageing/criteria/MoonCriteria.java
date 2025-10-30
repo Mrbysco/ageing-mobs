@@ -27,8 +27,8 @@ public class MoonCriteria extends BaseCriteria {
 
 	@Override
 	public boolean checkCriteria(Level level, Entity entityIn) {
-		Level entityLevel = entityIn.getCommandSenderWorld();
-		if (!entityLevel.isDay()) {
+		Level entityLevel = entityIn.level();
+		if (!entityLevel.isBrightOutside()) {
 			int moonPhase = entityLevel.dimensionType().moonPhase(entityLevel.getLevelData().getDayTime());
 			List<ResourceLocation> moonDimensions = AgeingRegistry.INSTANCE.getMoonDimensions();
 

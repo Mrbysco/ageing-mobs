@@ -49,7 +49,7 @@ runs {
         programArgument '--nogui'
     }
 
-    data {
+    clientData {
         // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
         // workingDirectory project.file('run-data')
 
@@ -83,7 +83,7 @@ dependencies {
 
     localRuntime "mezz.jei:jei-${mc_version}-neoforge:${jei_version}"
 
-    implementation "com.blamejared.crafttweaker:CraftTweaker-neoforge-${mc_version}:${crafttweaker_version}"
+//    implementation "com.blamejared.crafttweaker:CraftTweaker-neoforge-${mc_version}:${crafttweaker_version}"
 
 //    compileOnly "net.darkhax.bookshelf:Bookshelf-Forge-${mc_version}:${bookshelf_version}"
 //    compileOnly "net.darkhax.gamestages:GameStages-Forge-${mc_version}:${gamestages_version}"
@@ -139,7 +139,7 @@ if (System.getenv().CURSEFORGE_KEY) {
         mainFile.changelog = file("$project.rootDir/changelog.md")
         mainFile.changelogType = 'markdown'
 
-        mainFile.addOptional("crafttweaker")
+//        mainFile.addOptional("crafttweaker")
     }
 }
 
@@ -156,7 +156,7 @@ if (System.getenv().MODRINTH_KEY) {
         loaders = ["neoforge"]
 
         dependencies {
-            optional.project "crafttweaker"
+//            optional.project "crafttweaker"
         }
     }
 }

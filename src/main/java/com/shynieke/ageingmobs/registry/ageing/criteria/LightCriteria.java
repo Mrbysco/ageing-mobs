@@ -3,6 +3,7 @@ package com.shynieke.ageingmobs.registry.ageing.criteria;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
@@ -65,7 +66,7 @@ public class LightCriteria extends BaseCriteria {
 			if (isAloneBased()) {
 				AABB areaHitbox = new AABB(entityPos.getX() - 0.5f, entityPos.getY() - 0.5f, entityPos.getZ() - 0.5f, entityPos.getX() + 0.5f, entityPos.getY() + 0.5f, entityPos.getZ() + 0.5f)
 						.expandTowards(-5, -5, -5).expandTowards(5, 5, 5);
-				if (!level.getEntitiesOfClass(entityIn.getClass(), areaHitbox).contains(getEntity().create(level))) {
+				if (!level.getEntitiesOfClass(entityIn.getClass(), areaHitbox).contains(getEntity().create(level, EntitySpawnReason.CONVERSION))) {
 					this.isReversing = false;
 					return true;
 				} else {

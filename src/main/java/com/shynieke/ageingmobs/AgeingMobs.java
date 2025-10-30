@@ -1,5 +1,6 @@
 package com.shynieke.ageingmobs;
 
+import com.mojang.logging.LogUtils;
 import com.shynieke.ageingmobs.config.AgeingConfig;
 import com.shynieke.ageingmobs.handler.AgeHandler;
 import com.shynieke.ageingmobs.registry.AgeingReloadManager;
@@ -11,12 +12,11 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 @Mod(Reference.MOD_ID)
 public class AgeingMobs {
-	public static final Logger LOGGER = LogManager.getLogger();
+	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public AgeingMobs(IEventBus eventBus, Dist dist, ModContainer container) {
 		container.registerConfig(ModConfig.Type.COMMON, AgeingConfig.commonSpec);

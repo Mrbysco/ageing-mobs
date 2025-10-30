@@ -1,10 +1,11 @@
 package com.shynieke.ageingmobs.registry;
 
+import com.shynieke.ageingmobs.Reference;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class AgeingReloadManager implements ResourceManagerReloadListener {
@@ -16,7 +17,7 @@ public class AgeingReloadManager implements ResourceManagerReloadListener {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void onAddReloadListeners(AddReloadListenerEvent event) {
-		event.addListener(this);
+	public void onAddReloadListeners(AddServerReloadListenersEvent event) {
+		event.addListener(Reference.modLoc("reload"), this);
 	}
 }

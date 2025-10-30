@@ -357,6 +357,6 @@ public class AgeingConfig {
 
 	@SubscribeEvent
 	public static void onFileChange(final ModConfigEvent.Reloading configEvent) {
-		AgeingMobs.LOGGER.fatal("Ageing Mobs' config just got changed on the file system!");
+		AgeingMobs.LOGGER.warn("Ageing Mobs' config just got changed on the file system!");
 	}
 }

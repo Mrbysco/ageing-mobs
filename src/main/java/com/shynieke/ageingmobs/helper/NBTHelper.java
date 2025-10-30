@@ -11,9 +11,9 @@ public class NBTHelper {
 
 		try {
 			if (nbtData.startsWith("{") && nbtData.endsWith("}")) {
-				tag = TagParser.parseTag(nbtData);
+				tag = TagParser.parseCompoundFully(nbtData);
 			} else {
-				tag = TagParser.parseTag("{" + nbtData + "}");
+				tag = TagParser.parseCompoundFully("{" + nbtData + "}");
 			}
 		} catch (CommandSyntaxException exception) {
 			AgeingMobs.LOGGER.error("nope... {}", exception.getMessage());
