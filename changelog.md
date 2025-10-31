@@ -1,1 +1,1 @@
-* Add baby criteria `constructBaby` and the inverted variant `constructAdult` (CraftTweaker support)
+* Initial update to 1.21.10 (No crafttweaker support yet)
