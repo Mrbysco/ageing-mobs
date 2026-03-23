@@ -6,7 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
 public class BabyCriteria extends BaseCriteria {
-	private boolean inverted;
+	private final boolean inverted;
 
 	public BabyCriteria(iAgeing ageing, boolean inverted) {
 		super(ageing);

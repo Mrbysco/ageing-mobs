@@ -2,7 +2,7 @@ package com.shynieke.ageingmobs.registry.ageing.criteria;
 
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
@@ -41,7 +41,7 @@ public class LiquidBasedCriteria extends BaseCriteria {
 		boolean inFluid = entityIn.isFree(entityIn.getX(), entityIn.getY() - 1, entityIn.getZ());
 		if (inFluid) {
 			var fluidLoc = BuiltInRegistries.FLUID.getResourceKey(level.getFluidState(entityIn.blockPosition().offset(0, -1, 0)).getType());
-			if (fluidLoc.isPresent() && fluidLoc.get().location().equals(ResourceLocation.tryParse(getLiquid()))) {
+			if (fluidLoc.isPresent() && fluidLoc.get().identifier().equals(Identifier.tryParse(getLiquid()))) {
 				this.isReversing = false;
 				return true;
 			} else {

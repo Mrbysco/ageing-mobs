@@ -22,7 +22,7 @@
 //import com.shynieke.ageingmobs.registry.ageing.criteria.VillageCriteria;
 //import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
 //import net.minecraft.core.registries.BuiltInRegistries;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //import net.minecraft.world.effect.MobEffect;
 //import net.minecraft.world.entity.Entity;
 //import net.minecraft.world.entity.EntityType;
@@ -50,7 +50,7 @@
 //
 //	@Method
 //	public MCAgeingCriteria constructBiome(String biomeId) {
-//		ResourceLocation biomeLocation = ResourceLocation.tryParse(biomeId);
+//		Identifier biomeLocation = Identifier.tryParse(biomeId);
 //		if (biomeLocation == null) {
 //			AgeingMobs.LOGGER.error("Could not resolve biome: {}", biomeId);
 //			return this;
@@ -61,9 +61,9 @@
 //
 //	@Method
 //	public MCAgeingCriteria constructAnyBiome(String[] biomeIds) {
-//		List<ResourceLocation> biomes = new ArrayList<>();
+//		List<Identifier> biomes = new ArrayList<>();
 //		for (String id : biomeIds) {
-//			ResourceLocation biomeLocation = ResourceLocation.tryParse(id);
+//			Identifier biomeLocation = Identifier.tryParse(id);
 //			if (biomeLocation != null) {
 //				biomes.add(biomeLocation);
 //			} else {
@@ -80,7 +80,7 @@
 //
 //	@Method
 //	public MCAgeingCriteria constructBiomeTag(String biomeTag) {
-//		ResourceLocation biomeLocation = ResourceLocation.tryParse(biomeTag);
+//		Identifier biomeLocation = Identifier.tryParse(biomeTag);
 //		if (biomeLocation == null) {
 //			AgeingMobs.LOGGER.error("Could not resolve biome tag: {}", biomeTag);
 //			return this;
@@ -104,7 +104,7 @@
 //		if (blocks.length > 0) {
 //			List<Block> blockList = Lists.newArrayList();
 //			for (String blockName : blocks) {
-//				ResourceLocation blockLoc = ResourceLocation.tryParse(blockName);
+//				Identifier blockLoc = Identifier.tryParse(blockName);
 //				if (blockLoc == null) {
 //					AgeingMobs.LOGGER.error("Could not resolve block: {}", blockName);
 //					continue;
@@ -131,16 +131,16 @@
 //	@Method
 //	public MCAgeingCriteria constructDimension(String[] dimensions) {
 //		if (dimensions.length > 0) {
-//			List<ResourceLocation> blockList = new ArrayList<>();
+//			List<Identifier> blockList = new ArrayList<>();
 //			for (String dim : dimensions) {
-//				ResourceLocation dimLoc = ResourceLocation.tryParse(dim);
+//				Identifier dimLoc = Identifier.tryParse(dim);
 //				if (dimLoc == null) {
 //					AgeingMobs.LOGGER.error("Could not resolve dimension: {}", dim);
 //					continue;
 //				}
 //				blockList.add(dimLoc);
 //			}
-//			ResourceLocation[] dimensionArray = new ResourceLocation[blockList.size()];
+//			Identifier[] dimensionArray = new Identifier[blockList.size()];
 //			dimensionArray = blockList.toArray(dimensionArray);
 //			return new MCAgeingCriteria(new DimensionCriteria(this.internal.getAgeingData(), dimensionArray));
 //		}

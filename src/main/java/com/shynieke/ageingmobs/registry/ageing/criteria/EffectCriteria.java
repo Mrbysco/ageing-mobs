@@ -3,7 +3,7 @@ package com.shynieke.ageingmobs.registry.ageing.criteria;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,7 +19,7 @@ public class EffectCriteria extends BaseCriteria {
 
 	public EffectCriteria(iAgeing ageing, MobEffect mobEffect) {
 		super(ageing);
-		ResourceLocation effectLocation = BuiltInRegistries.MOB_EFFECT.getKey(mobEffect);
+		Identifier effectLocation = BuiltInRegistries.MOB_EFFECT.getKey(mobEffect);
 		if (effectLocation != null) {
 			var optionalHolder = BuiltInRegistries.MOB_EFFECT.get(effectLocation);
 			if (optionalHolder.isPresent()) {

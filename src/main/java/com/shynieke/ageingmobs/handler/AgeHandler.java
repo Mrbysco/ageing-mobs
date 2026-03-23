@@ -8,7 +8,7 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.BaseCriteria;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.Entity;
@@ -38,7 +38,7 @@ public class AgeHandler {
 				if (!AgeingRegistry.ageingList.isEmpty()) {
 					for (Entity entityIn : serverLevel.getEntities().getAll()) {
 						if (entityIn != null) {
-							ResourceLocation entityLocation = BuiltInRegistries.ENTITY_TYPE.getKey(entityIn.getType());
+							Identifier entityLocation = BuiltInRegistries.ENTITY_TYPE.getKey(entityIn.getType());
 							if (entityLocation != null && AgeingRegistry.hasEntityAgeing(entityLocation)) {
 								List<AgeingData> dataList = AgeingRegistry.getDataList(entityLocation);
 								for (AgeingData info : dataList) {
@@ -178,7 +178,7 @@ public class AgeHandler {
 						}
 						level.addFreshEntity(agedEntity);
 					} else {
-						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: {}", BuiltInRegistries.ENTITY_TYPE.getKey(info.getTransformedEntity()));
+						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with identifier: {}", BuiltInRegistries.ENTITY_TYPE.getKey(info.getTransformedEntity()));
 					}
 
 					entity.captureDrops(null);
@@ -214,7 +214,7 @@ public class AgeHandler {
 						}
 						level.addFreshEntity(agedEntity);
 					} else {
-						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: {}", BuiltInRegistries.ENTITY_TYPE.getKey(info.getTransformedEntity()));
+						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with identifier: {}", BuiltInRegistries.ENTITY_TYPE.getKey(info.getTransformedEntity()));
 					}
 
 					entity.captureDrops(null);
@@ -232,7 +232,7 @@ public class AgeHandler {
 						copyEquipment(entity, agedEntity);
 						level.addFreshEntity(agedEntity);
 					} else {
-						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with resource location: {}", BuiltInRegistries.ENTITY_TYPE.getKey(info.getTransformedEntity()));
+						AgeingMobs.LOGGER.error("An error has occured. Aged Entity is null, can not create entity with identifier: {}", BuiltInRegistries.ENTITY_TYPE.getKey(info.getTransformedEntity()));
 					}
 
 					entity.captureDrops(null);

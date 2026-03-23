@@ -2,16 +2,16 @@ package com.shynieke.ageingmobs.registry.ageing.criteria;
 
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
 public class BiomeTypeCriteria extends BaseCriteria {
-	private ResourceLocation biomeTag;
+	private Identifier biomeTag;
 
-	public BiomeTypeCriteria(iAgeing ageing, ResourceLocation biomeTag) {
+	public BiomeTypeCriteria(iAgeing ageing, Identifier biomeTag) {
 		super(ageing);
 		this.biomeTag = biomeTag;
 	}
@@ -21,11 +21,11 @@ public class BiomeTypeCriteria extends BaseCriteria {
 		this.biomeTag = biomeTag.location();
 	}
 
-	public ResourceLocation getBiomeType() {
+	public Identifier getBiomeType() {
 		return biomeTag;
 	}
 
-	public void setBiomeTag(ResourceLocation biome) {
+	public void setBiomeTag(Identifier biome) {
 		this.biomeTag = biome;
 	}
 

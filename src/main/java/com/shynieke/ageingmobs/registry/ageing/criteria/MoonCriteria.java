@@ -3,7 +3,8 @@ package com.shynieke.ageingmobs.registry.ageing.criteria;
 import com.shynieke.ageingmobs.AgeingMobs;
 import com.shynieke.ageingmobs.registry.AgeingRegistry;
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
@@ -29,10 +30,10 @@ public class MoonCriteria extends BaseCriteria {
 	public boolean checkCriteria(Level level, Entity entityIn) {
 		Level entityLevel = entityIn.level();
 		if (!entityLevel.isBrightOutside()) {
-			int moonPhase = entityLevel.dimensionType().moonPhase(entityLevel.getLevelData().getDayTime());
-			List<ResourceLocation> moonDimensions = AgeingRegistry.INSTANCE.getMoonDimensions();
+			int moonPhase = entityLevel.environmentAttributes().getDimensionValue(EnvironmentAttributes.MOON_PHASE).index();
+			List<Identifier> moonDimensions = AgeingRegistry.INSTANCE.getMoonDimensions();
 
-			if (!moonDimensions.isEmpty() && moonDimensions.contains(entityLevel.dimension().location())) {
+			if (!moonDimensions.isEmpty() && moonDimensions.contains(entityLevel.dimension().identifier())) {
 				int wantedPhase = moonPhaseFromString(getMoonPhase());
 
 				return moonPhase == wantedPhase;
@@ -47,7 +48,6 @@ public class MoonCriteria extends BaseCriteria {
 
 	public int moonPhaseFromString(String moonPhase) {
 		return switch (moonPhase) {
-			default -> 0;
 			case "Waning Gibbous" -> 1;
 			case "Last Quarter" -> 2;
 			case "Waning Crescent" -> 3;
@@ -55,6 +55,7 @@ public class MoonCriteria extends BaseCriteria {
 			case "Waxing Crescent" -> 5;
 			case "First Quarter" -> 6;
 			case "Waxing Gibbous" -> 7;
+			default -> 0;
 		};
 	}
 }

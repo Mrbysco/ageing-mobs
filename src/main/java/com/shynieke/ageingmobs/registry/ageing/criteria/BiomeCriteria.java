@@ -1,7 +1,7 @@
 package com.shynieke.ageingmobs.registry.ageing.criteria;
 
 import com.shynieke.ageingmobs.registry.ageing.iAgeing;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
@@ -14,31 +14,31 @@ import java.util.List;
  */
 public class BiomeCriteria extends BaseCriteria {
 	@Nonnull
-	private List<ResourceLocation> biomes;
+	private List<Identifier> biomes;
 
-	public BiomeCriteria(iAgeing ageing, @Nonnull ResourceLocation biome) {
+	public BiomeCriteria(iAgeing ageing, @Nonnull Identifier biome) {
 		super(ageing);
 		this.biomes = Collections.singletonList(biome);
 	}
 
-	public BiomeCriteria(iAgeing ageing, @Nonnull List<ResourceLocation> biomes) {
+	public BiomeCriteria(iAgeing ageing, @Nonnull List<Identifier> biomes) {
 		super(ageing);
 		this.biomes = List.copyOf(biomes);
 	}
 
-	public ResourceLocation getBiome(int index) {
+	public Identifier getBiome(int index) {
 		return biomes.get(index);
 	}
 
-	public void setBiome(int index, @Nonnull ResourceLocation biome) {
+	public void setBiome(int index, @Nonnull Identifier biome) {
 		this.biomes.set(index, biome);
 	}
 
-	public List<ResourceLocation> getBiomes() {
+	public List<Identifier> getBiomes() {
 		return biomes;
 	}
 
-	public void setBiomes(List<ResourceLocation> biomes) {
+	public void setBiomes(List<Identifier> biomes) {
 		this.biomes = biomes;
 	}
 
@@ -48,6 +48,6 @@ public class BiomeCriteria extends BaseCriteria {
 		if (biomeKey == null) {
 			return false;
 		}
-		return this.biomes.contains(biomeKey.location());
+		return this.biomes.contains(biomeKey.identifier());
 	}
 }

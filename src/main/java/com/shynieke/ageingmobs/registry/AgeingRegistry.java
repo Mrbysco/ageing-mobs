@@ -17,7 +17,7 @@ import com.shynieke.ageingmobs.registry.ageing.criteria.WeatherCriteria;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -40,12 +40,12 @@ import java.util.Map;
 import java.util.Optional;
 
 public class AgeingRegistry {
-	public static AgeingRegistry INSTANCE = new AgeingRegistry();
+	public final static AgeingRegistry INSTANCE = new AgeingRegistry();
 
-	public static LinkedHashMap<ResourceLocation, List<AgeingData>> ageingList = new LinkedHashMap<>();
+	public final static LinkedHashMap<Identifier, List<AgeingData>> ageingList = new LinkedHashMap<>();
 
 	private static HashMap<Block, Double> importanceList = new HashMap<>();
-	private static List<ResourceLocation> moonDimensions = Lists.newArrayList();
+	private static List<Identifier> moonDimensions = Lists.newArrayList();
 
 	public void initializeAgeing() {
 		if (INSTANCE.isIDUnique(BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.CREEPER), "CreeperToCharged") && AgeingConfig.COMMON.creeperAgeing.get()) {
@@ -341,8 +341,8 @@ public class AgeingRegistry {
 		if (INSTANCE.isIDUnique(BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.SKELETON), "SkeletonToWitherSkelly") && AgeingConfig.COMMON.skeletonToWitherSkeletonAgeing.get()) {
 			AgeingData skeletonToWitherSkelly = new AgeingData("SkeletonToWitherSkelly", EntityType.SKELETON, createNBTTag(""), EntityType.WITHER_SKELETON, createNBTTag(""), AgeingConfig.COMMON.skeletonToWitherSkeletonAgeingTime.get());
 			skeletonToWitherSkelly.setCriteria(new BaseCriteria[]{
-					new DimensionCriteria(skeletonToWitherSkelly, new ResourceLocation[]{
-							ResourceLocation.withDefaultNamespace("the_nether")
+					new DimensionCriteria(skeletonToWitherSkelly, new Identifier[]{
+							Identifier.withDefaultNamespace("the_nether")
 					})
 			});
 
@@ -359,8 +359,8 @@ public class AgeingRegistry {
 		if (INSTANCE.isIDUnique(BuiltInRegistries.ENTITY_TYPE.getKey(EntityType.SLIME), "SlimeToMagmaCube") && AgeingConfig.COMMON.slimeToMagmaCubeAgeing.get()) {
 			AgeingData slimeToMagmaCube = new AgeingData("SlimeToMagmaCube", EntityType.SLIME, createNBTTag(""), EntityType.MAGMA_CUBE, createNBTTag(""), AgeingConfig.COMMON.slimeToMagmaCubeAgeingTime.get());
 			slimeToMagmaCube.setCriteria(new BaseCriteria[]{
-					new DimensionCriteria(slimeToMagmaCube, new ResourceLocation[]{
-							ResourceLocation.withDefaultNamespace("the_nether")
+					new DimensionCriteria(slimeToMagmaCube, new Identifier[]{
+							Identifier.withDefaultNamespace("the_nether")
 					})
 			});
 			INSTANCE.registerAgeing(slimeToMagmaCube);
@@ -386,7 +386,7 @@ public class AgeingRegistry {
 	}
 
 	public void registerAgeing(AgeingData ageing) {
-		ResourceLocation resourceLocation = BuiltInRegistries.ENTITY_TYPE.getKey(ageing.getEntity());
+		Identifier resourceLocation = BuiltInRegistries.ENTITY_TYPE.getKey(ageing.getEntity());
 		if (resourceLocation != null) {
 			if (ageingList.containsKey(resourceLocation)) {
 				List<AgeingData> dataList = new ArrayList<>(ageingList.get(resourceLocation));
@@ -396,12 +396,12 @@ public class AgeingRegistry {
 				ageingList.put(resourceLocation, Collections.singletonList(ageing));
 			}
 		} else {
-			AgeingMobs.LOGGER.error(String.format("Failed to add Ageing Data with ID %s because the entity's resourcelocation is null", ageing.getName()));
+			AgeingMobs.LOGGER.error("Failed to add Ageing Data with ID {} because the entity's identifier is null", ageing.getName());
 		}
 	}
 
 	public void removeAgeing(AgeingData ageing) {
-		ResourceLocation resourceLocation = BuiltInRegistries.ENTITY_TYPE.getKey(ageing.getEntity());
+		Identifier resourceLocation = BuiltInRegistries.ENTITY_TYPE.getKey(ageing.getEntity());
 		if (resourceLocation != null) {
 			if (ageingList.containsKey(resourceLocation)) {
 				List<AgeingData> dataList = new ArrayList<>(ageingList.get(resourceLocation));
@@ -412,15 +412,15 @@ public class AgeingRegistry {
 					ageingList.put(resourceLocation, dataList);
 				}
 			} else {
-				AgeingMobs.LOGGER.error(String.format("Tried to remove Ageing Data with id %s but it didn't exist", ageing.getName()));
+				AgeingMobs.LOGGER.error("Tried to remove Ageing Data with id {} but it didn't exist", ageing.getName());
 			}
 		} else {
-			AgeingMobs.LOGGER.error(String.format("Failed to remove Ageing Data with ID %s because the entity's resourcelocation is null", ageing.getName()));
+			AgeingMobs.LOGGER.error("Failed to remove Ageing Data with ID {} because the entity's identifier is null", ageing.getName());
 		}
 	}
 
 	public void replaceAgeing(AgeingData ageing) {
-		ResourceLocation resourceLocation = BuiltInRegistries.ENTITY_TYPE.getKey(ageing.getEntity());
+		Identifier resourceLocation = BuiltInRegistries.ENTITY_TYPE.getKey(ageing.getEntity());
 		String uniqueID = ageing.getName();
 		if (resourceLocation != null) {
 			if (ageingList.containsKey(resourceLocation)) {
@@ -441,16 +441,16 @@ public class AgeingRegistry {
 					}
 
 					if (!found) {
-						AgeingMobs.LOGGER.error(String.format("Tried to change Ageing Data with id %s but it didn't exist", ageing.getName()));
+						AgeingMobs.LOGGER.error("Tried to change Ageing Data with id {} but it didn't exist", ageing.getName());
 					}
 				}
 			}
 		} else {
-			AgeingMobs.LOGGER.error(String.format("Failed to remove Ageing Data with ID %s because the entity's resourcelocation is null", ageing.getName()));
+			AgeingMobs.LOGGER.error("Failed to remove Ageing Data with ID {} because the entity's identifier is null", ageing.getName());
 		}
 	}
 
-	public static List<AgeingData> getDataList(ResourceLocation resourceLocation) {
+	public static List<AgeingData> getDataList(Identifier resourceLocation) {
 		if (ageingList.containsKey(resourceLocation)) {
 			List<AgeingData> dataList = ageingList.get(resourceLocation);
 			if (dataList == null) {
@@ -461,11 +461,11 @@ public class AgeingRegistry {
 		return new ArrayList<>();
 	}
 
-	public static boolean hasEntityAgeing(ResourceLocation resourceLocation) {
+	public static boolean hasEntityAgeing(Identifier resourceLocation) {
 		return ageingList.containsKey(resourceLocation);
 	}
 
-	public AgeingData getByID(ResourceLocation resourceLocation, String uniqueID) {
+	public AgeingData getByID(Identifier resourceLocation, String uniqueID) {
 		if (ageingList.containsKey(resourceLocation)) {
 			List<AgeingData> dataList = ageingList.get(resourceLocation);
 			if (dataList == null) {
@@ -483,7 +483,7 @@ public class AgeingRegistry {
 	}
 
 	public AgeingData getByID(String uniqueID) {
-		for (Map.Entry<ResourceLocation, List<AgeingData>> entry : ageingList.entrySet()) {
+		for (Map.Entry<Identifier, List<AgeingData>> entry : ageingList.entrySet()) {
 			List<AgeingData> dataList = entry.getValue();
 			if (dataList != null && !dataList.isEmpty()) {
 				for (AgeingData data : dataList) {
@@ -496,7 +496,7 @@ public class AgeingRegistry {
 		return null;
 	}
 
-	public boolean isIDUnique(ResourceLocation resourceLocation, String uniqueID) {
+	public boolean isIDUnique(Identifier resourceLocation, String uniqueID) {
 		if (ageingList.containsKey(resourceLocation)) {
 			List<AgeingData> dataList = ageingList.get(resourceLocation);
 			if (dataList == null) {
@@ -541,7 +541,7 @@ public class AgeingRegistry {
 				} else if (blockInfo.length == 2) {
 					String blockName = blockInfo[0];
 					double importance = Double.parseDouble(blockInfo[1]);
-					Optional<Block> blockHolder = BuiltInRegistries.BLOCK.getOptional(ResourceLocation.tryParse(blockName));
+					Optional<Block> blockHolder = BuiltInRegistries.BLOCK.getOptional(Identifier.tryParse(blockName));
 
 					if (blockHolder.isPresent() && !importanceList.containsKey(blockHolder.get())) {
 						importanceList.put(blockHolder.get(), importance);
@@ -557,9 +557,9 @@ public class AgeingRegistry {
 
 	public void initializeMoonDimensions() {
 		List<? extends String> dimensions = AgeingConfig.COMMON.moon_dimensions.get();
-		List<ResourceLocation> dimensionList = new ArrayList<>();
+		List<Identifier> dimensionList = new ArrayList<>();
 		for (String string : dimensions) {
-			ResourceLocation dim = ResourceLocation.tryParse(string);
+			Identifier dim = Identifier.tryParse(string);
 			if (!dimensionList.contains(dim)) {
 				dimensionList.add(dim);
 			}
@@ -567,7 +567,7 @@ public class AgeingRegistry {
 		moonDimensions = dimensionList;
 	}
 
-	public List<ResourceLocation> getMoonDimensions() {
+	public List<Identifier> getMoonDimensions() {
 		return moonDimensions;
 	}
 

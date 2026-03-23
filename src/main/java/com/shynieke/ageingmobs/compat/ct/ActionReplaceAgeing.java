@@ -5,7 +5,7 @@
 //import com.shynieke.ageingmobs.registry.AgeingRegistry;
 //import com.shynieke.ageingmobs.registry.ageing.AgeingData;
 //import net.minecraft.core.registries.BuiltInRegistries;
-//import net.minecraft.resources.ResourceLocation;
+//import net.minecraft.resources.Identifier;
 //
 //public class ActionReplaceAgeing implements IUndoableAction {
 //	public final AgeingData ageingData;
@@ -18,7 +18,7 @@
 //
 //	@Override
 //	public void apply() {
-//		ResourceLocation resourceLocation = BuiltInRegistries.ENTITY_TYPE.getKey(ageingData.getEntity());
+//		Identifier resourceLocation = BuiltInRegistries.ENTITY_TYPE.getKey(ageingData.getEntity());
 //		if (resourceLocation != null && !AgeingRegistry.INSTANCE.isIDUnique(resourceLocation, ageingData.getName())) {
 //			AgeingRegistry.INSTANCE.replaceAgeing(ageingData);
 //		}
@@ -33,7 +33,7 @@
 //			return "Unknown transform entity inserted at ageing ID '" + ageingData.getName() + "'";
 //		}
 //
-//		ResourceLocation resourceLocation = BuiltInRegistries.ENTITY_TYPE.getKey(ageingData.getEntity());
+//		Identifier resourceLocation = BuiltInRegistries.ENTITY_TYPE.getKey(ageingData.getEntity());
 //		if (resourceLocation != null) {
 //			if (AgeingRegistry.INSTANCE.isIDUnique(resourceLocation, ageingData.getName())) {
 //				return "Ageing from <" + BuiltInRegistries.ENTITY_TYPE.getKey(ageingData.getEntity()) + "> to <" + BuiltInRegistries.ENTITY_TYPE.getKey(ageingData.getTransformedEntity()) + "> has been changed";
@@ -41,7 +41,7 @@
 //				return "Ageing from <" + BuiltInRegistries.ENTITY_TYPE.getKey(ageingData.getEntity()) + "> to <" + BuiltInRegistries.ENTITY_TYPE.getKey(ageingData.getTransformedEntity()) + "> could not be changed";
 //			}
 //		} else {
-//			return "Could not replace ageing of %s as the resource location of the given entity is invalid, please check if your MCEntityType is correct";
+//			return "Could not replace ageing of %s as the identifier of the given entity is invalid, please check if your MCEntityType is correct";
 //		}
 //	}
 //
