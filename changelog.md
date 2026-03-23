@@ -1,1 +1,1 @@
-* Initial update to 1.21.10 (No crafttweaker support yet)
+* Initial update to 1.21.11 (No crafttweaker support yet)
