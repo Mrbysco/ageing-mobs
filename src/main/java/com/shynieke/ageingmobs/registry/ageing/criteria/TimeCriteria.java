@@ -32,9 +32,9 @@ public class TimeCriteria extends BaseCriteria {
 
 	@Override
 	public boolean checkCriteria(Level level, Entity entityIn) {
-		long minTime = (long) getMinTime();
-		long maxTime = (long) getMaxTime();
-		long worldTime = level.getDayTime() % 24000;
+		long minTime = getMinTime();
+		long maxTime = getMaxTime();
+		long worldTime = level.getGameTime() % 24000;
 		return worldTime <= maxTime && worldTime >= minTime;
 	}
 }

@@ -17,12 +17,12 @@ This mod allows mobs to age and transform.
 [[dependencies.ageingmobs]]
 modId="minecraft"
 type="required"
-versionRange="[1.21.11,1.22)"
+versionRange="[26.1,)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.ageingmobs]]
 modId="neoforge"
 type="required"
-versionRange="[21.11.0-beta,)"
+versionRange="[26.1.0.0-alpha,)"
 ordering="NONE"
 side="BOTH"
