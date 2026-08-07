@@ -8,23 +8,23 @@ import java.util.function.Predicate;
 
 public class EntityStateCriteria extends BaseCriteria {
 
-    private Predicate<Entity> stateChecker;
+	private Predicate<Entity> stateChecker;
 
-    public EntityStateCriteria(iAgeing ageing, Predicate<Entity> stateChecker) {
-        super(ageing);
-        this.stateChecker = stateChecker;
-    }
+	public EntityStateCriteria(iAgeing ageing, Predicate<Entity> stateChecker) {
+		super(ageing);
+		this.stateChecker = stateChecker;
+	}
 
-    public Predicate<Entity> getStateChecker() {
-        return this.stateChecker;
-    }
+	public Predicate<Entity> getStateChecker() {
+		return this.stateChecker;
+	}
 
-    public void setStateChecker(Predicate<Entity> stateChecker) {
-        this.stateChecker = stateChecker;
-    }
+	public void setStateChecker(Predicate<Entity> stateChecker) {
+		this.stateChecker = stateChecker;
+	}
 
-    @Override
-    public boolean checkCriteria(Level level, Entity entityIn) {
-        return this.getStateChecker().test(entityIn);
-    }
+	@Override
+	public boolean checkCriteria(Level level, Entity entityIn) {
+		return this.getStateChecker().test(entityIn);
+	}
 }

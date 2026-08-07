@@ -8,7 +8,7 @@ modId="ageingmobs"
 version="${file.jarVersion}"
 displayName="Ageing Mobs Mod"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/ageing-mobs"
-logoFile="logo.png"
+iconFile="logo.png"
 authors="ShyNieke, Mrbysco"
 credits="Plutosion for testing"
 description='''
@@ -17,12 +17,12 @@ This mod allows mobs to age and transform.
 [[dependencies.ageingmobs]]
 modId="minecraft"
 type="required"
-versionRange="[26.1,)"
+versionRange="[26.2,)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.ageingmobs]]
 modId="neoforge"
 type="required"
-versionRange="[26.1.0.0-alpha,)"
+versionRange="[26.2.0.0-alpha,)"
 ordering="NONE"
 side="BOTH"
